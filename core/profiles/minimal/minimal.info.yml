@@ -1,0 +1,18 @@
+name: Minimal
+type: profile
+description: 'Build a custom site without pre-configured functionality. Suitable for advanced users.'
+# version: VERSION
+core: 8.x
+install:
+  - node
+  - block
+  - dblog
+  - page_cache
+  - dynamic_page_cache
+themes:
+  - stark
+
+# Information added by Drupal.org packaging script on 2020-06-03
+version: '8.9.0'
+project: 'drupal'
+datestamp: 1591204166

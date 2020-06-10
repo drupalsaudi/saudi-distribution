@@ -1,0 +1,13 @@
+name: 'Field Layout test'
+type: module
+description: 'Support module for Field Layout tests.'
+core: 8.x
+package: Testing
+# version: VERSION
+dependencies:
+  - drupal:entity_test
+
+# Information added by Drupal.org packaging script on 2020-06-03
+version: '8.9.0'
+project: 'drupal'
+datestamp: 1591204166

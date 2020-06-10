@@ -1,0 +1,12 @@
+name: module handler test all1
+type: module
+description: 'Test module used to test adding groups of modules with loadAll during runtime.'
+package: Testing
+# version: VERSION
+core: 8.x
+hidden: true
+
+# Information added by Drupal.org packaging script on 2020-06-03
+version: '8.9.0'
+project: 'drupal'
+datestamp: 1591204166
