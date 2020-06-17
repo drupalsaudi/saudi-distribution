@@ -41,4 +41,22 @@ function drupalsaudi_install() {
     'link' => ['uri' => 'internal:/admin/content'],
   ]);
   $shortcut->save();
+
+  $drupalsaudishortcut = Shortcut::create([
+    'shortcut_set' => 'default',
+    'title' => t('المساعدة دروبال السعودية'),
+    'weight' => -18,
+    'link' => ['uri' => 'internal:/admin/help/drupal-saudi'],
+  ]);
+  $drupalsaudishortcut->save();
+
+    // Populate the main menu.
+    $linkpagedrupalsaudihelp = MenuLinkContent::create(array(
+      'title' => t('صفحة المساعدة دروبال السعودية'),
+      'weight' => 10,
+      'link' => array('uri' => 'internal:/admin/help/drupal-saudi'),
+      'menu_name' => 'admin',
+      'parent' => 'system.admin',
+    ));
+    $linkpagedrupalsaudihelp->save();
 }
