@@ -14,6 +14,11 @@ use Drupal\Core\Form\FormStateInterface;
  * Allows the profile to alter the site configuration form.
  */
 function drupalsaudi_form_install_configure_form_alter(&$form, FormStateInterface $form_state) {
+
+  // Date/time settings
+  $form['regional_settings']['site_default_country']['#default_value'] = 'SA';
+  $form['regional_settings']['date_default_timezone']['#default_value'] = 'Asia/Riyadh';
+
   $form['#submit'][] = 'drupalsaudi_form_install_configure_submit';
 }
 
