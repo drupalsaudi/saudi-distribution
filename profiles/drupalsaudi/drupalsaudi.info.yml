@@ -1,6 +1,6 @@
-name: drupalsaudi
+name: توزيعة دروبال السعودية
 type: profile
-description: 'Install with commonly used features pre-configured.'
+description: 'توزيعة دروبال السعودية فيها كل ما يتحتاجه المطور <a href="https://github.com/drupalsaudi/saudi-distribution" target="_blank" >الدعم</a>'
 # version: VERSION
 core: 8.x
 install:
