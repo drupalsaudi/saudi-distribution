@@ -1,0 +1,34 @@
+langcode: ar
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.alf_alyt_walmnasbt.body
+    - field.field.node.alf_alyt_walmnasbt.field_almhadr_walmqdm
+    - field.field.node.alf_alyt_walmnasbt.field_image
+    - node.type.alf_alyt_walmnasbt
+  module:
+    - text
+    - user
+id: node.alf_alyt_walmnasbt.teaser
+targetEntityType: node
+bundle: alf_alyt_walmnasbt
+mode: teaser
+content:
+  body:
+    label: hidden
+    type: text_summary_or_trimmed
+    weight: 101
+    settings:
+      trim_length: 600
+    third_party_settings: {  }
+    region: content
+  links:
+    weight: 100
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+hidden:
+  field_almhadr_walmqdm: true
+  field_image: true
+  langcode: true
