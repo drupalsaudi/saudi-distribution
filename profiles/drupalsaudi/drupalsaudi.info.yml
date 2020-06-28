@@ -50,7 +50,6 @@ distribution:
   name: توزيعة دروبال السعودية
   langcode: ar
 
-
 # Information added by Drupal.org packaging script on 2020-06-03
 version: '8.9.1'
 project: 'drupal'

@@ -1,0 +1,10 @@
+langcode: ar
+status: true
+dependencies: {  }
+name: 'المحاضر ومقدم الفعالية والمناسبه'
+type: almhadr_wmqdm_alf_alyt_walmnasbh
+description: ''
+help: ''
+new_revision: true
+preview_mode: 1
+display_submitted: true

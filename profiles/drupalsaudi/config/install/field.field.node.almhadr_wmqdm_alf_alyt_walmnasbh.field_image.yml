@@ -3,21 +3,21 @@ status: true
 dependencies:
   config:
     - field.storage.node.field_image
-    - node.type.alf_alyt_walmnasbt
+    - node.type.almhadr_wmqdm_alf_alyt_walmnasbh
   module:
     - image
-id: node.alf_alyt_walmnasbt.field_image
+id: node.almhadr_wmqdm_alf_alyt_walmnasbh.field_image
 field_name: field_image
 entity_type: node
-bundle: alf_alyt_walmnasbt
-label: 'صورة الفعالية'
+bundle: almhadr_wmqdm_alf_alyt_walmnasbh
+label: 'صورة المحاضر'
 description: ''
 required: false
 translatable: true
 default_value: {  }
 default_value_callback: ''
 settings:
-  file_directory: '[date:custom:Y]-[date:custom:m]'
+  file_directory: 'user-content/[date:custom:Y]-[date:custom:m]'
   file_extensions: 'png gif jpg jpeg'
   max_filesize: ''
   max_resolution: ''

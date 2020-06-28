@@ -3,17 +3,15 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.node.teaser
-    - field.field.node.alf_alyt_walmnasbt.body
-    - field.field.node.alf_alyt_walmnasbt.field_asm_almhadr
-    - field.field.node.alf_alyt_walmnasbt.field_image
-    - field.field.node.alf_alyt_walmnasbt.field_tarykh_w_wqt_almnasbt
-    - node.type.alf_alyt_walmnasbt
+    - field.field.node.almhadr_wmqdm_alf_alyt_walmnasbh.body
+    - field.field.node.almhadr_wmqdm_alf_alyt_walmnasbh.field_image
+    - node.type.almhadr_wmqdm_alf_alyt_walmnasbh
   module:
     - text
     - user
-id: node.alf_alyt_walmnasbt.teaser
+id: node.almhadr_wmqdm_alf_alyt_walmnasbh.teaser
 targetEntityType: node
-bundle: alf_alyt_walmnasbt
+bundle: almhadr_wmqdm_alf_alyt_walmnasbh
 mode: teaser
 content:
   body:
@@ -25,12 +23,10 @@ content:
     third_party_settings: {  }
     region: content
   links:
-    weight: 100
+    weight: 102
     settings: {  }
     third_party_settings: {  }
     region: content
 hidden:
-  field_asm_almhadr: true
   field_image: true
-  field_tarykh_w_wqt_almnasbt: true
   langcode: true
