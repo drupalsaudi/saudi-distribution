@@ -44,6 +44,7 @@ install:
   - simple_block
   - captcha
   - image_captcha
+  - multiple_registration
 themes:
   - bartik
   - seven

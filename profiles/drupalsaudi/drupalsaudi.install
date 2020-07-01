@@ -62,4 +62,13 @@ function drupalsaudi_install() {
     ));
     $linkpagedrupalsaudihelp->save();
 
+    // Populate the main menu.
+    $linkmembership = MenuLinkContent::create(array(
+      'title' => t('تسجيل اعضاء الجمعية'),
+      'weight' => 10,
+      'link' => array('uri' => 'internal:/user/register/a_da_aljm_yt'),
+      'menu_name' => 'main',
+      'parent' => 'system.menu.main',
+    ));
+    $linkmembership->save();
 }

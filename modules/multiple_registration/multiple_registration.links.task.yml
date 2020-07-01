@@ -1,0 +1,3 @@
+multiple_registration.local_tasks:
+  deriver: '\Drupal\multiple_registration\Plugin\Derivative\MultipleRegistrationLocalTasks'
+  weight: 100
