@@ -12,31 +12,776 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=((n==1)?(0):((n==0)?(1):((n==2)?(2):((((n%100)>=3)&&((n%100)<=10))?(3):((((n%100)>=11)&&((n%100)<=99))?(4):5)))));\n"
 
-msgid "Save configuration"
-msgstr "حفظ الإعدادات"
-msgid "Delete"
-msgstr "حذف"
-msgid "Submit"
-msgstr "إضافة"
-msgid "Enable"
-msgstr "تفعيل"
-msgid "Disable"
-msgstr "تعطيل"
-msgid "Background color"
-msgstr "لون الخلفية"
-msgid "Text color"
-msgstr "لون النص"
-msgid "normal"
-msgstr "عادية"
-msgid "Testing"
-msgstr "جار الاختبار"
-msgid "low"
-msgstr "منخفضة"
-msgid "high"
-msgstr "عالية"
-msgid "About"
-msgstr "حول"
+#
+# Translations for Module "CAPTCHA" for language "Arabic"
+#
+
+#: captcha.api.php:62
+msgid "Enter \"foo\""
+msgstr ""
+
+#: captcha.api.php:92
+msgid "Foo CAPTCHA"
+msgstr ""
+
+#: captcha.api.php:114
+msgid "This is a very simple challenge, which requires users to
+      enter \"foo\" in a textfield."
+msgstr ""
+
+#: captcha.install:96
+msgid "CAPTCHA"
+msgstr ""
+
+#: captcha.links.action.yml:3
+msgid "Add captcha point"
+msgstr ""
+
+#: captcha.links.menu.yml:2
+msgid "CAPTCHA module settings"
+msgstr ""
+
+#: captcha.links.menu.yml:3
+msgid "Administer how and where CAPTCHA is used."
+msgstr ""
+
+#: captcha.links.menu.yml:9
+msgid "CAPTCHA examples"
+msgstr ""
+
+#: captcha.links.task.yml:3
+msgid "CAPTCHA Settings"
+msgstr ""
+
+#: captcha.links.task.yml:8
+msgid "CAPTCHA examples"
+msgstr ""
+
+#: captcha.links.task.yml:13
 msgid "Form settings"
 msgstr "إعدادات الاستمارة"
-msgid "UUID"
-msgstr "المعرف UUID"
+
+#: captcha.module:58
+msgid "About"
+msgstr "حول"
+
+#: captcha.module:59
+msgid "\"CAPTCHA\" is an acronym for \"Completely Automated Public Turing test to tell Computers and Humans Apart\". It is typically a challenge-response test to determine whether the user is human. The CAPTCHA module is a tool to fight automated submission by malicious users (spamming) of for example comments forms, user registration forms, guestbook forms, etc. You can extend the desired forms with an additional challenge, which should be easy for a human to solve correctly, but hard enough to keep automated scripts and spam bots out."
+msgstr ""
+
+#: captcha.module:60
+msgid "Note that the CAPTCHA module interacts with page caching (see <a href=\":performancesettings\">performance settings</a>). Because the challenge should be unique for each generated form, the caching of the page it appears on is prevented. Make sure that these forms do not appear on too many pages or you will lose much caching efficiency. For example, if you put a CAPTCHA on the user login block, which typically appears on each page for anonymous visitors, caching will practically be disabled. The comment submission forms are another example. In this case you should set the <em>Location of comment submission form</em> to <em>Display on separate page</em> in the comment settings of the relevant <a href=\":contenttypes\">content types</a> for better caching efficiency."
+msgstr ""
+
+#: captcha.module:64
+msgid "CAPTCHA is a trademark of Carnegie Mellon University."
+msgstr ""
+
+#: captcha.module:68
+msgid "A CAPTCHA can be added to virtually each Drupal form. Some default forms are already provided in the form list, but arbitrary forms can be easily added and managed when the option <em>Add CAPTCHA administration links to forms</em> is enabled."
+msgstr ""
+
+#: captcha.module:69
+msgid "Users with the <em>Skip CAPTCHA</em> <a href=\":perm\">permission</a> won\'t be offered a challenge. Be sure to grant this permission to the trusted users (e.g. site administrators). If you want to test a protected form, be sure to do it as a user without the <em>Skip CAPTCHA</em> permission (e.g. as anonymous user)."
+msgstr ""
+
+#: captcha.module:72
+msgid "Note that the CAPTCHA module disables <a href=\":performancesettings\">page caching</a> of pages that include a CAPTCHA challenge."
+msgstr ""
+
+#: captcha.module:141
+msgid "CAPTCHA"
+msgstr ""
+
+#: captcha.module:239
+msgid "CAPTCHA"
+msgstr ""
+
+#: captcha.module:247
+msgid "CAPTCHA: challenge \"@type\" enabled"
+msgstr ""
+
+#: captcha.module:247
+msgid "CAPTCHA: challenge \"@type\" disabled"
+msgstr ""
+
+#: captcha.module:248
+msgid "Untrusted users will see a CAPTCHA here (<a href=\"@settings\">general CAPTCHA settings</a>)."
+msgstr ""
+
+#: captcha.module:252
+msgid "CAPTCHA disabled, Untrusted users won\'t see the captcha (<a href=\"@settings\">general CAPTCHA settings</a>)."
+msgstr ""
+
+#: captcha.module:257
+msgid "Enabled challenge"
+msgstr ""
+
+#: captcha.module:265
+msgid "CAPTCHA: no challenge enabled"
+msgstr ""
+
+#: captcha.module:268
+msgid "Place a CAPTCHA here for untrusted users."
+msgstr ""
+
+#: captcha.module:287
+msgid "CAPTCHA"
+msgstr ""
+
+#: captcha.module:288
+msgid "Most CAPTCHA methods will disable the caching of pages that contain a CAPTCHA element. Check the different implementations to know more about how it affects caching."
+msgstr ""
+
+#: captcha.module:486
+msgid "CAPTCHA validation error: unknown CAPTCHA session ID. Contact the site administrator if this problem persists."
+msgstr ""
+
+#: captcha.module:532
+msgid "The answer you entered for the CAPTCHA was not correct."
+msgstr ""
+
+#: captcha.module:598
+msgid "Math question"
+msgstr ""
+
+#: captcha.module:599
+msgid "Solve this simple math problem and enter the result. E.g. for 1+3, enter 4."
+msgstr ""
+
+#: captcha.module:600
+msgid "@x + @y ="
+msgstr ""
+
+#: captcha.module:625
+msgid "Test one two three"
+msgstr ""
+
+#: captcha.permissions.yml:2
+msgid "Administer CAPTCHA settings"
+msgstr ""
+
+#: captcha.permissions.yml:4
+msgid "Skip CAPTCHA"
+msgstr ""
+
+#: captcha.permissions.yml:5
+msgid "Users with this permission will not be offered a CAPTCHA."
+msgstr ""
+
+#: captcha.routing.yml:5
+msgid "CAPTCHA settings"
+msgstr ""
+
+#: captcha.routing.yml:13
+msgid "CAPTCHA examples"
+msgstr ""
+
+#: captcha.routing.yml:23
+msgid "CAPTCHA configuration"
+msgstr ""
+
+#: captcha.routing.yml:31
+msgid "Add CAPTCHA point"
+msgstr ""
+
+#: captcha.routing.yml:39
+msgid "Edit CAPTCHA point"
+msgstr ""
+
+#: captcha.routing.yml:49
+msgid "Disable CAPTCHA point"
+msgstr ""
+
+#: captcha.routing.yml:59
+msgid "Enable CAPTCHA point"
+msgstr ""
+
+#: captcha.routing.yml:69
+msgid "Delete CAPTCHA point"
+msgstr ""
+
+#: config/install/captcha.settings.yml:3
+msgid "This question is for testing whether or not you are a human visitor and to prevent automated spam submissions."
+msgstr ""
+
+#: image_captcha/image_captcha.install:21
+msgid "Image CAPTCHA requires GD library"
+msgstr ""
+
+#: image_captcha/image_captcha.install:24
+msgid "The Image CAPTCHA module can not be installed because your PHP setup does not provide the <a href=\"!gddoc\">GD library</a>, which is required to generate images."
+msgstr ""
+
+#: image_captcha/image_captcha.module:29
+msgid "The image CAPTCHA is a popular challenge where a random textual code is obfuscated in an image. The image is generated on the fly for each request, which is rather CPU intensive for the server. Be careful with the size and computation related settings."
+msgstr ""
+
+#: image_captcha/image_captcha.module:245
+msgid "Image CAPTCHA"
+msgstr ""
+
+#: image_captcha/image_captcha.module:246
+msgid "Image CAPTCHA"
+msgstr ""
+
+#: image_captcha/image_captcha.module:252
+msgid "What code is in the image?"
+msgstr ""
+
+#: image_captcha/image_captcha.module:253
+msgid "Enter the characters shown in the image."
+msgstr ""
+
+#: image_captcha/src/Controller/CaptchaImageRefresh.php:87
+msgid "Error has occurred. Please contact to site administrator."
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:88
+msgid "The Image CAPTCHA module can not generate images because your PHP setup does not support it (no <a href=\"!gdlib\" target=\"_blank\">GD library</a> with JPEG support)."
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:97
+msgid "Example"
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:98
+msgid "Presolved image CAPTCHA example, generated with the current settings."
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:110
+msgid "Code settings"
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:115
+msgid "Characters to use in the code"
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:120
+msgid "Code length"
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:123
+msgid "The code length influences the size of the image. Note that larger values make the image generation more CPU intensive."
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:129
+msgid "RTL support"
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:132
+msgid "Enable this option to render the code from right to left for right to left languages."
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:142
+msgid "Color and image settings"
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:143
+msgid "Configuration of the background, text colors and file format of the image CAPTCHA."
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:148
+msgid "Background color"
+msgstr "لون الخلفية"
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:149
+msgid "Enter the hexadecimal code for the background color (e.g. #FFF or #FFCE90). When using the PNG file format with transparent background, it is recommended to set this close to the underlying background color."
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:156
+msgid "Text color"
+msgstr "لون النص"
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:157
+msgid "Enter the hexadecimal code for the text color (e.g. #000 or #004283)."
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:164
+msgid "Additional variation of text color"
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:166
+msgid "No variation"
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:167
+msgid "Little variation"
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:168
+msgid "Medium variation"
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:169
+msgid "High variation"
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:170
+msgid "Very high variation"
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:173
+msgid "The different characters will have randomized colors in the specified range around the text color."
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:177
+msgid "File format"
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:178
+msgid "Select the file format for the image. JPEG usually results in smaller files, PNG allows tranparency."
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:181
+msgid "JPEG"
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:182
+msgid "PNG"
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:183
+msgid "PNG with transparent background"
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:190
+msgid "Distortion and noise"
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:191
+msgid "With these settings you can control the degree of obfuscation by distortion and added noise. Do not exaggerate the obfuscation and assure that the code in the image is reasonably readable. For example, do not combine high levels of distortion and noise."
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:196
+msgid "Distortion level"
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:198
+msgid "@level - no distortion"
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:199
+msgid "@level - low"
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:203
+msgid "@level - medium"
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:208
+msgid "@level - high"
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:211
+msgid "Set the degree of wave distortion in the image."
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:215
+msgid "Smooth distortion"
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:217
+msgid "This option enables bilinear interpolation of the distortion which makes the image look smoother, but it is more CPU intensive."
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:222
+msgid "Add salt and pepper noise"
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:224
+msgid "This option adds randomly colored point noise."
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:229
+msgid "Add line noise"
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:231
+msgid "This option enables lines randomly drawn on top of the text code."
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:236
+msgid "Noise level"
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:238
+msgid "low"
+msgstr "منخفضة"
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:240
+msgid "medium"
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:242
+msgid "high"
+msgstr "عالية"
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:244
+msgid "severe"
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:259
+msgid "The list of characters to use should not contain spaces."
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:267
+msgid "You need to select at least one font."
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:272
+msgid "The built-in font only supports Latin2 characters. Only use \"a\" to \"z\" and numbers."
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:279
+msgid "The following fonts are not readable: %fonts."
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:285
+msgid "Background color is not a valid hexadecimal color value."
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:288
+msgid "Text color is not a valid hexadecimal color value."
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:324
+msgid "Font settings"
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:333
+msgid "No TrueType support"
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:334
+msgid "The Image CAPTCHA module can not use TrueType fonts because your PHP setup does not support it. You can only use a PHP built-in bitmap font of fixed size."
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:351
+msgid "Font preview of @font (@file)"
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:365
+msgid "Preview of built-in font"
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:372
+msgid "PHP built-in font: font_preview"
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:381
+msgid "Fonts"
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:383
+msgid "Select the fonts to use for the text in the image CAPTCHA. Apart from the provided defaults, you can also use your own TrueType fonts (filename extension .ttf) by putting them in %fonts_library_general or %fonts_library_specific."
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:395
+msgid "Font size"
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:397
+msgid "tiny"
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:398
+msgid "small"
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:400
+msgid "normal"
+msgstr "عادية"
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:402
+msgid "large"
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:404
+msgid "extra large"
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:407
+msgid "The font size influences the size of the image. Note that larger values make the image generation more CPU intensive."
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:415
+msgid "Character spacing"
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:416
+msgid "Define the average spacing between characters. Note that larger values make the image generation more CPU intensive."
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:419
+msgid "tight"
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:420
+msgid "normal"
+msgstr "عادية"
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:421
+msgid "wide"
+msgstr ""
+
+#: image_captcha/src/Form/ImageCaptchaSettingsForm.php:422
+msgid "extra wide"
+msgstr ""
+
+#: modules/captcha_long_form_id_test/captcha_long_form_id_test.info.yml:3
+msgid "Test module for testing captchas added to forms with ids longer than 64 characters"
+msgstr ""
+
+#: modules/captcha_long_form_id_test/captcha_long_form_id_test.routing.yml:5
+msgid "LongIdForm"
+msgstr ""
+
+#: modules/captcha_long_form_id_test/src/Form/LongIdForm.php:26
+msgid "Text Field"
+msgstr ""
+
+#: modules/captcha_long_form_id_test/src/Form/LongIdForm.php:32
+msgid "Submit"
+msgstr "إضافة"
+
+#: src/Entity/CaptchaPoint.php:17
+msgid "Captcha Point"
+msgstr ""
+
+#: src/Entity/Controller/CaptchaPointListBuilder.php:17
+msgid "Captcha Point form ID"
+msgstr ""
+
+#: src/Entity/Controller/CaptchaPointListBuilder.php:18
+msgid "Captcha Point challenge type"
+msgstr ""
+
+#: src/Form/CaptchaExamplesForm.php:66
+msgid "This page gives an overview of all available challenge types, generated with their current settings."
+msgstr ""
+
+#: src/Form/CaptchaExamplesForm.php:77
+msgid "Challenge %challenge by module %module"
+msgstr ""
+
+#: src/Form/CaptchaExamplesForm.php:83
+msgid "10 more examples of this challenge."
+msgstr ""
+
+#: src/Form/CaptchaPointDeleteForm.php:18
+msgid "Are you sure you want to delete %name?"
+msgstr ""
+
+#: src/Form/CaptchaPointDeleteForm.php:32
+msgid "Delete"
+msgstr "حذف"
+
+#: src/Form/CaptchaPointDeleteForm.php:40
+msgid "Captcha point %label has been deleted."
+msgstr ""
+
+#: src/Form/CaptchaPointDisableForm.php:18
+msgid "Are you sure you want to disable the Captcha?"
+msgstr ""
+
+#: src/Form/CaptchaPointDisableForm.php:25
+msgid "This will disable the captcha."
+msgstr ""
+
+#: src/Form/CaptchaPointDisableForm.php:39
+msgid "Disable"
+msgstr "تعطيل"
+
+#: src/Form/CaptchaPointDisableForm.php:48
+msgid "Captcha point %label has been disabled."
+msgstr ""
+
+#: src/Form/CaptchaPointEnableForm.php:18
+msgid "Are you sure you want to enable the Captcha?"
+msgstr ""
+
+#: src/Form/CaptchaPointEnableForm.php:25
+msgid "This will enable the captcha."
+msgstr ""
+
+#: src/Form/CaptchaPointEnableForm.php:39
+msgid "Enable"
+msgstr "تفعيل"
+
+#: src/Form/CaptchaPointEnableForm.php:48
+msgid "Captcha point %label has been enabled."
+msgstr ""
+
+#: src/Form/CaptchaPointForm.php:78
+msgid "Form ID"
+msgstr ""
+
+#: src/Form/CaptchaPointForm.php:79
+msgid "Also works with the base form ID."
+msgstr ""
+
+#: src/Form/CaptchaPointForm.php:97
+msgid "Challenge type"
+msgstr ""
+
+#: src/Form/CaptchaPointForm.php:98
+msgid "The CAPTCHA type to use for this form."
+msgstr ""
+
+#: src/Form/CaptchaPointForm.php:115
+msgid "Captcha Point for %form_id form was created."
+msgstr ""
+
+#: src/Form/CaptchaPointForm.php:120
+msgid "Captcha Point for %form_id form was updated."
+msgstr ""
+
+#: src/Form/CaptchaSettingsForm.php:96
+msgid "Form protection"
+msgstr ""
+
+#: src/Form/CaptchaSettingsForm.php:97
+msgid "Select the challenge type you want for each of the listed forms (identified by their so called <em>form_id</em>'s). You can easily add arbitrary forms with the textfield at the bottom of the table or with the help of the option <em>Add CAPTCHA administration links to forms</em> below."
+msgstr ""
+
+#: src/Form/CaptchaSettingsForm.php:103
+msgid "Default challenge type"
+msgstr ""
+
+#: src/Form/CaptchaSettingsForm.php:104
+msgid "Select the default challenge type for CAPTCHAs. This can be overridden for each form if desired."
+msgstr ""
+
+#: src/Form/CaptchaSettingsForm.php:112
+msgid "Default challenge on non-listed forms."
+msgstr ""
+
+#: src/Form/CaptchaSettingsForm.php:113
+msgid "Enable CAPTCHA for every form not listed here"
+msgstr ""
+
+#: src/Form/CaptchaSettingsForm.php:119
+msgid "Add CAPTCHA administration links to forms"
+msgstr ""
+
+#: src/Form/CaptchaSettingsForm.php:121
+msgid "This option makes it easy to manage CAPTCHA settings on forms. When enabled, users with the <em>administer CAPTCHA settings</em> permission will see a fieldset with CAPTCHA administration links on all forms, except on administrative pages."
+msgstr ""
+
+#: src/Form/CaptchaSettingsForm.php:126
+msgid "Allow CAPTCHAs and CAPTCHA administration links on administrative pages"
+msgstr ""
+
+#: src/Form/CaptchaSettingsForm.php:128
+msgid "This option makes it possible to add CAPTCHAs to forms on administrative pages. CAPTCHAs are disabled by default on administrative pages (which shouldn't be accessible to untrusted users normally) to avoid the related overhead. In some situations, e.g. in the case of demo sites, it can be useful to allow CAPTCHAs on administrative pages."
+msgstr ""
+
+#: src/Form/CaptchaSettingsForm.php:135
+msgid "CAPTCHA placement caching"
+msgstr ""
+
+#: src/Form/CaptchaSettingsForm.php:136
+msgid "For efficiency, the positions of the CAPTCHA elements in each of the configured forms are cached. Most of the time, the structure of a form does not change and it would be a waste to recalculate the positions every time. Occasionally however, the form structure can change (e.g. during site building) and clearing the CAPTCHA placement cache can be required to fix the CAPTCHA placement."
+msgstr ""
+
+#: src/Form/CaptchaSettingsForm.php:140
+msgid "Clear the CAPTCHA placement cache"
+msgstr ""
+
+#: src/Form/CaptchaSettingsForm.php:147
+msgid "Add a description to the CAPTCHA"
+msgstr ""
+
+#: src/Form/CaptchaSettingsForm.php:148
+msgid "Add a configurable description to explain the purpose of the CAPTCHA to the visitor."
+msgstr ""
+
+#: src/Form/CaptchaSettingsForm.php:153
+msgid "Challenge description"
+msgstr ""
+
+#: src/Form/CaptchaSettingsForm.php:154
+msgid "Configurable description of the CAPTCHA. An empty entry will reset the description to default."
+msgstr ""
+
+#: src/Form/CaptchaSettingsForm.php:170
+msgid "Default CAPTCHA validation"
+msgstr ""
+
+#: src/Form/CaptchaSettingsForm.php:171
+msgid "Define how the response should be processed by default. Note that the modules that provide the actual challenges can override or ignore this."
+msgstr ""
+
+#: src/Form/CaptchaSettingsForm.php:173
+msgid "Case sensitive validation: the response has to exactly match the solution."
+msgstr ""
+
+#: src/Form/CaptchaSettingsForm.php:174
+msgid "Case insensitive validation: lowercase/uppercase errors are ignored."
+msgstr ""
+
+#: src/Form/CaptchaSettingsForm.php:183
+msgid "Persistence"
+msgstr ""
+
+#: src/Form/CaptchaSettingsForm.php:186
+msgid "Always add a challenge."
+msgstr ""
+
+#: src/Form/CaptchaSettingsForm.php:187
+msgid "Omit challenges in a multi-step/preview workflow once the user successfully responds to a challenge."
+msgstr ""
+
+#: src/Form/CaptchaSettingsForm.php:188
+msgid "Omit challenges on a form type once the user successfully responds to a challenge on a form of that type."
+msgstr ""
+
+#: src/Form/CaptchaSettingsForm.php:189
+msgid "Omit challenges on all forms once the user successfully responds to any challenge on the site."
+msgstr ""
+
+#: src/Form/CaptchaSettingsForm.php:191
+msgid "Define if challenges should be omitted during the rest of a session once the user successfully responds to a challenge."
+msgstr ""
+
+#: src/Form/CaptchaSettingsForm.php:197
+msgid "Enable statistics"
+msgstr ""
+
+#: src/Form/CaptchaSettingsForm.php:198
+msgid "Keep CAPTCHA related counters in the <a href=\":statusreport\">status report</a>. Note that this comes with a performance penalty as updating the counters results in clearing the variable cache."
+msgstr ""
+
+#: src/Form/CaptchaSettingsForm.php:207
+msgid "Log wrong responses"
+msgstr ""
+
+#: src/Form/CaptchaSettingsForm.php:208
+msgid "Report information about wrong responses to the log."
+msgstr ""
+
+#: src/Form/CaptchaSettingsForm.php:214
+msgid "Report information about wrong responses to the <a href=\":dblog\">log</a>."
+msgstr ""
+
+#: src/Form/CaptchaSettingsForm.php:223
+msgid "Save configuration"
+msgstr "حفظ الإعدادات"
+
+#: src/Form/CaptchaSettingsForm.php:249
+msgid "The CAPTCHA settings have been saved."
+msgstr ""
+
+#: src/Form/CaptchaSettingsForm.php:264
+msgid "Cleared the CAPTCHA placement cache."
+msgstr ""
+
+#: src/Service/CaptchaService.php:31
+msgid "Default challenge type"
+msgstr ""
+
+#: src/Service/CaptchaService.php:40
+msgid "@type (from module @module)"
+msgstr ""
+
