@@ -17,18 +17,20 @@
 # custom module, theme, etc., are not ignored unless you purposely do so.
 /vendor/
 
+!sites/default/files/translations
 # Ignore configuration files that may contain sensitive information.
 sites/*/settings*.php
 sites/*/services*.yml
 
 # Ignore paths that contain user-generated content.
 sites/*/files
+!***/translations/
 sites/*/private
 
 # Ignore SimpleTest multi-site environment.
 sites/simpletest
 
-# If you prefer to store your .gitignore file in the sites/ folder, comment
+# If you prefer to store your .gitignore file in the sites/ folder, commentcd
 # or delete the previous settings and uncomment the following ones, instead.
 
 # Ignore configuration files that may contain sensitive information.
