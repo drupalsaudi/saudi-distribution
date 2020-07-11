@@ -10,10 +10,10 @@
   background-color: #1275b2;
   background-image:
     url(../../images/noise-low.png),
-    -webkit-radial-gradient(hsl(146.4, 66.5%, 57.8%), hsl(203, 80%, 32%));
+    -webkit-radial-gradient(hsl(203, 80%, 45%), hsl(203, 80%, 32%));
   background-image:
-  url(../../images/noise-low.png),
-  radial-gradient(hsl(146.4, 66.5%, 57.8%), hsl(203, 80%, 32%))
+    url(../../images/noise-low.png),
+    radial-gradient(hsl(203, 80%, 45%), hsl(203, 80%, 32%));
   background-repeat: repeat;
   background-position: left top, 50% 50%; /* LTR */
 }
