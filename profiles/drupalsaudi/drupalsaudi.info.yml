@@ -49,6 +49,9 @@ themes:
   - bartik
   - seven
 
+'interface translation project': drupalsaudi
+'interface translation server pattern': profiles/drupalsaudi/translations/%language/%project.%language.po
+
 distribution:
   name: توزيعة دروبال السعودية
   langcode: ar
