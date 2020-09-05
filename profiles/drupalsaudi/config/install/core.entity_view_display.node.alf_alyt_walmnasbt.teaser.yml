@@ -7,8 +7,10 @@ dependencies:
     - field.field.node.alf_alyt_walmnasbt.field_asm_almhadr
     - field.field.node.alf_alyt_walmnasbt.field_image
     - field.field.node.alf_alyt_walmnasbt.field_tarykh_w_wqt_almnasbt
+    - image.style.large
     - node.type.alf_alyt_walmnasbt
   module:
+    - image
     - text
     - user
 id: node.alf_alyt_walmnasbt.teaser
@@ -19,18 +21,26 @@ content:
   body:
     label: hidden
     type: text_summary_or_trimmed
-    weight: 101
+    weight: 2
     settings:
       trim_length: 600
     third_party_settings: {  }
     region: content
+  field_image:
+    type: image
+    weight: 1
+    region: content
+    label: hidden
+    settings:
+      image_style: large
+      image_link: ''
+    third_party_settings: {  }
   links:
-    weight: 100
+    weight: 0
+    region: content
     settings: {  }
     third_party_settings: {  }
-    region: content
 hidden:
   field_asm_almhadr: true
-  field_image: true
   field_tarykh_w_wqt_almnasbt: true
   langcode: true
