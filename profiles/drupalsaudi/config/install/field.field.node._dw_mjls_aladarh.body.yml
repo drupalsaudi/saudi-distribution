@@ -11,7 +11,7 @@ field_name: body
 entity_type: node
 bundle: _dw_mjls_aladarh
 label: 'معلومات عن العضو'
-description: ''
+description: 'معلومات عامة عن العضو'
 required: false
 translatable: true
 default_value: {  }
