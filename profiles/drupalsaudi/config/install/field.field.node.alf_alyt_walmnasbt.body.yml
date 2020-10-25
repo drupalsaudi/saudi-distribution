@@ -10,7 +10,7 @@ id: node.alf_alyt_walmnasbt.body
 field_name: body
 entity_type: node
 bundle: alf_alyt_walmnasbt
-label: Body
+label: الوصف
 description: ''
 required: false
 translatable: true
