@@ -203,6 +203,8 @@ class FieldDiscoveryTest extends MigrateDrupal7TestBase {
               'map' => [
                 'taxonomy_term_reference' => [
                   'taxonomy_term_reference_link' => 'entity_reference_label',
+                  'taxonomy_term_reference_plain' => 'entity_reference_label',
+                  'taxonomy_term_reference_rss_category' => 'entity_reference_label',
                   'i18n_taxonomy_term_reference_link' => 'entity_reference_label',
                   'entityreference_entity_view' => 'entity_reference_entity_view',
                 ],
@@ -283,7 +285,7 @@ class FieldDiscoveryTest extends MigrateDrupal7TestBase {
     $this->assertArrayHasKey('user', $actual_fields['user']);
     $this->assertArrayHasKey('test_content_type', $actual_fields['node']);
     $this->assertCount(7, $actual_fields['node']);
-    $this->assertCount(6, $actual_fields['comment']);
+    $this->assertCount(7, $actual_fields['comment']);
     $this->assertCount(22, $actual_fields['node']['test_content_type']);
     foreach ($actual_fields as $entity_type_id => $bundles) {
       foreach ($bundles as $bundle => $fields) {
