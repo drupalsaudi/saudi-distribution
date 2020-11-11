@@ -8,15 +8,8 @@ simple_block.*:
       type: string
       label: 'ID'
     title:
-      type: string
+      type: label
       label: 'Title'
     content:
-      type: mapping
+      type: text_format
       label: 'Content'
-      mapping:
-        value:
-          type: string
-          label: 'Text'
-        format:
-          type: string
-          label: 'Format'

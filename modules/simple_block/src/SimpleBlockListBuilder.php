@@ -27,10 +27,10 @@ class SimpleBlockListBuilder extends ConfigEntityListBuilder {
    * {@inheritdoc}
    */
   public function buildRow(EntityInterface $entity) {
-      return [
-        'id' => $entity->id(),
-        'block' => $entity->label(),
-      ] + parent::buildRow($entity);
+    return [
+      'id' => $entity->id(),
+      'block' => $entity->label(),
+    ] + parent::buildRow($entity);
   }
 
   /**

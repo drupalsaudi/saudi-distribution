@@ -49,14 +49,14 @@ class SimpleBlockEditForm extends EntityForm implements ContainerInjectionInterf
       '#description' => $this->t("The block title."),
       '#required' => TRUE,
     ];
-    $form['content'] = array(
+    $form['content'] = [
       '#type' => 'text_format',
       '#format' => $simple_block->getContent()['format'],
       '#title' => $this->t('Block content'),
       '#default_value' => $simple_block->getContent()['value'],
       '#description' => $this->t("The block content."),
       '#required' => TRUE,
-    );
+    ];
     return $form;
   }
 
@@ -64,7 +64,18 @@ class SimpleBlockEditForm extends EntityForm implements ContainerInjectionInterf
    * {@inheritdoc}
    */
   public function save(array $form, FormStateInterface $form_state) {
-    $this->entity->save();
+    $simple_block = $this->entity;
+    $is_new = $simple_block->isNew();
+    $status = $simple_block->save();
+    if ($status && $is_new) {
+      \Drupal::messenger()->addMessage($this->t('Block %id has been added.', ['%id' => $simple_block->id()]));
+    }
+    elseif ($status) {
+      \Drupal::messenger()->addMessage($this->t('Block %id has been updated.', ['%id' => $simple_block->id()]));
+    }
+    else {
+      \Drupal::messenger()->addMessage($this->t('Block %id was not saved.', ['%id' => $simple_block->id()]), 'warning');
+    }
   }
 
 }

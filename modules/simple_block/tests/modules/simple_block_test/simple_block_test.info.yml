@@ -1,14 +1,13 @@
 type: module
 name: 'Simple Block Test'
 description: 'Simple Block testing module.'
-# core: 8.x
-# version: VERSION
+core: 8.x
+core_version_requirement: ^8 || ^9
 package: Testing
 dependencies:
-  - simple_block
+  - simple_block:simple_block
 
-# Information added by Drupal.org packaging script on 2017-01-26
-version: '8.x-1.0-beta1'
-core: '8.x'
+# Information added by Drupal.org packaging script on 2020-09-12
+version: '8.x-1.0'
 project: 'simple_block'
-datestamp: 1485418688
+datestamp: 1599902655
