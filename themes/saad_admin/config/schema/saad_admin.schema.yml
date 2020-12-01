@@ -1,0 +1,5 @@
+# Schema for the configuration files of the saad_admin theme.
+
+saad_admin.settings:
+  type: theme_settings
+  label: 'saad_admin settings'
