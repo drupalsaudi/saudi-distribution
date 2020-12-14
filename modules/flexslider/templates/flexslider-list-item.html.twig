@@ -1,0 +1,26 @@
+{#
+/**
+ * @file
+ * Default theme implementation for the individual Flexslider item/slide template.
+ *
+ * Available variables:
+ * - attributes: An array of attributes to apply to the element.
+ * - item.slide: A renderable array of the main image/background.
+ * - item.caption: A renderable array containing caption fields if provided:
+ *   - title: The individual slide title.
+ *   - alt: The core Image field Alt as caption.
+ *   - link: The slide links or buttons.
+ *   - overlay: The image/audio/video overlay, or a nested slick.
+ *   - data: any possible field for more complex data if crazy enough.
+ * - settings: An array containing the given settings.
+ *
+ * @see template_preprocess_flexslider_list_item()
+ */
+#}
+
+<li{{ attributes }}>
+    {{ item }}
+    {% if caption %}
+        <div class="flex-caption">{{ caption }}</div>
+    {% endif %}
+</li>

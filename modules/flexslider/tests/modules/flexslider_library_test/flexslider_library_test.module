@@ -1,0 +1,46 @@
+<?php
+
+/**
+ * @file
+ * Hooks for flexslider library testing.
+ */
+
+use Drupal\Core\Site\Settings;
+
+/**
+ * Implements hook_library_info_alter().
+ */
+function flexslider_library_test_library_info_alter(&$libraries, $extension) {
+  if ($extension == 'flexslider' and isset($libraries['flexslider'])) {
+
+    $paths = array_keys($libraries['flexslider']['js']);
+    $library_path = dirname($paths[0]);
+    $library_path_test = '/' . Settings::get('file_public_path') . '/libraries/flexslider';
+
+    // Set path to where the library was downloaded in the test environment.
+    $js = \Drupal::config('flexslider.settings')->get('flexslider_debug') ? 'jquery.flexslider.js' : 'jquery.flexslider-min.js';
+    $libraries['flexslider']['js'][$library_path_test . '/' . $js] = $libraries['flexslider']['js'][$library_path . '/' . $js];
+    unset($libraries['flexslider']['js'][$library_path . '/' . $js]);
+
+    if (isset($libraries['flexslider']['css']['component'][$library_path . '/flexslider.css'])) {
+      $libraries['flexslider']['css']['component'][$library_path_test . '/flexslider.css'] = $libraries['flexslider']['css']['component'][$library_path . '/flexslider.css'];
+      unset($libraries['flexslider']['css']['component'][$library_path . '/flexslider.css']);
+    }
+
+  }
+}
+
+/**
+ * Implements hook_page_attachments_alter().
+ */
+function flexslider_library_test_page_attachments_alter(array &$attachments) {
+  // Attach the flexslider assets on the user page for testing.
+  $current_path = \Drupal::service('path.current')->getPath();
+  if (preg_match('|^\/?user\/\d+$|', $current_path)) {
+    $flexslider_attachments = flexslider_add();
+    $attachments['#attached']['library'] = array_merge(
+      $attachments['#attached']['library'],
+      $flexslider_attachments['library']
+    );
+  }
+}

@@ -1,0 +1,28 @@
+<?php
+
+/**
+ * @file
+ * Install file for the flexslider library test module.
+ */
+
+use Drupal\Core\Site\Settings;
+use Drupal\Core\File\FileSystemInterface;
+
+/**
+ * Implements hook_install().
+ */
+function flexslider_library_test_install() {
+  $library_folder = Settings::get('file_public_path') . '/libraries';
+  $flexslider_folder = $library_folder . '/flexslider';
+  if (file_exists($flexslider_folder)) {
+    return;
+  }
+
+  \Drupal::service('file_system')->prepareDirectory($library_folder, FileSystemInterface::MODIFY_PERMISSIONS | FileSystemInterface::CREATE_DIRECTORY);
+  $zip_file = $library_folder . '/flexslider.zip';
+  copy('https://github.com/woocommerce/FlexSlider/archive/master.zip', $zip_file);
+  $zip = new \ZipArchive();
+  $zip->open($zip_file);
+  $zip->extractTo($library_folder);
+  rename($library_folder . '/FlexSlider-master', $flexslider_folder);
+}

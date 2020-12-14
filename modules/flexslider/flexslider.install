@@ -1,0 +1,73 @@
+<?php
+
+/**
+ * @file
+ * Installation actions for FlexSlider.
+ */
+
+/**
+ * Implements hook_uninstall().
+ *
+ * Deletes all content and configuration installed by this module.
+ */
+function flexslider_uninstall() {
+  // Delete all of the configuration installed by this module.
+  $dir = drupal_get_path('module', 'flexslider') . '/config/install';
+  $files = \Drupal::service('file_system')->scanDirectory($dir, '/.*/');
+  foreach ($files as $file) {
+    \Drupal::configFactory()->getEditable($file->name)->delete();
+  }
+  \Drupal::logger('flexslider')->info(t('Deleted flexslider configuration'), []);
+}
+
+/**
+ * Implements hook_requirements().
+ */
+function flexslider_requirements($phase) {
+  $requirements = [];
+
+  // Check to see if the flexslider library is available.
+  if ($phase == 'runtime') {
+    // @todo Remove this conditional once 8.9 is the minimum supported core
+    // version.
+    if (\Drupal::hasService('library.libraries_directory_file_finder')) {
+      /** @var \Drupal\Core\Asset\LibrariesDirectoryFileFinder $library_file_finder */
+      $library_file_finder = \Drupal::service('library.libraries_directory_file_finder');
+      $found = (bool) $library_file_finder->find('flexslider/jquery.flexslider-min.js');
+    }
+    else {
+      $path = DRUPAL_ROOT . '/libraries/flexslider/jquery.flexslider-min.js';
+      if (\Drupal::moduleHandler()->moduleExists('libraries')) {
+        $path = libraries_get_path('flexslider') . '/jquery.flexslider-min.js';
+      }
+      $found = file_exists($path);
+
+      // Find the library in the profiles path if not found.
+      if (!$found) {
+        $path = drupal_get_path('profile', \Drupal::installProfile());
+        $path .= '/libraries/flexslider/jquery.flexslider-min.js';
+        $found = file_exists($path);
+      }
+    }
+
+    if (!$found) {
+      $requirements['flexslider'] = [
+        'title' => t('FlexSlider'),
+        'description' => t('FlexSlider library not found. Please consult the README.md for installation instructions.'),
+        'severity' => REQUIREMENT_ERROR,
+      ];
+    }
+  }
+  return $requirements;
+}
+
+/**
+ * Add styles to the default configuration for flexslider module.
+ */
+function flexslider_update_8001() {
+  $config_factory = \Drupal::configFactory();
+  $config = $config_factory->getEditable('flexslider.settings');
+  $config->set('flexslider_css', TRUE);
+  $config->set('flexslider_module_css', TRUE);
+  $config->save(TRUE);
+}

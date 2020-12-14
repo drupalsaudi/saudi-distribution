@@ -1,0 +1,46 @@
+langcode: en
+status: true
+dependencies: {  }
+id: flexslider_default_basic_carousel
+label: 'Basic Carousel'
+options:
+  animation: slide
+  animationSpeed: 600
+  direction: horizontal
+  slideshow: true
+  easing: swing
+  smoothHeight: false
+  reverse: false
+  slideshowSpeed: 7000
+  animationLoop: false
+  randomize: false
+  startAt: 0
+  itemWidth: 210
+  itemMargin: 5
+  minItems: 2
+  maxItems: 2
+  move: 0
+  directionNav: true
+  controlNav: '1'
+  thumbCaptions: false
+  thumbCaptionsBoth: false
+  keyboard: true
+  multipleKeyboard: false
+  mousewheel: false
+  touch: true
+  prevText: Previous
+  nextText: Next
+  namespace: flex-
+  selector: '.slides > li'
+  sync: ''
+  asNavFor: ''
+  initDelay: 0
+  useCSS: true
+  video: false
+  pausePlay: true
+  pauseText: Pause
+  playText: Play
+  pauseOnAction: true
+  pauseOnHover: true
+  controlsContainer: .flex-control-nav-container
+  manualControls: ''

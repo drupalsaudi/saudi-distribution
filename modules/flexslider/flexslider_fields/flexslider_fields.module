@@ -1,0 +1,16 @@
+<?php
+
+/**
+ * @file
+ * Adds fields integration with FlexSlider.
+ */
+
+/**
+ * Implements hook_field_formatter_info_alter().
+ */
+function flexslider_fields_field_formatter_info_alter(array &$info) {
+  // Remove responsive formatter if responsive image module is not installed.
+  if (!\Drupal::moduleHandler()->moduleExists('responsive_image') && isset($info['flexslider_responsive'])) {
+    unset($info['flexslider_responsive']);
+  }
+}
