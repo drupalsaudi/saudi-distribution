@@ -45,6 +45,8 @@ install:
   - captcha
   - image_captcha
   - multiple_registration
+  - menu_link_attributes
+  - flexslider
 themes:
   - bartik
   - seven
