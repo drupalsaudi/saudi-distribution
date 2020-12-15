@@ -1,0 +1,12 @@
+name: 'Font Awesome'
+type: module
+description: 'The most popular icon set and toolkit on the web.'
+
+core: 8.x
+core_version_requirement: ^8 || ^9
+configure: fontawesome.admin_settings
+
+# Information added by Drupal.org packaging script on 2020-07-02
+version: '8.x-2.17'
+project: 'fontawesome'
+datestamp: 1593708091

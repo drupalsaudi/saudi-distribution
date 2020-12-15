@@ -66,9 +66,119 @@ function drupalsaudi_install() {
     $linkmembership = MenuLinkContent::create(array(
       'title' => t('تسجيل اعضاء الجمعية'),
       'weight' => 10,
+      'enabled' => 0,
       'link' => array('uri' => 'internal:/user/register/a_da_aljm_yt'),
       'menu_name' => 'main',
       'parent' => 'system.menu.main',
+
     ));
     $linkmembership->save();
-}
+
+    // Populate the main menu.
+    $linkaboutsa = MenuLinkContent::create([
+      'title' => t('عن الجمعية'),
+      'weight' => 2,
+      'link' => [
+        'uri' => 'internal:/',
+        'options' => [
+          'fa_icon' => 'far fa-building',
+          'fa_icon_prefix' => 'fa',
+          'fa_icon_tag' => 'i',
+          'fa_icon_appearance' => 'before',
+        ]
+      ],
+      'menu_name' => 'main',
+      'parent' => 'system.menu.main',
+    ]);
+    $linkaboutsa->save();
+
+    // Populate the main menu.
+    $linkcatsa = MenuLinkContent::create([
+      'title' => t('اقسام الجمعية'),
+      'weight' => 3,
+      'link' => [
+        'uri' => 'internal:/',
+        'options' => [
+          'fa_icon' => 'fa-sitemap',
+          'fa_icon_prefix' => 'fa',
+          'fa_icon_tag' => 'i',
+          'fa_icon_appearance' => 'before',
+        ]
+      ],
+      'menu_name' => 'main',
+      'parent' => 'system.menu.main',
+    ]);
+    $linkcatsa->save();
+
+    // Populate the main menu.
+    $linkcentersa = MenuLinkContent::create([
+      'title' => t('المركز الاعلامي'),
+      'weight' => 4,
+      'link' => [
+        'uri' => 'internal:/',
+        'options' => [
+          'fa_icon' => 'far fa-newspaper',
+          'fa_icon_prefix' => 'fa',
+          'fa_icon_tag' => 'i',
+          'fa_icon_appearance' => 'before',
+        ]
+      ],
+      'menu_name' => 'main',
+      'parent' => 'system.menu.main',
+    ]);
+    $linkcentersa->save();
+
+    // Populate the main menu.
+    $linkimportantsa = MenuLinkContent::create([
+      'title' => t('روابط تهمك'),
+      'weight' => 5,
+      'link' => [
+        'uri' => 'internal:/',
+        'options' => [
+          'fa_icon' => 'fa-globe',
+          'fa_icon_prefix' => 'fa',
+          'fa_icon_tag' => 'i',
+          'fa_icon_appearance' => 'before',
+        ]
+      ],
+      'menu_name' => 'main',
+      'parent' => 'system.menu.main',
+    ]);
+    $linkimportantsa->save();
+
+    // Populate the main menu.
+    $linkcontactsa = MenuLinkContent::create([
+      'title' => t('اتصل بنا'),
+      'weight' => 6,
+      'link' => [
+        'uri' => 'internal:/',
+        'options' => [
+          'fa_icon' => 'fa-phone-alt',
+          'fa_icon_prefix' => 'fa',
+          'fa_icon_tag' => 'i',
+          'fa_icon_appearance' => 'before',
+        ]
+      ],
+      'menu_name' => 'main',
+      'parent' => 'system.menu.main',
+    ]);
+    $linkcontactsa->save();
+
+    // Populate the main menu.
+    $linksupportsa = MenuLinkContent::create([
+      'title' => t('دعم الجمعية'),
+      'weight' => 7,
+      'link' => [
+        'uri' => 'internal:/',
+        'options' => [
+          'fa_icon' => 'fa-hands-helping',
+          'fa_icon_prefix' => 'fa',
+          'fa_icon_tag' => 'i',
+          'fa_icon_appearance' => 'before',
+        ]
+      ],
+      'menu_name' => 'main',
+      'parent' => 'system.menu.main',
+    ]);
+    $linksupportsa->save();
+  }

@@ -1,0 +1,407 @@
+<?php
+
+/**
+ * @file
+ * Contains fontawesome_menu_icons.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Component\Render\FormattableMarkup;
+use Drupal\Component\Utility\Html;
+
+/**
+ * Implements hook_help().
+ */
+function fontawesome_menu_icons_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the fontawesome_menu_icons module.
+    case 'help.page.fontawesome_menu_icons':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('FontAwesome Menu Icons') . '</p>';
+      return $output;
+
+    default:
+  }
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function fontawesome_menu_icons_form_menu_link_content_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $menu_link = $form_state->getFormObject()->getEntity();
+  $menu_link_options = $menu_link->link->first()->options ?: [];
+
+  $form['fa_icon'] = [
+    '#type'  => 'fieldset',
+    '#title' => t('FontAwesome Icon'),
+  ];
+
+  $form['fa_icon']['fa_icon'] = [
+    '#type'          => 'textfield',
+    '#title'         => t('Icon'),
+    '#default_value' => !empty($menu_link_options['fa_icon']) ? $menu_link_options['fa_icon'] : '',
+    '#attributes'    => [
+      'class' => [
+        'fa-menu-iconpicker',
+      ],
+    ],
+  ];
+
+  $form['fa_icon']['fa_icon_prefix'] = [
+    '#type'          => 'select',
+    '#title'         => t('Style prefix'),
+    '#default_value' => !empty($menu_link_options['fa_icon_prefix']) ? $menu_link_options['fa_icon_prefix'] : 'fa',
+    '#options'       => [
+      'fa'  => 'fa (' . t('4.x only') . ')',
+      'fas' => 'fas (' . t('5.x only') . ')',
+      'far' => 'far (' . t('5.x only') . ')',
+      'fal' => 'fal (' . t('5.x only') . ')',
+      'fad' => 'fad (' . t('5.x only') . ')',
+      'fab' => 'fab (' . t('5.x only') . ')',
+    ],
+  ];
+
+  $form['fa_icon']['fa_icon_tag'] = [
+    '#type'          => 'select',
+    '#title'         => t('HTML tag'),
+    '#default_value' => !empty($menu_link_options['fa_icon_tag']) ? $menu_link_options['fa_icon_tag'] : 'i',
+    '#options'       => [
+      'i'    => 'i',
+      'span' => 'span',
+    ],
+  ];
+
+  $form['fa_icon']['fa_icon_appearance'] = [
+    '#type'          => 'select',
+    '#title'         => t('Appearance'),
+    '#default_value' => !empty($menu_link_options['fa_icon_appearance']) ? $menu_link_options['fa_icon_appearance'] : 'before',
+    '#options'       => [
+      'before' => t('Before text'),
+      'after'  => t('After text'),
+      'only'   => t('Without text'),
+    ],
+  ];
+
+  $form['actions']['submit']['#submit'][] = 'fontawesome_menu_icons_menu_link_content_form_submit';
+
+  // FIXME 'libraries/fontawesome-iconpicker' doesn't work...
+  // @see https://www.drupal.org/docs/8/modules/libraries-api-8x/using-libraries-api-3x-as-a-module-developer
+  // $form['#attached']['library'][] = 'libraries/fontawesome-iconpicker';
+
+  $form['#attached']['library'][] = 'fontawesome_menu_icons/fontawesome-iconpicker';
+  $form['#attached']['library'][] = 'fontawesome_menu_icons/fontawesome-menu-icons';
+}
+
+/**
+ * Process the submitted form.
+ *
+ * @param array $form
+ *   Form Array.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   Form State Interface.
+ *
+ * @throws \Drupal\Core\Entity\EntityStorageException
+ */
+function fontawesome_menu_icons_menu_link_content_form_submit(array $form, FormStateInterface $form_state) {
+  $icon_field = $form_state->getValue('fa_icon');
+  $icon_prefix = $form_state->getValue('fa_icon_prefix');
+  $icon_tag = $form_state->getValue('fa_icon_tag');
+  $icon_appearance = $form_state->getValue('fa_icon_appearance');
+
+  $options = [
+    'fa_icon'            => !empty($icon_field) ? Html::escape($icon_field) : '',
+    'fa_icon_prefix'     => !empty($icon_prefix) ? Html::escape($icon_prefix) : 'fa',
+    'fa_icon_tag'        => !empty($icon_tag) ? Html::escape($icon_tag) : 'i',
+    'fa_icon_appearance' => !empty($icon_appearance) ? Html::escape($icon_appearance) : 'before',
+  ];
+
+  /** @var \Drupal\menu_link_content\Entity\MenuLinkContent $menu_link */
+  $menu_link = $form_state->getFormObject()->getEntity();
+  $menu_link_options = $menu_link->link->first()->options;
+
+  $merged = array_merge($menu_link_options, $options);
+
+  $menu_link->link->first()->options = $merged;
+  $menu_link->save();
+}
+
+/**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function fontawesome_menu_icons_form_menu_link_edit_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $options = $form_state->getBuildInfo()['args'][0]->getOptions();
+
+  $form['fa_icon'] = [
+    '#type'  => 'fieldset',
+    '#title' => t('FontAwesome Icon'),
+  ];
+
+  $form['fa_icon']['fa_icon'] = [
+    '#type'          => 'textfield',
+    '#title'         => t('Icon'),
+    '#default_value' => !empty($options['fa_icon']) ? $options['fa_icon'] : '',
+    '#attributes'    => [
+      'class' => [
+        'fa-menu-iconpicker',
+      ],
+    ],
+  ];
+
+  $form['fa_icon']['fa_icon_prefix'] = [
+    '#type'          => 'select',
+    '#title'         => t('Style prefix'),
+    '#default_value' => !empty($options['fa_icon_prefix']) ? $options['fa_icon_prefix'] : 'fa',
+    '#options'       => [
+      'fa'  => 'fa (' . t('4.x only') . ')',
+      'fas' => 'fas (' . t('5.x only') . ')',
+      'far' => 'far (' . t('5.x only') . ')',
+      'fal' => 'fal (' . t('5.x only') . ')',
+      'fad' => 'fad (' . t('5.x only') . ')',
+      'fab' => 'fab (' . t('5.x only') . ')',
+    ],
+  ];
+
+  $form['fa_icon']['fa_icon_tag'] = [
+    '#type'          => 'select',
+    '#title'         => t('HTML tag'),
+    '#default_value' => !empty($options['fa_icon_tag']) ? $options['fa_icon_tag'] : 'i',
+    '#options'       => [
+      'i'    => 'i',
+      'span' => 'span',
+    ],
+  ];
+
+  $form['fa_icon']['fa_icon_appearance'] = [
+    '#type'          => 'select',
+    '#title'         => t('Appearance'),
+    '#default_value' => !empty($options['fa_icon_appearance']) ? $options['fa_icon_appearance'] : 'before',
+    '#options'       => [
+      'before' => t('Before text'),
+      'after'  => t('After text'),
+      'only'   => t('Without text'),
+    ],
+  ];
+
+  $form['#submit'][] = 'fontawesome_menu_icons_form_menu_link_edit_submit';
+
+  // FIXME 'libraries/fontawesome-iconpicker' doesn't work...
+  // @see https://www.drupal.org/docs/8/modules/libraries-api-8x/using-libraries-api-3x-as-a-module-developer
+  // $form['#attached']['library'][] = 'libraries/fontawesome-iconpicker';
+
+  $form['#attached']['library'][] = 'fontawesome_menu_icons/fontawesome-iconpicker';
+  $form['#attached']['library'][] = 'fontawesome_menu_icons/fontawesome-menu-icons';
+}
+
+/**
+ * Process the submitted form.
+ *
+ * @param array $form
+ *   Array Form.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   Form Interface.
+ */
+function fontawesome_menu_icons_form_menu_link_edit_submit(array $form, FormStateInterface $form_state) {
+  $options = $form_state->getBuildInfo()['args'][0]->getOptions();
+  $menu_link_id = $form_state->getValue('menu_link_id');
+
+  $icon_field = $form_state->getValue('fa_icon');
+  $icon_prefix = $form_state->getValue('fa_icon_prefix');
+  $icon_tag = $form_state->getValue('fa_icon_tag');
+  $icon_appearance = $form_state->getValue('fa_icon_appearance');
+
+  $options['fa_icon'] = !empty($icon_field) ? Html::escape($icon_field) : '';
+  $options['fa_icon_prefix'] = !empty($icon_prefix) ? Html::escape($icon_prefix) : 'fa';
+  $options['fa_icon_tag'] = !empty($icon_tag) ? Html::escape($icon_tag) : 'i';
+  $options['fa_icon_appearance'] = !empty($icon_appearance) ? Html::escape($icon_appearance) : 'before';
+
+  if (!empty($menu_link_id)) {
+    $query = \Drupal::database()->update('menu_tree');
+    $query->fields([
+      'options' => serialize($options),
+    ]);
+    $query->condition('id', $menu_link_id);
+    $query->execute();
+
+    $config_factory = \Drupal::configFactory();
+    $config = $config_factory->getEditable('fontawesome_menu_icons.settings');
+
+    $icons = $config->get('menu_link_icons');
+    // Array key cannot contain dot in the config.
+    $config_key = str_replace('.', '_', $menu_link_id);
+
+    if (empty($options['fa_icon'])) {
+      if (isset($icons[$config_key])) {
+        unset($icons[$config_key]);
+      }
+    }
+    else {
+      $icons[$config_key] = [
+        'icon'       => $options['fa_icon'],
+        'prefix'     => $options['fa_icon_prefix'],
+        'tag'        => $options['fa_icon_tag'],
+        'appearance' => $options['fa_icon_appearance'],
+      ];
+    }
+
+    $config->set('menu_link_icons', $icons);
+    $config->save();
+  }
+}
+
+/**
+ * Implements hook_menu_links_discovered_alter().
+ */
+function fontawesome_menu_icons_menu_links_discovered_alter(&$links) {
+  // After clearing the site's cache, the options were cleared from the
+  // menu_tree database table (I'm not sure if this is a bug or normal
+  // behaviour)... but we need to re-apply fa_icon on each menu link item.
+  $config = \Drupal::config('fontawesome_menu_icons.settings');
+  $icons = $config->get('menu_link_icons');
+
+  foreach ($links as $link_id => &$link) {
+    if (empty($link['id'])) {
+      continue;
+    }
+
+    // Array key cannot contain dot in the config.
+    $config_key = str_replace('.', '_', $link_id);
+
+    if (!empty($icons[$config_key])) {
+      // Array is the new storage format.
+      if (is_array($icons[$config_key])) {
+        $link['options']['fa_icon'] = !empty($icons[$config_key]['icon']) ? $icons[$config_key]['icon'] : '';
+        $link['options']['fa_icon_prefix'] = !empty($icons[$config_key]['prefix']) ? $icons[$config_key]['prefix'] : '';
+        $link['options']['fa_icon_tag'] = !empty($icons[$config_key]['tag']) ? $icons[$config_key]['tag'] : '';
+        $link['options']['fa_icon_appearance'] = !empty($icons[$config_key]['appearance']) ? $icons[$config_key]['appearance'] : 'before';
+      }
+      // BC, legacy config
+      // (when appearance and other properties were not supported).
+      else {
+        $link['options']['fa_icon'] = !empty($icons[$config_key]) ? $icons[$config_key] : '';
+        $link['options']['fa_icon_prefix'] = 'fa';
+        $link['options']['fa_icon_tag'] = 'i';
+        $link['options']['fa_icon_appearance'] = 'before';
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_link_alter().
+ */
+function fontawesome_menu_icons_link_alter(&$variables) {
+  if (!empty($variables['options']['fa_icon']) && empty($variables['options']['already_processed'])) {
+    $class = $variables['options']['fa_icon'];
+    $prefix = !empty($variables['options']['fa_icon_prefix']) ? $variables['options']['fa_icon_prefix'] : 'fa';
+    $tag = !empty($variables['options']['fa_icon_tag']) ? $variables['options']['fa_icon_tag'] : 'i';
+    $appearance = !empty($variables['options']['fa_icon_appearance']) ? $variables['options']['fa_icon_appearance'] : 'before';
+
+    /** @var \Drupal\Core\Url $url */
+    $url = $variables['url'];
+    $is_link = ($url->isRouted() && ($url->getRouteName() == '<nolink>')) ? FALSE : TRUE;
+
+    switch ($appearance) {
+      case "only":
+        if ($is_link) {
+          $variables['options']['attributes']['aria-label'] = $variables['text'];
+          $variables['text'] = new FormattableMarkup('<' . $tag . ' class="' . $prefix . ' ' . $class . '" aria-hidden="true"></' . $tag . '>', []);
+        }
+        else {
+          $variables['text'] = new FormattableMarkup('<' . $tag . ' class="' . $prefix . ' ' . $class . '" aria-hidden="true" title="@title"></' . $tag . '><span class="sr-only">@title</span>', [
+            '@title' => $variables['text'],
+          ]);
+        }
+
+        break;
+
+      case "after":
+        $variables['text'] = new FormattableMarkup('@title <' . $tag . ' class="' . $prefix . ' ' . $class . '" aria-hidden="true"></' . $tag . '>', [
+          '@title' => $variables['text'],
+        ]);
+        break;
+
+      case "before":
+      default:
+        $variables['text'] = new FormattableMarkup('<' . $tag . ' class="' . $prefix . ' ' . $class . '" aria-hidden="true"></' . $tag . '> <span class="link-text">@title</span>', [
+          '@title' => $variables['text'],
+        ]);
+        break;
+    }
+
+    $variables['options']['already_processed'] = TRUE;
+  }
+}
+
+/**
+ * Implements hook_preprocess_menu().
+ */
+function fontawesome_menu_icons_preprocess_menu(&$variables, $hook) {
+  if (!empty($variables['items'])) {
+    _fontawesome_menu_icons_preprocess_menu($variables['items']);
+  }
+}
+
+/**
+ * @param $items
+ */
+function _fontawesome_menu_icons_preprocess_menu(&$items) {
+  foreach ($items as &$item) {
+    if (empty($item['url'])) {
+      continue;
+    }
+
+    _fontawesome_menu_icons_preprocess_menu_item($item);
+
+    if (!empty($item['below'])) {
+      _fontawesome_menu_icons_preprocess_menu($item['below']);
+    }
+  }
+}
+
+/**
+ * @param $item
+ */
+function _fontawesome_menu_icons_preprocess_menu_item(&$item) {
+  /** @var \Drupal\Core\Url $url */
+  $url = $item['url'];
+  $options = $url->getOptions();
+
+  if (!empty($options['fa_icon']) && empty($options['already_processed'])) {
+    $class = $options['fa_icon'];
+    $prefix = !empty($options['fa_icon_prefix']) ? $options['fa_icon_prefix'] : 'fa';
+    $tag = !empty($options['fa_icon_tag']) ? $options['fa_icon_tag'] : 'i';
+    $appearance = !empty($options['fa_icon_appearance']) ? $options['fa_icon_appearance'] : 'before';
+    $is_link = ($url->isRouted() && ($url->getRouteName() == '<nolink>')) ? FALSE : TRUE;
+
+    switch ($appearance) {
+      case "only":
+        if ($is_link) {
+          $item['attributes']['aria-label'] = $item['title'];
+          $item['title'] = new FormattableMarkup('<' . $tag . ' class="' . $prefix . ' ' . $class . '" aria-hidden="true"></' . $tag . '>', []);
+        }
+        else {
+          $item['title'] = new FormattableMarkup('<' . $tag . ' class="' . $prefix . ' ' . $class . '" aria-hidden="true" title="@title"></' . $tag . '><span class="sr-only">@title</span>', [
+            '@title' => $item['title'],
+          ]);
+        }
+        break;
+
+      case "after":
+        $item['title'] = new FormattableMarkup('<span class="link-text">@title</span> <' . $tag . ' class="' . $prefix . ' ' . $class . '" aria-hidden="true"></' . $tag . '>', [
+          '@title' => $item['title'],
+        ]);
+        break;
+
+      case "before":
+      default:
+        $item['title'] = new FormattableMarkup('<' . $tag . ' class="' . $prefix . ' ' . $class . '" aria-hidden="true"></' . $tag . '> <span class="link-text">@title</span>', [
+          '@title' => $item['title'],
+        ]);
+        break;
+    }
+
+    $item['url']->setOption('already_processed', TRUE);
+  }
+}

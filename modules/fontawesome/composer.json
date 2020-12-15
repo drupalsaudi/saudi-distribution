@@ -1,0 +1,15 @@
+{
+    "name": "drupal/fontawesome",
+    "description": "The web's most popular icon set and toolkit.",
+    "type": "drupal-module",
+    "license": "GPL-2.0-or-later",
+    "homepage": "https://www.drupal.org/project/fontawesome",
+    "minimum-stability": "dev",
+    "extra": {
+        "drush": {
+            "services": {
+                "drush.services.yml": "^9"
+            }
+        }
+    }
+}
