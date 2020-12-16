@@ -1,0 +1,22 @@
+langcode: ar
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_rabt_khrytt_almwq_
+    - node.type.alf_alyt_walmnasbt
+  module:
+    - link
+id: node.alf_alyt_walmnasbt.field_rabt_khrytt_almwq_
+field_name: field_rabt_khrytt_almwq_
+entity_type: node
+bundle: alf_alyt_walmnasbt
+label: 'موقع الفعالية'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  link_type: 16
+  title: 1
+field_type: link

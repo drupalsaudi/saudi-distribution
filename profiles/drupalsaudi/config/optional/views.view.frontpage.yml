@@ -1,13 +1,20 @@
+uuid: b1b92a11-b764-47ff-b58f-bcfc106b7506
 langcode: ar
 status: true
 dependencies:
   config:
     - core.entity_view_mode.node.rss
     - core.entity_view_mode.node.teaser
+    - node.type._dw_mjls_aladarh
+    - node.type.alf_alyt_walmnasbt
+    - node.type.almhadr_wmqdm_alf_alyt_walmnasbh
+    - node.type.article
+    - node.type.bhth
+    - node.type.ktb
+    - node.type.page
   module:
     - node
     - user
-
 id: frontpage
 label: Frontpage
 module: node
@@ -37,69 +44,23 @@ display:
           sort_asc_label: Asc
           sort_desc_label: Desc
       filters:
-        promote:
-          admin_label: ''
-          expose:
-            description: ''
-            identifier: ''
-            label: ''
-            multiple: false
-            operator: ''
-            operator_id: ''
-            remember: false
-            remember_roles:
-              authenticated: authenticated
-            required: false
-            use_operator: false
-            operator_limit_selection: false
-            operator_list: {  }
-          exposed: false
-          field: promote
-          group: 1
-          group_info:
-            default_group: All
-            default_group_multiple: {  }
-            description: ''
-            group_items: {  }
-            identifier: ''
-            label: ''
-            multiple: false
-            optional: true
-            remember: false
-            widget: select
-          group_type: group
-          id: promote
-          is_grouped: false
-          operator: '='
-          relationship: none
+        type:
+          id: type
           table: node_field_data
-          value: '1'
-          plugin_id: boolean
-          entity_type: node
-          entity_field: promote
-        status:
-          expose:
-            operator: ''
-            operator_limit_selection: false
-            operator_list: {  }
-          field: status
-          group: 1
-          id: status
-          table: node_field_data
-          value: '1'
-          plugin_id: boolean
-          entity_type: node
-          entity_field: status
-        langcode:
-          id: langcode
-          table: node_field_data
-          field: langcode
+          field: type
           relationship: none
           group_type: group
           admin_label: ''
-          operator: in
+          operator: 'not in'
           value:
-            '***LANGUAGE_language_content***': '***LANGUAGE_language_content***'
+            all: all
+            page: page
+            alf_alyt_walmnasbt: alf_alyt_walmnasbt
+            almhadr_wmqdm_alf_alyt_walmnasbh: almhadr_wmqdm_alf_alyt_walmnasbh
+            bhth: bhth
+            _dw_mjls_aladarh: _dw_mjls_aladarh
+            ktb: ktb
+            article: article
           group: 1
           exposed: false
           expose:
@@ -108,6 +69,8 @@ display:
             description: ''
             use_operator: false
             operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
             identifier: ''
             required: false
             remember: false
@@ -115,8 +78,6 @@ display:
             remember_roles:
               authenticated: authenticated
             reduce: false
-            operator_limit_selection: false
-            operator_list: {  }
           is_grouped: false
           group_info:
             label: ''
@@ -129,9 +90,9 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-          plugin_id: language
           entity_type: node
-          entity_field: langcode
+          entity_field: type
+          plugin_id: bundle
       pager:
         type: full
         options:
@@ -209,6 +170,9 @@ display:
       fields: {  }
       arguments: {  }
       display_extenders: {  }
+      filter_groups:
+        operator: AND
+        groups: {  }
     display_plugin: default
     display_title: Master
     id: default

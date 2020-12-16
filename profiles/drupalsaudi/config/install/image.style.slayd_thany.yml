@@ -1,0 +1,12 @@
+langcode: ar
+status: true
+dependencies: {  }
+name: slayd_thany
+label: 'سلايد ثاني'
+effects:
+  b4ab9a13-1a3a-445c-aee7-56b92176538d:
+    id: image_resize
+    weight: 1
+    data:
+      width: 380
+      height: 380

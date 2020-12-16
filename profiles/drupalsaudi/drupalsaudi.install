@@ -53,13 +53,22 @@ function drupalsaudi_install() {
   $drupalsaudishortcut->save();
 
     // Populate the main menu.
-    $linkpagedrupalsaudihelp = MenuLinkContent::create(array(
+    $linkpagedrupalsaudihelp = MenuLinkContent::create([
       'title' => t('المساعدة دروبال السعودية'),
       'weight' => 10,
-      'link' => array('uri' => 'internal:/admin/help/drupal-saudi'),
+      'link' => [
+        'uri' => 'internal:/admin/help/drupal-saudi',
+        'options' => [
+          'attributes' => [
+            'class' => [
+              'helppagedrupalsaudi'
+            ]
+          ],
+        ],
+      ],
       'menu_name' => 'admin',
       'parent' => 'system.admin',
-    ));
+    ]);
     $linkpagedrupalsaudihelp->save();
 
     // Populate the main menu.
@@ -175,7 +184,12 @@ function drupalsaudi_install() {
           'fa_icon_prefix' => 'fa',
           'fa_icon_tag' => 'i',
           'fa_icon_appearance' => 'before',
-        ]
+          'attributes' => [
+            'class' => [
+              'donate-link'
+            ]
+          ],
+        ],
       ],
       'menu_name' => 'main',
       'parent' => 'system.menu.main',

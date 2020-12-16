@@ -1,0 +1,7 @@
+langcode: ar
+status: true
+dependencies: {  }
+id: ywmy
+label: يومي
+locked: false
+pattern: d

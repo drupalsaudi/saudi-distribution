@@ -1,0 +1,406 @@
+/**
+ * @file
+ * Subtheme specific CSS.
+ */
+ @font-face {
+    font-family: 'Cairo';
+    src: url("../../fonts/cairo/Cairo-Regular.eot");
+    src: url("../../fonts/cairo/Cairo-Regular.eot?#iefix") format("embedded-opentype"), url("../fonts/cairo/Cairo-Regular.woff2") format("woff2"), url("../fonts/cairo/Cairo-Regular.woff") format("woff"), url("../fonts/cairo/Cairo-Regular.ttf") format("truetype"), url("../fonts/cairo/Cairo-Regular.svg#SSTArabic-Medium") format("svg");
+    font-weight: 500;
+    font-style: normal
+  }
+
+  @font-face {
+    font-family: 'sst';
+    src: url("../../fonts/sst/SSTArabic-Medium.eot");
+    src: url("../../fonts/sst/SSTArabic-Medium.eot?#iefix") format("embedded-opentype"), url("../fonts/sst/SSTArabic-Medium.woff2") format("woff2"), url("../fonts/sst/SSTArabic-Medium.woff") format("woff"), url("../fonts/sst/SSTArabic-Medium.ttf") format("truetype"), url("../fonts/sst/SSTArabic-Medium.svg#SSTArabic-Medium") format("svg");
+    font-weight: 500;
+    font-style: normal
+  }
+
+  @font-face {
+    font-family: 'sst';
+    src: url("../../fonts/sst/SSTArabic-Roman.eot");
+    src: url("../../fonts/sst/SSTArabic-Roman.eot?#iefix") format("embedded-opentype"), url("../fonts/sst/SSTArabic-Roman.woff2") format("woff2"), url("../fonts/sst/SSTArabic-Roman.woff") format("woff"), url("../fonts/sst/SSTArabic-Roman.ttf") format("truetype"), url("../fonts/sst/SSTArabic-Roman.svg#SSTArabic-Roman") format("svg");
+    font-weight: normal;
+    font-style: normal
+  }
+
+  @font-face {
+    font-family: 'sst';
+    src: url("../../fonts/sst/SSTArabic-Light.eot");
+    src: url("../../fonts/sst/SSTArabic-Light.eot?#iefix") format("embedded-opentype"), url("../fonts/sst/SSTArabic-Light.woff2") format("woff2"), url("../fonts/sst/SSTArabic-Light.woff") format("woff"), url("../fonts/sst/SSTArabic-Light.ttf") format("truetype"), url("../fonts/sst/SSTArabic-Light.svg#SSTArabic-Light") format("svg");
+    font-weight: 300;
+    font-style: normal
+  }
+
+  @font-face {
+    font-family: 'sst';
+    src: url("../../fonts/sst/SSTArabic-Bold.eot");
+    src: url("../../fonts/sst/SSTArabic-Bold.eot?#iefix") format("embedded-opentype"), url("../fonts/sst/SSTArabic-Bold.woff2") format("woff2"), url("../fonts/sst/SSTArabic-Bold.woff") format("woff"), url("../fonts/sst/SSTArabic-Bold.ttf") format("truetype"), url("../fonts/sst/SSTArabic-Bold.svg#SSTArabic-Bold") format("svg");
+    font-weight: bold;
+    font-style: normal
+  }
+
+ .node--view-mode-teaser h2 a {
+    color: #044f48 !important;
+}
+body {
+	color: #3b3b3b;
+	background: #eee;
+}
+
+.navbar {
+    border-bottom: 0px solid #2f9e48 rgba(0,0,0,.5);
+    box-shadow: 0 8px 6px -6px #ddd;
+    font-family: sst, Arial, sans-serif;
+}
+
+.navbar-expand-lg .navbar-nav .nav-link {
+    font-size: 1.3em !important;
+    padding: 0.5em 1em !important;
+    text-align: center !important;
+}
+
+
+
+.svg-inline--fa {
+	font-size: 30px !important;
+	display: block !important;
+	margin: 0 auto;
+}
+
+a.donate-link {
+	background: #2f9e48;
+	color: #fff !important;
+	border-radius: 5px;
+	border: 1px solid #2f9e48;
+}
+
+/**
+ * @file
+ * Slidshow CSS.
+ */
+ #block-views-block-blockslidshow-block-1 {
+  margin: 0 0 45px;
+  position: relative;
+}
+#block-views-block-blockslidshow-block-1 .views-field-title {
+  position: absolute;
+  bottom: 75px;
+  width: 100%;
+  font-size: 32px;
+}
+#block-views-block-blockslidshow-block-1 .views-field-title span {
+	display: block;
+	text-align: center;
+}
+
+#block-views-block-blockslidshow-block-1 .views-slideshow-controls-bottom {
+	position: absolute;
+	bottom: 30px;
+  z-index: 99;
+  width: 100%;
+}
+
+#block-views-block-blockslidshow-block-1 .views-field-title a {
+	color: white !important;
+}
+ #widget_pager_bottom_blockslidshow-block_1 {
+	display: block;
+}
+
+#widget_pager_bottom_blockslidshow-block_1 li {
+  margin-left: 5px;
+  background: #fff;
+  padding: 0.1em 1.1em 0 3.5em !important;
+  line-height: 5px;
+}
+
+#widget_pager_bottom_blockslidshow_news-block_1 {
+	display: block;
+}
+#widget_pager_bottom_blockslidshow_news-block_1 li {
+  margin: 5px;
+}
+.region-bottom-block-12 {
+	background: #eee;
+}
+#block-views-block-sndwq-alrwyt-walrsalh-walhdf-block-1 {
+	margin: 0 auto;
+}
+.about {
+	padding: 11px 50px;
+	text-align: center;
+	background: #fff;
+	margin: 10px auto;
+	margin-right: 40px;
+}
+.about .about-block {
+ background-color: #fff;
+ padding: 2em 1em;
+}
+.about .views-field-title a {
+	font-size: 1.4em !important;
+	font-family: sst, Arial, sans-serif;
+	color: #2f9e48;
+}
+.views-field-field-akhtr-alayqwnh-almnasbt .svg-inline--fa {
+	font-size: 5em !important;
+	color: #2f9e48;
+}
+.flex-direction-nav a {
+	height: 50px !important;
+}
+
+
+.site-footer {
+	background-color: #2f9e48 !important;
+	color: #fff;
+	padding: 15px 15px 0;
+	text-align: center;
+	margin-top: 20px;
+	font-size: 2vw;
+  text-shadow: #5b5b5b 1px 1px 0px;
+}
+
+.title-container {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	border-bottom: 2px solid #ddd;
+	padding-bottom: 15px;
+}
+.title-container h2.title {
+	border-right: 5px solid #2f9e48;
+	font-size: 1.6em;
+	padding-right: 10px;
+	color: #666;
+  line-height: 1.4;
+  float: right;
+}
+
+.all-link {
+  float: left;
+  background-color: #2f9e48 !important;
+border-color: #2f9e48 !important;
+font-weight: 700;
+}
+
+.badge-secondary {
+	color: #fff;
+	background-color: #2f9e48;
+}
+
+
+.row-striped:nth-of-type(odd){
+  background-color: #efefef;
+  border-left: 4px #2f9e48 solid;
+}
+
+.row-striped:nth-of-type(even){
+  background-color: #ffffff;
+  border-left: 4px #efefef solid;
+
+}
+
+.row-striped {
+    padding: 15px 0;
+    margin-bottom: 5px;
+}
+
+
+.row-striped .h3 a {
+  color: #044f48 !important;
+}
+.urltitlef_alyat_qadmh a {
+  font-size: 1.6vw;
+  color: #2f9e48;
+}
+
+.event-meta li i {
+	color: #2f9e48;
+}
+
+.view-f-alyat-qadmh .svg-inline--fa {
+	color: #2f9e48;
+	font-size: 14px !important;
+	float: right;
+	margin: 6px;
+}
+
+.after-content {
+	margin: 20px 0;
+}
+
+#block-mwaqaltwasl a,
+#block-bramjaljmyt a,
+#block-almrkzalalamy a {
+	color: rgba(0,0,0,.5);
+	font-weight: 600;
+  padding: unset !important;
+  line-height: 16px;
+}
+#block-mwaqaltwasl h2,
+#block-bramjaljmyt h2,
+#block-almrkzalalamy h2 {
+	color: #2f9e48;
+  font-size: 1.3em;
+}
+#block-mwaqaltwasl ul,
+#block-bramjaljmyt ul,
+#block-almrkzalalamy ul {
+	display: unset;
+}
+#block-mwaqaltwasl li,
+#block-bramjaljmyt li,
+#block-almrkzalalamy li {
+	border-right: teal 4px solid;
+	margin-bottom: 7px;
+  padding-right: 5px;
+}
+#block-mwaqaltwasl .svg-inline--fa,
+#block-bramjaljmyt  .svg-inline--fa,
+#block-almrkzalalamy .svg-inline--fa {
+	display: unset !important;
+	font-size: 14px !important;
+	color: rgba(0,0,0,.5);
+}
+
+
+.breadcrumb {
+	background-color: rgb(238,238,238) !important;
+	border: 1px solid #f0eded;
+	background: linear-gradient(0deg, rgba(238,238,238,1) 0%, rgba(255,255,255,1) 66%);
+	box-shadow: 0px 1px 4px 1px rgba(0, 0, 0, 0.31);
+}
+.breadcrumb-item a {
+	font-size: 19px !important;
+	color: #1f8486;
+	font-weight: 600;
+}
+
+
+.field--name-title {
+	border-right: 5px solid #2f9e48;
+	padding-right: 15px;
+	font-family: sst, Arial, sans-serif;
+	font-size: 27.4px;
+	color: #666;
+	border-bottom: 2px solid #e8e8e8;
+	width: 97%;
+	display: block;
+  padding-bottom: 6px;
+  border-radius: 4px;
+}
+.field--name-body {
+	font-family: sst, Arial, sans-serif;
+	color: #333;
+	font-weight: 500;
+  clear: both;
+}
+
+.view-f-alyat-qadmh .item-list {
+	margin: 0 auto;
+}
+
+.field--name-field-rabt-khrytt-almwq-,
+.field--name-field-tarykh-w-wqt-almnasbt,
+.field--name-field-asm-almhadr {
+	margin: 3px 0 17px;
+	padding-bottom: 13px;
+	border-bottom: 1px dotted #b6e6c1;
+}
+.field--name-field-rabt-khrytt-almwq- .fa-map-marker-alt,
+.field--name-field-tarykh-w-wqt-almnasbt .fa-clock,
+.field--name-field-asm-almhadr .fa-user {
+	float: right;
+	margin: 2px 5px;
+	color: #1d8234;
+	background: #fff;
+	box-shadow: 0 4px 10px rgba(0,0,0,.17);
+	border-radius: 50%;
+	padding: 5px;
+}
+.abg {
+	background: #2F9D92;
+	border-radius: 6px;
+  padding: 10px;
+  box-shadow: 0px 4px 10px 5px rgba(0,0,0,0.44);
+}
+.abg .field__label {
+	font-size: 17px;
+	font-weight: 600;
+	color: #f9f9f9;
+	text-shadow: #484848 1px 1px 0px;
+}
+.abg a {
+	color: #002622 !important;
+}
+.abg .field__item {
+	color: #193502;
+	text-shadow: #a0d9d3 1px 1px 0px;
+	font-weight: 600;
+}
+[dir="rtl"] .field--type-entity-reference .field__label {
+	padding-left: 5px;
+	padding-right: 0;
+	float: right;
+}
+.view-f-alyat-qadmh li {
+	padding: 0 !important;
+}
+
+
+
+@media screen and (min-width: 40em) {
+  .layout--twocol-section.layout--twocol-section--50-50 > .layout__region--first {
+    flex: 0 1 60% !important;
+  }
+  .layout--twocol-section.layout--twocol-section--50-50 > .layout__region--second {
+    flex: 0 1 40% !important;
+  }
+
+  .layout--twocol-section.layout--twocol-section--33-67 > .layout__region--first,
+  .layout--twocol-section.layout--twocol-section--67-33 > .layout__region--second {
+    flex: 0 1 33%;
+  }
+
+  .layout--twocol-section.layout--twocol-section--33-67 > .layout__region--second,
+  .layout--twocol-section.layout--twocol-section--67-33 > .layout__region--first {
+    flex: 0 1 67%;
+  }
+
+  .layout--twocol-section.layout--twocol-section--25-75 > .layout__region--first,
+  .layout--twocol-section.layout--twocol-section--75-25 > .layout__region--second {
+    flex: 0 1 25%;
+  }
+
+  .layout--twocol-section.layout--twocol-section--25-75 > .layout__region--second,
+  .layout--twocol-section.layout--twocol-section--75-25 > .layout__region--first {
+    flex: 0 1 75%;
+  }
+}
+
+.views_slideshow_cycle_main { width: 100%; }
+.views_slideshow_cycle_main .views-slideshow-cycle-main-frame { width: 100% !important; height: auto; }
+.views_slideshow_cycle_main .views-slideshow-cycle-main-frame-row { width: 100% !important; height: auto; }
+.views_slideshow_cycle_main .field-content { max-width: 100%; width: 100%; }
+.views_slideshow_cycle_main .field-content img { max-width: 100%; width: 100%; height: auto; margin: 0; padding: 0; }
+
+.field--name-field-flexslider-example-slidesh {
+	display: contents;
+	clear: both;
+}
+
+/**
+ * toolbar link drupal saudi.
+ */
+
+ .toolbar-bar .helppagedrupalsaudi:before {
+  background-image: url(../images/drupalsaudi-icon.png);
+}
+.toolbar-bar .helppagedrupalsaudi:active:before,
+.toolbar-bar .helppagedrupalsaudi.is-active:before {
+  background-image: url(../images/drupalsaudi-icon.png);
+}

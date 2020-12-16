@@ -1,0 +1,20 @@
+langcode: ar
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - drupalsaudi_saad_one
+
+id: drupalsaudi_saad_one_powered
+theme: drupalsaudi_saad_one
+region: footer_fifth
+weight: 10
+provider: null
+plugin: system_powered_by_block
+settings:
+  id: system_powered_by_block
+  label: 'يستخدم دروبال'
+  provider: system
+  label_display: '0'
+visibility: {  }

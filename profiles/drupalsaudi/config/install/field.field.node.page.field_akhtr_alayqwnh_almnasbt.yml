@@ -1,0 +1,20 @@
+langcode: ar
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_akhtr_alayqwnh_almnasbt
+    - node.type.page
+  module:
+    - fontawesome
+id: node.page.field_akhtr_alayqwnh_almnasbt
+field_name: field_akhtr_alayqwnh_almnasbt
+entity_type: node
+bundle: page
+label: 'اختر الايقونه المناسبة'
+description: 'من فضلكم اختاروا الايقونه المناسبة لعرضها في صندوق الرساله والرؤية في الصفحة الرئيسية بالامكان البحث هنا <a>https://fontawesome.com/icons?c=spinner-icons</a>'
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: fontawesome_icon
