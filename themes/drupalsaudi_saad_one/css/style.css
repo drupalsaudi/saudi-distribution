@@ -50,6 +50,9 @@ body {
 	background: #eee;
 }
 
+#header {
+	margin-bottom: 1em;
+}
 .navbar {
     border-bottom: 0px solid #2f9e48 rgba(0,0,0,.5);
     box-shadow: 0 8px 6px -6px #ddd;
@@ -125,16 +128,17 @@ a.donate-link {
 }
 .region-bottom-block-12 {
 	background: #eee;
+  padding: 50px 0;
 }
 #block-views-block-sndwq-alrwyt-walrsalh-walhdf-block-1 {
 	margin: 0 auto;
 }
 .about {
-	padding: 11px 50px;
-	text-align: center;
+  text-align: center;
 	background: #fff;
 	margin: 10px auto;
 	margin-right: 40px;
+  padding: 2em 1em;
 }
 .about .about-block {
  background-color: #fff;
@@ -159,7 +163,6 @@ a.donate-link {
 	color: #fff;
 	padding: 15px 15px 0;
 	text-align: center;
-	margin-top: 20px;
 	font-size: 2vw;
   text-shadow: #5b5b5b 1px 1px 0px;
 }

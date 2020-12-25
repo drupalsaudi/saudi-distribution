@@ -1,4 +1,3 @@
-uuid: b1b92a11-b764-47ff-b58f-bcfc106b7506
 langcode: ar
 status: true
 dependencies:
@@ -10,6 +9,7 @@ dependencies:
     - node.type.almhadr_wmqdm_alf_alyt_walmnasbh
     - node.type.article
     - node.type.bhth
+    - node.type.content_slide_show
     - node.type.ktb
     - node.type.page
   module:
@@ -53,11 +53,11 @@ display:
           admin_label: ''
           operator: 'not in'
           value:
-            all: all
             page: page
             alf_alyt_walmnasbt: alf_alyt_walmnasbt
             almhadr_wmqdm_alf_alyt_walmnasbh: almhadr_wmqdm_alf_alyt_walmnasbh
             bhth: bhth
+            content_slide_show: content_slide_show
             _dw_mjls_aladarh: _dw_mjls_aladarh
             ktb: ktb
             article: article

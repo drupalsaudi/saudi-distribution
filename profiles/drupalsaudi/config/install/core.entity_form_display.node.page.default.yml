@@ -1,10 +1,13 @@
-langcode: en
+langcode: ar
 status: true
 dependencies:
   config:
     - field.field.node.page.body
+    - field.field.node.page.field_akhtr_alayqwnh_almnasbt
+    - field.field.node.page.field_zhwr_almhtwy_fy_alsndwq
     - node.type.page
   module:
+    - fontawesome
     - path
     - text
 id: node.page.default
@@ -14,7 +17,7 @@ mode: default
 content:
   body:
     type: text_textarea_with_summary
-    weight: 31
+    weight: 9
     region: content
     settings:
       rows: 9
@@ -24,13 +27,33 @@ content:
     third_party_settings: {  }
   created:
     type: datetime_timestamp
-    weight: 10
+    weight: 3
     region: content
     settings: {  }
     third_party_settings: {  }
+  field_akhtr_alayqwnh_almnasbt:
+    type: fontawesome_icon_widget
+    weight: 8
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_zhwr_almhtwy_fy_alsndwq:
+    weight: 7
+    settings:
+      display_label: true
+    third_party_settings: {  }
+    type: boolean_checkbox
+    region: content
+  langcode:
+    type: language_select
+    weight: 1
+    region: content
+    settings:
+      include_locked: true
+    third_party_settings: {  }
   path:
     type: path
-    weight: 30
+    weight: 6
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -38,26 +61,26 @@ content:
     type: boolean_checkbox
     settings:
       display_label: true
-    weight: 15
+    weight: 4
     region: content
     third_party_settings: {  }
   status:
     type: boolean_checkbox
     settings:
       display_label: true
-    weight: 120
+    weight: 10
     region: content
     third_party_settings: {  }
   sticky:
     type: boolean_checkbox
     settings:
       display_label: true
-    weight: 16
+    weight: 5
     region: content
     third_party_settings: {  }
   title:
     type: string_textfield
-    weight: -5
+    weight: 0
     region: content
     settings:
       size: 60
@@ -65,7 +88,7 @@ content:
     third_party_settings: {  }
   uid:
     type: entity_reference_autocomplete
-    weight: 5
+    weight: 2
     region: content
     settings:
       match_operator: CONTAINS

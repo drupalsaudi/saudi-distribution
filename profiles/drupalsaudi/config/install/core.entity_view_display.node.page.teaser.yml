@@ -1,9 +1,12 @@
-langcode: en
+uuid: 9c58682c-2e42-4349-bdc2-cf67a2600297
+langcode: ar
 status: true
 dependencies:
   config:
     - core.entity_view_mode.node.teaser
     - field.field.node.page.body
+    - field.field.node.page.field_akhtr_alayqwnh_almnasbt
+    - field.field.node.page.field_zhwr_almhtwy_fy_alsndwq
     - node.type.page
   module:
     - text
@@ -24,4 +27,7 @@ content:
   links:
     weight: 101
     region: content
-hidden: {  }
+hidden:
+  field_akhtr_alayqwnh_almnasbt: true
+  field_zhwr_almhtwy_fy_alsndwq: true
+  langcode: true

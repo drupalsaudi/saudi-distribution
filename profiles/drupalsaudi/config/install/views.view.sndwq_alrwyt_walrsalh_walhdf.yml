@@ -59,7 +59,7 @@ display:
         type: views_bootstrap_grid
         options:
           grouping: {  }
-          row_class: 'about about-block'
+          row_class: 'justify-content-md-center about about-block'
           default_row_class: false
           col_xs: col-3
           col_sm: col-sm-3
@@ -268,6 +268,44 @@ display:
           expose:
             operator_limit_selection: false
             operator_list: {  }
+        field_zhwr_almhtwy_fy_alsndwq_value:
+          id: field_zhwr_almhtwy_fy_alsndwq_value
+          table: node__field_zhwr_almhtwy_fy_alsndwq
+          field: field_zhwr_almhtwy_fy_alsndwq_value
+          relationship: none
+          group_type: group
+          admin_label: ''
+          operator: '='
+          value: '1'
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          plugin_id: boolean
       sorts:
         created:
           id: created

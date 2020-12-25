@@ -1,0 +1,22 @@
+langcode: ar
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_zhwr_almhtwy_fy_alsndwq
+    - node.type.page
+id: node.page.field_zhwr_almhtwy_fy_alsndwq
+field_name: field_zhwr_almhtwy_fy_alsndwq
+entity_type: node
+bundle: page
+label: 'ظهور المحتوى في الصندوق'
+description: 'ضعوا علامة صح امام المربع لعرضه بداخل صندوق الرساله والهدف في الصفحة الرئيسية'
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: في
+  off_label: إيقاف
+field_type: boolean
