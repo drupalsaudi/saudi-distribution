@@ -10,7 +10,7 @@ libraries:
   - bootstrap_library/bootstrap-dev
   - bootstrap_library/bootstrap-cdn
 
-# Information added by Drupal.org packaging script on 2020-05-07
-version: '8.x-1.13'
+# Information added by Drupal.org packaging script on 2020-08-15
+version: '8.x-1.14'
 project: 'bootstrap_library'
-datestamp: 1588867615
+datestamp: 1597506572
