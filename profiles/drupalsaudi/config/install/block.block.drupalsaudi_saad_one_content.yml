@@ -5,19 +5,15 @@ dependencies:
     - system
   theme:
     - drupalsaudi_saad_one
-
-id: drupalsaudi_saad_one_branding
+id: drupalsaudi_saad_one_content
 theme: drupalsaudi_saad_one
-region: header
+region: content
 weight: 0
 provider: null
-plugin: system_branding_block
+plugin: system_main_block
 settings:
-  id: system_branding_block
-  label: 'Site branding'
+  id: system_main_block
+  label: 'محتوى الصفحة الرئيسية'
   provider: system
   label_display: '0'
-  use_site_logo: true
-  use_site_name: false
-  use_site_slogan: true
 visibility: {  }

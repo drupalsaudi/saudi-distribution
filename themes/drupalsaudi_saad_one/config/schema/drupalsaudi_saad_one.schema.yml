@@ -1,8 +1,8 @@
 # Schema for the configuration files of the Bootstrap Barrio Subtheme.
 
-bootstrap_barrio_subtheme.settings:
+drupalsaudi_saad_one.settings:
   type: theme_settings
-  label: 'Bootstrap Barrio settings'
+  label: 'drupalsaudi saad one settings'
   mapping:
 
     # Library.
