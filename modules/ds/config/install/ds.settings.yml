@@ -1,0 +1,9 @@
+disabled: false
+field_template: false
+ft-default: default
+ft-show-colon: false
+ft-layout-builder: false
+classes:
+  region: {  }
+  field: {  }
+use_field_names: true

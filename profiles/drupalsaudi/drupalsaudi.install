@@ -139,12 +139,12 @@ function drupalsaudi_install() {
 
     // Populate the main menu.
     $linkimportantsa = MenuLinkContent::create([
-      'title' => t('روابط تهمك'),
+      'title' => t('مجلس الادارة'),
       'weight' => 5,
       'link' => [
-        'uri' => 'internal:/',
+        'uri' => 'internal:/board-of-directors',
         'options' => [
-          'fa_icon' => 'fa-globe',
+          'fa_icon' => 'fa-users',
           'fa_icon_prefix' => 'fa',
           'fa_icon_tag' => 'i',
           'fa_icon_appearance' => 'before',
