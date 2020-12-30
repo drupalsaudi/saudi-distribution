@@ -28,7 +28,7 @@ class AliasTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     // The alias whitelist expects that the menu path roots are set by a
@@ -179,7 +179,6 @@ class AliasTest extends KernelTestBase {
 
     // Create AliasManager and Path object.
     $whitelist = new AliasWhitelist('path_alias_whitelist', $memoryCounterBackend, $this->container->get('lock'), $this->container->get('state'), $this->container->get('path_alias.repository'));
-    $aliasManager = new AliasManager($this->container->get('path_alias.repository'), $whitelist, $this->container->get('language_manager'), $memoryCounterBackend);
 
     // Whitelist cache should not exist at all yet.
     $this->assertFalse($memoryCounterBackend->get('path_alias_whitelist'));

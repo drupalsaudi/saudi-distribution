@@ -28,7 +28,7 @@ class EntityDisplayTest extends KernelTestBase {
    *
    * @var string[]
    */
-  public static $modules = [
+  protected static $modules = [
     'field_ui',
     'field',
     'entity_test',
@@ -39,7 +39,7 @@ class EntityDisplayTest extends KernelTestBase {
     'system',
   ];
 
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
     $this->installEntitySchema('entity_test');
     $this->installEntitySchema('node');
@@ -124,7 +124,7 @@ class EntityDisplayTest extends KernelTestBase {
   }
 
   /**
-   * Test sorting of components by name on basic CRUD operations
+   * Test sorting of components by name on basic CRUD operations.
    */
   public function testEntityDisplayCRUDSort() {
     $display = EntityViewDisplay::create([
@@ -638,14 +638,13 @@ class EntityDisplayTest extends KernelTestBase {
     $this->assertTrue($form_display->get('hidden')[$field_name]);
     // The correct warning message has been logged.
     $arguments = ['@display' => (string) t('Entity form display'), '@id' => $form_display->id(), '@name' => $field_name];
-    $logged = (bool) Database::getConnection()->select('watchdog', 'w')
-      ->fields('w', ['wid'])
+    $variables = Database::getConnection()->select('watchdog', 'w')
+      ->fields('w', ['variables'])
       ->condition('type', 'system')
       ->condition('message', "@display '@id': Component '@name' was disabled because its settings depend on removed dependencies.")
-      ->condition('variables', serialize($arguments))
       ->execute()
-      ->fetchAll();
-    $this->assertTrue($logged);
+      ->fetchField();
+    $this->assertEquals($arguments, unserialize($variables));
   }
 
   /**
@@ -695,7 +694,7 @@ class EntityDisplayTest extends KernelTestBase {
    *   The entity display object to get dependencies from.
    *
    * @return bool
-   *   TRUE if the assertion succeeded, FALSE otherwise.
+   *   TRUE if the assertion succeeded.
    */
   protected function assertDependencyHelper($assertion, $type, $key, EntityDisplayInterface $display) {
     $all_dependencies = $display->getDependencies();
@@ -704,7 +703,8 @@ class EntityDisplayTest extends KernelTestBase {
     $value = $assertion ? in_array($key, $dependencies) : !in_array($key, $dependencies);
     $args = ['@context' => $context, '@id' => $display->id(), '@type' => $type, '@key' => $key];
     $message = $assertion ? new FormattableMarkup("@context display '@id' depends on @type '@key'.", $args) : new FormattableMarkup("@context display '@id' do not depend on @type '@key'.", $args);
-    return $this->assert($value, $message);
+    $this->assertTrue($value, $message);
+    return TRUE;
   }
 
 }

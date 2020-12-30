@@ -3,9 +3,8 @@ type: module
 description: 'Provides test support for @FieldType-level normalization.'
 package: Testing
 # version: VERSION
-core: 8.x
 
-# Information added by Drupal.org packaging script on 2020-07-08
-version: '8.9.2'
+# Information added by Drupal.org packaging script on 2020-12-02
+version: '9.1.0'
 project: 'drupal'
-datestamp: 1594238019
+datestamp: 1606933306

@@ -21,7 +21,7 @@ class ModerationRevisionRevertTest extends BrowserTestBase {
    *
    * @var array
    */
-  public static $modules = [
+  protected static $modules = [
     'content_moderation',
     'node',
   ];
@@ -34,7 +34,7 @@ class ModerationRevisionRevertTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  public function setUp() {
+  public function setUp(): void {
     parent::setUp();
 
     $moderated_bundle = $this->createContentType(['type' => 'moderated_bundle']);
@@ -67,13 +67,13 @@ class ModerationRevisionRevertTest extends BrowserTestBase {
     $this->drupalPostForm('node/add/moderated_bundle', [
       'title[0][value]' => 'First draft node',
       'moderation_state[0][state]' => 'draft',
-    ], t('Save'));
+    ], 'Save');
 
     // Now make it published.
     $this->drupalPostForm('node/1/edit', [
       'title[0][value]' => 'Published node',
       'moderation_state[0][state]' => 'published',
-    ], t('Save'));
+    ], 'Save');
 
     // Check the editing form that show the published title.
     $this->drupalGet('node/1/edit');
@@ -93,7 +93,7 @@ class ModerationRevisionRevertTest extends BrowserTestBase {
     // Try to save the node.
     $this->drupalPostForm('node/1/edit', [
       'moderation_state[0][state]' => 'draft',
-    ], t('Save'));
+    ], 'Save');
 
     // Check if the submission passed the EntityChangedConstraintValidator.
     $this->assertSession()

@@ -27,7 +27,7 @@ abstract class AggregatorTestBase extends BrowserTestBase {
    *
    * @var array
    */
-  public static $modules = [
+  protected static $modules = [
     'block',
     'node',
     'aggregator',
@@ -74,12 +74,11 @@ abstract class AggregatorTestBase extends BrowserTestBase {
    */
   public function createFeed($feed_url = NULL, array $edit = []) {
     $edit = $this->getFeedEditArray($feed_url, $edit);
-    $this->drupalPostForm('aggregator/sources/add', $edit, t('Save'));
-    $this->assertText(t('The feed @name has been added.', ['@name' => $edit['title[0][value]']]), new FormattableMarkup('The feed @name has been added.', ['@name' => $edit['title[0][value]']]));
+    $this->drupalPostForm('aggregator/sources/add', $edit, 'Save');
+    $this->assertText('The feed ' . Html::escape($edit['title[0][value]']) . ' has been added.', new FormattableMarkup('The feed @name has been added.', ['@name' => $edit['title[0][value]']]));
 
     // Verify that the creation message contains a link to a feed.
-    $view_link = $this->xpath('//div[@class="messages"]//a[contains(@href, :href)]', [':href' => 'aggregator/sources/']);
-    $this->assert(isset($view_link), 'The message area contains a link to a feed');
+    $this->assertSession()->elementExists('xpath', '//div[@data-drupal-messages]//a[contains(@href, "aggregator/sources/")]');
 
     $fids = \Drupal::entityQuery('aggregator_feed')->condition('title', $edit['title[0][value]'])->condition('url', $edit['url[0][value]'])->execute();
     $this->assertNotEmpty($fids, 'The feed found in database.');
@@ -93,8 +92,8 @@ abstract class AggregatorTestBase extends BrowserTestBase {
    *   Feed object representing the feed.
    */
   public function deleteFeed(FeedInterface $feed) {
-    $this->drupalPostForm('aggregator/sources/' . $feed->id() . '/delete', [], t('Delete'));
-    $this->assertRaw(t('The feed %title has been deleted.', ['%title' => $feed->label()]), 'Feed deleted successfully.');
+    $this->drupalPostForm('aggregator/sources/' . $feed->id() . '/delete', [], 'Delete');
+    $this->assertRaw(t('The feed %title has been deleted.', ['%title' => $feed->label()]));
   }
 
   /**
@@ -197,11 +196,8 @@ abstract class AggregatorTestBase extends BrowserTestBase {
     $this->clickLink('Update items');
 
     // Ensure we have the right number of items.
-    $iids = \Drupal::entityQuery('aggregator_item')->condition('fid', $feed->id())->execute();
-    $feed->items = [];
-    foreach ($iids as $iid) {
-      $feed->items[] = $iid;
-    }
+    $item_ids = \Drupal::entityQuery('aggregator_item')->condition('fid', $feed->id())->execute();
+    $feed->items = array_values($item_ids);
 
     if ($expected_count !== NULL) {
       $feed->item_count = count($feed->items);
@@ -216,8 +212,8 @@ abstract class AggregatorTestBase extends BrowserTestBase {
    *   Feed object representing the feed.
    */
   public function deleteFeedItems(FeedInterface $feed) {
-    $this->drupalPostForm('admin/config/services/aggregator/delete/' . $feed->id(), [], t('Delete items'));
-    $this->assertRaw(t('The news items from %title have been deleted.', ['%title' => $feed->label()]), 'Feed items deleted.');
+    $this->drupalPostForm('admin/config/services/aggregator/delete/' . $feed->id(), [], 'Delete items');
+    $this->assertRaw(t('The news items from %title have been deleted.', ['%title' => $feed->label()]));
   }
 
   /**
@@ -337,7 +333,7 @@ EOF;
   }
 
   /**
-   * Returns a example RSS091 feed.
+   * Returns an example RSS091 feed.
    *
    * @return string
    *   Path to the feed.
@@ -347,7 +343,7 @@ EOF;
   }
 
   /**
-   * Returns a example Atom feed.
+   * Returns an example Atom feed.
    *
    * @return string
    *   Path to the feed.
@@ -359,7 +355,7 @@ EOF;
   }
 
   /**
-   * Returns a example feed.
+   * Returns an example feed.
    *
    * @return string
    *   Path to the feed.
@@ -380,7 +376,7 @@ EOF;
       $edit = [];
       $edit['title[0][value]'] = $this->randomMachineName();
       $edit['body[0][value]'] = $this->randomMachineName();
-      $this->drupalPostForm('node/add/article', $edit, t('Save'));
+      $this->drupalPostForm('node/add/article', $edit, 'Save');
     }
   }
 

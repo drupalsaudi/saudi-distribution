@@ -360,7 +360,7 @@ class DateTimePlus {
       throw new \Exception('DateTime object not set.');
     }
     if (!method_exists($this->dateTimeObject, $method)) {
-      throw new \BadMethodCallException(sprintf('Call to undefined method %s::%s()', get_class($this), $method));
+      throw new \BadMethodCallException(sprintf('Call to undefined method %s::%s()', static::class, $method));
     }
 
     $result = call_user_func_array([$this->dateTimeObject, $method], $args);
@@ -399,7 +399,7 @@ class DateTimePlus {
    */
   public static function __callStatic($method, $args) {
     if (!method_exists('\DateTime', $method)) {
-      throw new \BadMethodCallException(sprintf('Call to undefined method %s::%s()', get_called_class(), $method));
+      throw new \BadMethodCallException(sprintf('Call to undefined method %s::%s()', static::class, $method));
     }
     return call_user_func_array(['\DateTime', $method], $args);
   }
@@ -624,11 +624,10 @@ class DateTimePlus {
     $valid_date = FALSE;
     $valid_time = TRUE;
     // Check for a valid date using checkdate(). Only values that
-    // meet that test are valid.
-    if (array_key_exists('year', $array) && array_key_exists('month', $array) && array_key_exists('day', $array)) {
-      if (@checkdate($array['month'], $array['day'], $array['year'])) {
-        $valid_date = TRUE;
-      }
+    // meet that test are valid. An empty value, either a string or a 0, is not
+    // a valid value.
+    if (!empty($array['year']) && !empty($array['month']) && !empty($array['day'])) {
+      $valid_date = checkdate($array['month'], $array['day'], $array['year']);
     }
     // Testing for valid time is reversed. Missing time is OK,
     // but incorrect values are not.

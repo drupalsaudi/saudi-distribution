@@ -31,7 +31,7 @@ class HelpTopicSearchTest extends HelpTopicTranslatedTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     // Log in.
@@ -148,7 +148,7 @@ class HelpTopicSearchTest extends HelpTopicTranslatedTestBase {
     // Verify that we can search from the admin/help page.
     $this->drupalGet('admin/help');
     $session->pageTextContains('Search help');
-    $this->drupalPostForm(NULL, ['keys' => 'nonworditem'], 'Search');
+    $this->submitForm(['keys' => 'nonworditem'], 'Search');
     $this->assertSearchResultsCount(1);
     $session->linkExists('ABC Help Test module');
 
@@ -241,14 +241,15 @@ class HelpTopicSearchTest extends HelpTopicTranslatedTestBase {
    * Tests uninstalling the help_topics module.
    */
   public function testUninstall() {
+    \Drupal::service('module_installer')->uninstall(['help_topics_test']);
     // Ensure we can uninstall help_topics and use the help system without
     // breaking.
     $this->drupalLogin($this->rootUser);
     $edit = [];
     $edit['uninstall[help_topics]'] = TRUE;
-    $this->drupalPostForm('admin/modules/uninstall', $edit, t('Uninstall'));
-    $this->drupalPostForm(NULL, NULL, t('Uninstall'));
-    $this->assertText(t('The selected modules have been uninstalled.'), 'Modules status has been updated.');
+    $this->drupalPostForm('admin/modules/uninstall', $edit, 'Uninstall');
+    $this->submitForm([], 'Uninstall');
+    $this->assertText('The selected modules have been uninstalled.', 'Modules status has been updated.');
     $this->drupalGet('admin/help');
     $this->assertSession()->statusCodeEquals(200);
   }

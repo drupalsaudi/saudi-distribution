@@ -31,7 +31,7 @@ class DisplayPageTest extends ViewsKernelTestBase {
    *
    * @var array
    */
-  public static $modules = ['system', 'user', 'field', 'views_test_data'];
+  protected static $modules = ['system', 'user', 'field', 'views_test_data'];
 
   /**
    * The router dumper to get all routes.
@@ -73,7 +73,7 @@ class DisplayPageTest extends ViewsKernelTestBase {
   }
 
   /**
-   * Checks that the router items are properly registered
+   * Checks that the router items are properly registered.
    */
   public function testPageRouterItems() {
     $collection = \Drupal::service('views.route_subscriber')->routes();

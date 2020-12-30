@@ -15,7 +15,12 @@ class ContextualFilterTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['node', 'views', 'views_ui', 'views_test_config'];
+  protected static $modules = [
+    'node',
+    'views',
+    'views_ui',
+    'views_test_config',
+  ];
 
   /**
    * {@inheritdoc}
@@ -32,10 +37,10 @@ class ContextualFilterTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
-    ViewTestData::createTestViews(get_class($this), ['views_test_config']);
+    ViewTestData::createTestViews(static::class, ['views_test_config']);
 
     // Always show advanced column.
     \Drupal::configFactory()->getEditable('views.settings')->set('ui.show.advanced_column', TRUE)->save();

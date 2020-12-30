@@ -12,7 +12,6 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\TypedData\TypedDataManagerInterface;
-use Drupal\Tests\Traits\ExpectDeprecationTrait;
 use Drupal\Tests\UnitTestCase;
 use Drupal\Core\Language\Language;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -23,8 +22,6 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
  * @group Access
  */
 class ContentEntityBaseUnitTest extends UnitTestCase {
-
-  use ExpectDeprecationTrait;
 
   /**
    * The bundle of the entity under test.
@@ -127,7 +124,7 @@ class ContentEntityBaseUnitTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     $this->id = 1;
     $values = [
       'id' => $this->id,
@@ -473,31 +470,6 @@ class ContentEntityBaseUnitTest extends UnitTestCase {
   }
 
   /**
-   * @covers ::label
-   *
-   * @group legacy
-   */
-  public function testLabel() {
-
-    $this->addExpectedDeprecationMessage('Entity type ' . $this->entityTypeId . ' defines a label callback. Support for that is deprecated in drupal:8.0.0 and will be removed in drupal:9.0.0. Override the EntityInterface::label() method instead. See https://www.drupal.org/node/3050794');
-
-    // Make a mock with one method that we use as the entity's label callback.
-    // We check that it is called, and that the entity's label is the callback's
-    // return value.
-    $callback_label = $this->randomMachineName();
-    $callback_container = $this->createMock(get_class());
-    $callback_container->expects($this->once())
-      ->method(__FUNCTION__)
-      ->will($this->returnValue($callback_label));
-    $this->entityType->expects($this->once())
-      ->method('get')
-      ->with('label_callback')
-      ->will($this->returnValue([$callback_container, __FUNCTION__]));
-
-    $this->assertSame($callback_label, $this->entity->label());
-  }
-
-  /**
    * Data provider for testGet().
    *
    * @returns
@@ -626,7 +598,7 @@ class ContentEntityBaseUnitTest extends UnitTestCase {
       ->willReturnArgument(0);
 
     // Exercise getFields().
-    $this->assertArrayEquals(
+    $this->assertEquals(
       $expected,
       $mock_base->getFields($include_computed)
     );

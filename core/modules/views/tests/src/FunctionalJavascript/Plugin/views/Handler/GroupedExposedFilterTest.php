@@ -17,7 +17,7 @@ class GroupedExposedFilterTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = [
+  protected static $modules = [
     'node',
     'views',
     'views_ui',
@@ -47,10 +47,10 @@ class GroupedExposedFilterTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
-    ViewTestData::createTestViews(get_class($this), ['views_test_config']);
+    ViewTestData::createTestViews(static::class, ['views_test_config']);
 
     // Disable automatic live preview to make the sequence of calls clearer.
     \Drupal::configFactory()->getEditable('views.settings')->set('ui.always_live_preview', FALSE)->save();

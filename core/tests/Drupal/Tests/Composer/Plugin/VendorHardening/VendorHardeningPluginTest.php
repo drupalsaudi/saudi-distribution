@@ -6,18 +6,23 @@ use Composer\Composer;
 use Composer\IO\IOInterface;
 use Composer\Package\PackageInterface;
 use Composer\Package\RootPackageInterface;
-use Drupal\Composer\VendorHardening\Config;
+use Drupal\Composer\Plugin\VendorHardening\Config;
 use Drupal\Composer\Plugin\VendorHardening\VendorHardeningPlugin;
+use Drupal\Tests\PhpUnitCompatibilityTrait;
+use Drupal\Tests\Traits\PhpUnitWarnings;
 use org\bovigo\vfs\vfsStream;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @coversDefaultClass Drupal\Composer\Plugin\VendorHardening\VendorHardeningPlugin
+ * @coversDefaultClass \Drupal\Composer\Plugin\VendorHardening\VendorHardeningPlugin
  * @group VendorHardening
  */
 class VendorHardeningPluginTest extends TestCase {
 
-  public function setUp() {
+  use PhpUnitWarnings;
+  use PhpUnitCompatibilityTrait;
+
+  public function setUp(): void {
     parent::setUp();
     vfsStream::setup('vendor', NULL, [
       'drupal' => [
@@ -36,7 +41,6 @@ class VendorHardeningPluginTest extends TestCase {
   public function testCleanPackage() {
 
     $config = $this->getMockBuilder(Config::class)
-      ->setMethods(['getPathsForPackage'])
       ->disableOriginalConstructor()
       ->getMock();
     $config->expects($this->once())
@@ -85,7 +89,6 @@ class VendorHardeningPluginTest extends TestCase {
    */
   public function testCleanAllPackages() {
     $config = $this->getMockBuilder(Config::class)
-      ->setMethods(['getAllCleanupPaths'])
       ->disableOriginalConstructor()
       ->getMock();
     $config->expects($this->once())
@@ -93,7 +96,6 @@ class VendorHardeningPluginTest extends TestCase {
       ->willReturn(['drupal/package' => ['tests']]);
 
     $package = $this->getMockBuilder(PackageInterface::class)
-      ->setMethods(['getName'])
       ->getMockForAbstractClass();
     $package->expects($this->any())
       ->method('getName')

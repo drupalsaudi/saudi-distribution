@@ -26,7 +26,7 @@ class ConnectionFailureTest extends KernelTestBase {
     // MySQL errors like "1153 - Got a packet bigger than 'max_allowed_packet'
     // bytes" or "1100 - Table 'xyz' was not locked with LOCK TABLES" lead to a
     // database connection unusable for further requests. All further request
-    // will result in an "2006 - MySQL server had gone away" error. As a
+    // will result in a "2006 - MySQL server had gone away" error. As a
     // consequence it's impossible to use this connection to log the causing
     // initial error itself. Using Database::closeConnection() we simulate such
     // a corrupted connection. In this case dblog has to establish a different
@@ -39,7 +39,10 @@ class ConnectionFailureTest extends KernelTestBase {
     // Re-establish the default database connection.
     $database = Database::getConnection();
 
-    $wid = $database->query("SELECT MAX(wid) FROM {watchdog} WHERE message = 'testConnectionFailureLogging'")->fetchField();
+    $query = $database->select('watchdog')
+      ->condition('message', 'testConnectionFailureLogging');
+    $query->addExpression('MAX(wid)');
+    $wid = $query->execute()->fetchField();
     $this->assertNotEmpty($wid, 'Watchdog entry has been stored in database.');
   }
 

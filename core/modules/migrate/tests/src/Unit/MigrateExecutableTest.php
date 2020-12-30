@@ -48,7 +48,7 @@ class MigrateExecutableTest extends MigrateTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
     $this->migration = $this->getMigration();
     $this->message = $this->createMock('Drupal\migrate\MigrateMessageInterface');
@@ -66,12 +66,16 @@ class MigrateExecutableTest extends MigrateTestCase {
     $source->expects($this->once())
       ->method('rewind')
       ->will($this->throwException(new \Exception($exception_message)));
+    // The exception message contains the line number where it is thrown. Save
+    // it for the testing the exception message.
+    $line = (__LINE__) - 3;
 
     $this->migration->expects($this->any())
       ->method('getSourcePlugin')
       ->will($this->returnValue($source));
 
     // Ensure that a message with the proper message was added.
+    $exception_message .= " in " . __FILE__ . " line $line";
     $this->message->expects($this->once())
       ->method('display')
       ->with("Migration failed with source plugin exception: " . Html::escape($exception_message));
@@ -404,7 +408,7 @@ class MigrateExecutableTest extends MigrateTestCase {
     foreach ($expected as $key => $value) {
       $this->assertSame($row->getDestinationProperty($key), $value);
     }
-    $this->assertSame(count($row->getDestination()), count($expected));
+    $this->assertSame(count($expected), count($row->getDestination()));
   }
 
   /**
@@ -474,7 +478,7 @@ class MigrateExecutableTest extends MigrateTestCase {
    *   The mocked migration source.
    */
   protected function getMockSource() {
-    $iterator = $this->createMock('\Iterator');
+    $this->createMock('\Iterator');
 
     $class = 'Drupal\migrate\Plugin\migrate\source\SourcePluginBase';
     $source = $this->getMockBuilder($class)

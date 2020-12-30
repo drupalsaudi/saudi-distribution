@@ -20,7 +20,7 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
  * @internal JSON:API maintains no PHP API since its API is the HTTP API. This
  *   class may change at any time and this will break any dependencies on it.
  *
- * @see https://www.drupal.org/project/jsonapi/issues/3032787
+ * @see https://www.drupal.org/project/drupal/issues/3032787
  * @see jsonapi.api.php
  */
 class FieldItemNormalizer extends NormalizerBase implements DenormalizerInterface {
@@ -60,6 +60,7 @@ class FieldItemNormalizer extends NormalizerBase implements DenormalizerInterfac
    * catch it, and pass it to the value object that JSON:API uses.
    */
   public function normalize($field_item, $format = NULL, array $context = []) {
+    assert($field_item instanceof FieldItemInterface);
     /** @var \Drupal\Core\TypedData\TypedDataInterface $property */
     $values = [];
     $context[CacheableNormalizerInterface::SERIALIZATION_CONTEXT_CACHEABILITY] = new CacheableMetadata();
@@ -71,7 +72,8 @@ class FieldItemNormalizer extends NormalizerBase implements DenormalizerInterfac
         $values[$property_name] = $this->serializer->normalize($property, $format, $context);
       }
       // Flatten if there is only a single property to normalize.
-      $values = static::rasterizeValueRecursive(count($field_properties) == 1 ? reset($values) : $values);
+      $flatten = count($field_properties) === 1 && $field_item::mainPropertyName() !== NULL;
+      $values = static::rasterizeValueRecursive($flatten ? reset($values) : $values);
     }
     else {
       $values = $field_item->getValue();

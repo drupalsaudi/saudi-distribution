@@ -12,7 +12,7 @@ use Drupal\Core\PageCache\ResponsePolicyInterface;
 use Drupal\Core\Site\Settings;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -91,10 +91,10 @@ class FinishResponseSubscriber implements EventSubscriberInterface {
   /**
    * Sets extra headers on any responses, also subrequest ones.
    *
-   * @param \Symfony\Component\HttpKernel\Event\FilterResponseEvent $event
+   * @param \Symfony\Component\HttpKernel\Event\ResponseEvent $event
    *   The event to process.
    */
-  public function onAllResponds(FilterResponseEvent $event) {
+  public function onAllResponds(ResponseEvent $event) {
     $response = $event->getResponse();
     // Always add the 'http_response' cache tag to be able to invalidate every
     // response, for example after rebuilding routes.
@@ -106,10 +106,10 @@ class FinishResponseSubscriber implements EventSubscriberInterface {
   /**
    * Sets extra headers on successful responses.
    *
-   * @param \Symfony\Component\HttpKernel\Event\FilterResponseEvent $event
+   * @param \Symfony\Component\HttpKernel\Event\ResponseEvent $event
    *   The event to process.
    */
-  public function onRespond(FilterResponseEvent $event) {
+  public function onRespond(ResponseEvent $event) {
     if (!$event->isMasterRequest()) {
       return;
     }
@@ -156,6 +156,14 @@ class FinishResponseSubscriber implements EventSubscriberInterface {
       $response_cacheability = $response->getCacheableMetadata();
       $response->headers->set('X-Drupal-Cache-Tags', implode(' ', $response_cacheability->getCacheTags()));
       $response->headers->set('X-Drupal-Cache-Contexts', implode(' ', $this->cacheContextsManager->optimizeTokens($response_cacheability->getCacheContexts())));
+      $max_age_message = $response_cacheability->getCacheMaxAge();
+      if ($max_age_message === 0) {
+        $max_age_message = '0 (Uncacheable)';
+      }
+      elseif ($max_age_message === -1) {
+        $max_age_message = '-1 (Permanent)';
+      }
+      $response->headers->set('X-Drupal-Cache-Max-Age', $max_age_message);
     }
 
     $is_cacheable = ($this->requestPolicy->check($request) === RequestPolicyInterface::ALLOW) && ($this->responsePolicy->check($response, $request) !== ResponsePolicyInterface::DENY);

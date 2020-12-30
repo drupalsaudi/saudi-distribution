@@ -17,7 +17,7 @@ class ActionTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['system', 'field', 'user', 'action_test'];
+  protected static $modules = ['system', 'field', 'user', 'action_test'];
 
   /**
    * The action manager.
@@ -29,7 +29,7 @@ class ActionTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->actionManager = $this->container->get('plugin.manager.action');
@@ -43,7 +43,8 @@ class ActionTest extends KernelTestBase {
   public function testOperations() {
     // Test that actions can be discovered.
     $definitions = $this->actionManager->getDefinitions();
-    $this->assertTrue(count($definitions) > 1, 'Action definitions are found.');
+    // Verify that the action definitions are found.
+    $this->assertGreaterThan(1, count($definitions));
     $this->assertTrue(!empty($definitions['action_test_no_type']), 'The test action is among the definitions found.');
 
     $definition = $this->actionManager->getDefinition('action_test_no_type');

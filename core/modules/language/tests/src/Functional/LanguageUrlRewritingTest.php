@@ -21,7 +21,7 @@ class LanguageUrlRewritingTest extends BrowserTestBase {
    *
    * @var array
    */
-  public static $modules = ['language', 'language_test'];
+  protected static $modules = ['language', 'language_test'];
 
   /**
    * {@inheritdoc}
@@ -29,13 +29,13 @@ class LanguageUrlRewritingTest extends BrowserTestBase {
   protected $defaultTheme = 'stark';
 
   /**
-   * An user with permissions to administer languages.
+   * A user with permissions to administer languages.
    *
    * @var \Drupal\user\UserInterface
    */
   protected $webUser;
 
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     // Create and log in user.
@@ -48,15 +48,15 @@ class LanguageUrlRewritingTest extends BrowserTestBase {
     // Install French language.
     $edit = [];
     $edit['predefined_langcode'] = 'fr';
-    $this->drupalPostForm('admin/config/regional/language/add', $edit, t('Add language'));
+    $this->drupalPostForm('admin/config/regional/language/add', $edit, 'Add language');
 
     // Enable URL language detection and selection.
     $edit = ['language_interface[enabled][language-url]' => 1];
-    $this->drupalPostForm('admin/config/regional/language/detection', $edit, t('Save settings'));
+    $this->drupalPostForm('admin/config/regional/language/detection', $edit, 'Save settings');
 
     // Check that drupalSettings contains path prefix.
     $this->drupalGet('fr/admin/config/regional/language/detection');
-    $this->assertRaw('"pathPrefix":"fr\/"', 'drupalSettings path prefix contains language code.');
+    $this->assertRaw('"pathPrefix":"fr\/"');
   }
 
   /**
@@ -116,7 +116,7 @@ class LanguageUrlRewritingTest extends BrowserTestBase {
       'domain[en]' => $base_url_host,
       'domain[fr]' => $language_domain,
     ];
-    $this->drupalPostForm('admin/config/regional/language/detection/url', $edit, t('Save configuration'));
+    $this->drupalPostForm('admin/config/regional/language/detection/url', $edit, 'Save configuration');
     // Rebuild the container so that the new language gets picked up by services
     // that hold the list of languages.
     $this->rebuildContainer();

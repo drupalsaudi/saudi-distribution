@@ -22,7 +22,7 @@ class EditorUploadImageScaleTest extends BrowserTestBase {
    *
    * @var array
    */
-  public static $modules = ['editor', 'editor_test'];
+  protected static $modules = ['editor', 'editor_test'];
 
   /**
    * {@inheritdoc}
@@ -39,7 +39,7 @@ class EditorUploadImageScaleTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     // Add text format.
@@ -203,7 +203,7 @@ class EditorUploadImageScaleTest extends BrowserTestBase {
       'files[fid]' => \Drupal::service('file_system')->realpath($uri),
     ];
     $this->drupalGet('editor/dialog/image/basic_html');
-    $this->drupalPostForm('editor/dialog/image/basic_html', $edit, t('Upload'));
+    $this->drupalPostForm('editor/dialog/image/basic_html', $edit, 'Upload');
     $uploaded_image_file = $this->container->get('image.factory')->get('public://inline-images/' . basename($uri));
     return [
       (int) $uploaded_image_file->getWidth(),

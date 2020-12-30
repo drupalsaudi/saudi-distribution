@@ -18,12 +18,12 @@ class MigrateContactCategoryTest extends MigrateDrupal6TestBase {
    *
    * @var array
    */
-  public static $modules = ['contact'];
+  protected static $modules = ['contact'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
     $this->executeMigration('contact_category');
   }
@@ -77,7 +77,6 @@ class MigrateContactCategoryTest extends MigrateDrupal6TestBase {
     $this->executeMigration('contact_category');
 
     // Test there is a duplicate Website feedback form.
-    $contact_form = ContactForm::load('website_feedback1');
     $this->assertEntity('website_feedback1', 'Website feedback', ['admin@example.com'], '', 0);
   }
 

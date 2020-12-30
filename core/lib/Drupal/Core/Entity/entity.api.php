@@ -484,7 +484,7 @@ use Drupal\node\Entity\NodeType;
  * - defaults: For entity form routes, use _entity_form rather than the generic
  *   _controller or _form. The value is composed of the entity type machine name
  *   and a form handler type from the entity annotation (see @ref define above
- *   more more on handlers and annotation). So, in this example, block.default
+ *   for more on handlers and annotation). So, in this example, block.default
  *   refers to the 'default' form handler on the block entity type, whose
  *   annotation contains:
  *   @code
@@ -541,7 +541,7 @@ use Drupal\node\Entity\NodeType;
  * @link container Services and Dependency Injection topic @endlink for more
  * about how to properly retrieve services.
  *
- * To query to find entities to load, use an entity query, which is a object
+ * To query to find entities to load, use an entity query, which is an object
  * implementing \Drupal\Core\Entity\Query\QueryInterface that you can retrieve
  * with:
  * @code
@@ -616,6 +616,18 @@ use Drupal\node\Entity\NodeType;
  * are invoked are hook_entity_create_access() and
  * hook_ENTITY_TYPE_create_access() instead.
  *
+ * The access to an entity can be influenced in several ways:
+ * - To explicitly allow access, return an AccessResultInterface object with
+ * isAllowed() returning TRUE. Other modules can override this access by
+ * returning TRUE for isForbidden().
+ * - To explicitly forbid access, return an AccessResultInterface object with
+ * isForbidden() returning TRUE. Access will be forbidden even if your module
+ * (or another module) also returns TRUE for isNeutral() or isAllowed().
+ * - To neither allow nor explicitly forbid access, return an
+ * AccessResultInterface object with isNeutral() returning TRUE.
+ * - If your module does not return an AccessResultInterface object, neutral
+ * access will be assumed.
+ *
  * The Node entity type has a complex system for determining access, which
  * developers can interact with. This is described in the
  * @link node_access Node access topic. @endlink
@@ -641,7 +653,10 @@ use Drupal\node\Entity\NodeType;
  * @param \Drupal\Core\Entity\EntityInterface $entity
  *   The entity to check access to.
  * @param string $operation
- *   The operation that is to be performed on $entity.
+ *   The operation that is to be performed on $entity. Usually one of:
+ *   - "view"
+ *   - "update"
+ *   - "delete"
  * @param \Drupal\Core\Session\AccountInterface $account
  *   The account trying to access the entity.
  *
@@ -677,7 +692,10 @@ function hook_entity_access(\Drupal\Core\Entity\EntityInterface $entity, $operat
  * @param \Drupal\Core\Entity\EntityInterface $entity
  *   The entity to check access to.
  * @param string $operation
- *   The operation that is to be performed on $entity.
+ *   The operation that is to be performed on $entity. Usually one of:
+ *   - "view"
+ *   - "update"
+ *   - "delete"
  * @param \Drupal\Core\Session\AccountInterface $account
  *   The account trying to access the entity.
  *

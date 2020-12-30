@@ -17,14 +17,14 @@ class EntityOperationsTest extends BrowserTestBase {
    *
    * @var array
    */
-  public static $modules = ['entity_test'];
+  protected static $modules = ['entity_test'];
 
   /**
    * {@inheritdoc}
    */
   protected $defaultTheme = 'stark';
 
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     // Create and log in user.
@@ -41,7 +41,7 @@ class EntityOperationsTest extends BrowserTestBase {
     $this->drupalGet('admin/people/roles');
     $roles = user_roles();
     foreach ($roles as $role) {
-      $this->assertLinkByHref($role->toUrl()->toString() . '/test_operation');
+      $this->assertSession()->linkByHrefExists($role->toUrl()->toString() . '/test_operation');
       $this->assertSession()->linkExists(new FormattableMarkup('Test Operation: @label', ['@label' => $role->label()]));
     }
   }

@@ -108,7 +108,7 @@ abstract class Constraint
         $defaultOption = $this->getDefaultOption();
         $invalidOptions = [];
         $missingOptions = array_flip((array) $this->getRequiredOptions());
-        $knownOptions = get_object_vars($this);
+        $knownOptions = get_class_vars(static::class);
 
         // The "groups" option is added to the object lazily
         $knownOptions['groups'] = true;
@@ -285,8 +285,6 @@ abstract class Constraint
 
     /**
      * Optimizes the serialized value to minimize storage space.
-     *
-     * @return array The properties to serialize
      *
      * @internal
      */

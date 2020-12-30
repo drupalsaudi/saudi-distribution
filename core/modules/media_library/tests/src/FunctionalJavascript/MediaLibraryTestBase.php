@@ -13,7 +13,7 @@ abstract class MediaLibraryTestBase extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['media_library_test'];
+  protected static $modules = ['media_library_test', 'hold_test'];
 
   /**
    * {@inheritdoc}
@@ -25,8 +25,12 @@ abstract class MediaLibraryTestBase extends WebDriverTestBase {
    *
    * @param array $media_items
    *   A nested array of media item names keyed by media type.
+   *
+   * @return \Drupal\media\MediaInterface[]
+   *   An array of media entities keyed by the names passed in.
    */
   protected function createMediaItems(array $media_items) {
+    $created_items = [];
     $time = time();
     foreach ($media_items as $type => $names) {
       foreach ($names as $name) {
@@ -39,8 +43,10 @@ abstract class MediaLibraryTestBase extends WebDriverTestBase {
           ->getSourceFieldDefinition($media->bundle->entity)
           ->getName();
         $media->set($source_field, $name)->setCreatedTime(++$time)->save();
+        $created_items[$name] = $media;
       }
     }
+    return $created_items;
   }
 
   /**
@@ -410,9 +416,11 @@ abstract class MediaLibraryTestBase extends WebDriverTestBase {
    * Switches to the table display of the widget view.
    */
   protected function switchToMediaLibraryTable() {
+    hold_test_response(TRUE);
     $this->getSession()->getPage()->clickLink('Table');
     // Assert the display change is correctly announced for screen readers.
     $this->waitForText('Loading table view.');
+    hold_test_response(FALSE);
     $this->waitForText('Changed to table view.');
     $this->assertMediaLibraryTable();
   }

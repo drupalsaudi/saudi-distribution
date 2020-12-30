@@ -200,7 +200,7 @@ abstract class Schema implements PlaceholderInterface {
     // couldn't use \Drupal::database()->select() here because it would prefix
     // information_schema.tables and the query would fail.
     // Don't use {} around information_schema.tables table.
-    $results = $this->connection->query("SELECT table_name as table_name FROM information_schema.tables WHERE " . (string) $condition, $condition->arguments());
+    $results = $this->connection->query("SELECT table_name AS table_name FROM information_schema.tables WHERE " . (string) $condition, $condition->arguments());
     foreach ($results as $table) {
       // Take into account tables that have an individual prefix.
       if (isset($individually_prefixed_tables[$table->table_name])) {
@@ -340,44 +340,6 @@ abstract class Schema implements PlaceholderInterface {
    *   by that name to begin with.
    */
   abstract public function dropField($table, $field);
-
-  /**
-   * Set the default value for a field.
-   *
-   * @param $table
-   *   The table to be altered.
-   * @param $field
-   *   The field to be altered.
-   * @param $default
-   *   Default value to be set. NULL for 'default NULL'.
-   *
-   * @throws \Drupal\Core\Database\SchemaObjectDoesNotExistException
-   *   If the specified table or field doesn't exist.
-   *
-   * @deprecated in drupal:8.7.0 and is removed from drupal:9.0.0. Instead,
-   *   call ::changeField() passing a full field specification.
-   *
-   * @see ::changeField()
-   */
-  abstract public function fieldSetDefault($table, $field, $default);
-
-  /**
-   * Set a field to have no default value.
-   *
-   * @param $table
-   *   The table to be altered.
-   * @param $field
-   *   The field to be altered.
-   *
-   * @throws \Drupal\Core\Database\SchemaObjectDoesNotExistException
-   *   If the specified table or field doesn't exist.
-   *
-   * @deprecated in drupal:8.7.0 and is removed from drupal:9.0.0. Instead,
-   *   call ::changeField() passing a full field specification.
-   *
-   * @see ::changeField()
-   */
-  abstract public function fieldSetNoDefault($table, $field);
 
   /**
    * Checks if an index exists in the given table.

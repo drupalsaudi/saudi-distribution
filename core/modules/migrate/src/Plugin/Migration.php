@@ -314,25 +314,6 @@ class Migration extends PluginBase implements MigrationInterface, RequirementsIn
   }
 
   /**
-   * Gets any arbitrary property's value.
-   *
-   * @param string $property
-   *   The property to retrieve.
-   *
-   * @return mixed
-   *   The value for that property, or NULL if the property does not exist.
-   *
-   * @deprecated in drupal:8.1.0 and is removed from drupal:9.0.0. Use
-   *   more specific getters instead.
-   *
-   * @see https://www.drupal.org/node/2873795
-   */
-  public function get($property) {
-    @trigger_error('\Drupal\migrate\Plugin\Migration::get() is deprecated in Drupal 8.1.x, will be removed before Drupal 9.0.x. Use more specific getters instead. See https://www.drupal.org/node/2873795', E_USER_DEPRECATED);
-    return isset($this->$property) ? $this->$property : NULL;
-  }
-
-  /**
    * Retrieves the ID map plugin.
    *
    * @return \Drupal\migrate\Plugin\MigrateIdMapInterface
@@ -364,9 +345,6 @@ class Migration extends PluginBase implements MigrationInterface, RequirementsIn
       $this->processPlugins[$index] = [];
       foreach ($this->getProcessNormalized($process) as $property => $configurations) {
         $this->processPlugins[$index][$property] = [];
-        if (!is_array($configurations) && !$this->processPlugins[$index][$property]) {
-          throw new MigrateException(sprintf("Process configuration for '$property' must be an array", $property));
-        }
         foreach ($configurations as $configuration) {
           if (isset($configuration['source'])) {
             $this->processPlugins[$index][$property][] = $this->processPluginManager->createInstance('get', $configuration, $this);
@@ -437,6 +415,13 @@ class Migration extends PluginBase implements MigrationInterface, RequirementsIn
       $this->idMapPlugin = $this->idMapPluginManager->createInstance($plugin, $configuration, $this);
     }
     return $this->idMapPlugin;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public function getRequirements(): array {
+    return $this->requirements;
   }
 
   /**

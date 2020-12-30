@@ -22,7 +22,7 @@ class EntityDecoupledTranslationRevisionsTest extends EntityKernelTestBase {
    *
    * @var array
    */
-  public static $modules = [
+  protected static $modules = [
     'system',
     'entity_test',
     'language',
@@ -80,7 +80,7 @@ class EntityDecoupledTranslationRevisionsTest extends EntityKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $entity_type_id = 'entity_test_mulrev';
@@ -205,7 +205,7 @@ class EntityDecoupledTranslationRevisionsTest extends EntityKernelTestBase {
    */
   public function testDecoupledPendingRevisions($sequence) {
     $revision_id = $this->doTestEditSequence($sequence);
-    $this->assertEquals(count($sequence), $revision_id);
+    $this->assertCount($revision_id, $sequence);
   }
 
   /**

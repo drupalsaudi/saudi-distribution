@@ -18,7 +18,7 @@ class BooleanFormatterSettingsTest extends BrowserTestBase {
    *
    * @var array
    */
-  public static $modules = ['field', 'field_ui', 'text', 'node', 'user'];
+  protected static $modules = ['field', 'field_ui', 'text', 'node', 'user'];
 
   /**
    * {@inheritdoc}
@@ -42,7 +42,7 @@ class BooleanFormatterSettingsTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     // Create a content type. Use Node because it has Field UI pages that work.
@@ -113,14 +113,14 @@ class BooleanFormatterSettingsTest extends BrowserTestBase {
     foreach ($settings as $values) {
       // Set up the field settings.
       $this->drupalGet('admin/structure/types/manage/' . $this->bundle . '/fields/node.' . $this->bundle . '.' . $this->fieldName);
-      $this->drupalPostForm(NULL, [
+      $this->submitForm([
         'settings[on_label]' => $values[0],
         'settings[off_label]' => $values[1],
       ], 'Save settings');
 
       // Open the Manage Display page and trigger the field settings form.
       $this->drupalGet('admin/structure/types/manage/' . $this->bundle . '/display');
-      $this->drupalPostForm(NULL, [], $this->fieldName . '_settings_edit');
+      $this->submitForm([], $this->fieldName . '_settings_edit');
 
       // Test that the settings options are present in the correct format.
       foreach ($options as $string) {

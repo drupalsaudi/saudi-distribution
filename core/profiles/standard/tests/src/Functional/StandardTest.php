@@ -38,7 +38,7 @@ class StandardTest extends BrowserTestBase {
    */
   public function testStandard() {
     $this->drupalGet('');
-    $this->assertSession()->linkExists(t('Contact'));
+    $this->assertSession()->linkExists('Contact');
     $this->clickLink(t('Contact'));
     $this->assertSession()->statusCodeEquals(200);
 
@@ -53,16 +53,15 @@ class StandardTest extends BrowserTestBase {
     $this->drupalLogin($this->adminUser);
     // Configure the block.
     $this->drupalGet('admin/structure/block/add/system_menu_block:main/bartik');
-    $this->drupalPostForm(NULL, [
+    $this->submitForm([
       'region' => 'sidebar_first',
       'id' => 'main_navigation',
-    ], t('Save block'));
+    ], 'Save block');
     // Verify admin user can see the block.
     $this->drupalGet('');
     $this->assertText('Main navigation');
 
-    // Verify we have role = aria on system_powered_by and help_block
-    // blocks.
+    // Verify we have role = complementary on help_block blocks.
     $this->drupalGet('admin/structure/block');
     $elements = $this->xpath('//div[@role=:role and @id=:id]', [
       ':role' => 'complementary',
@@ -70,13 +69,6 @@ class StandardTest extends BrowserTestBase {
     ]);
 
     $this->assertCount(1, $elements, 'Found complementary role on help block.');
-
-    $this->drupalGet('');
-    $elements = $this->xpath('//div[@role=:role and @id=:id]', [
-      ':role' => 'complementary',
-      ':id' => 'block-bartik-powered',
-    ]);
-    $this->assertCount(1, $elements, 'Found complementary role on powered by block.');
 
     // Verify anonymous user can see the block.
     $this->drupalLogout();
@@ -95,11 +87,12 @@ class StandardTest extends BrowserTestBase {
     // Add a comment.
     $this->drupalLogin($this->adminUser);
     $this->drupalGet('node/1');
-    $this->assertRaw('Then she picked out two somebodies,<br />Sally and me', 'Found a line break.');
-    $this->drupalPostForm(NULL, [
+    // Verify that a line break is present.
+    $this->assertRaw('Then she picked out two somebodies,<br />Sally and me');
+    $this->submitForm([
       'subject[0][value]' => 'Barfoo',
       'comment_body[0][value]' => 'Then she picked out two somebodies, Sally and me',
-    ], t('Save'));
+    ], 'Save');
     // Fetch the feed.
     $this->drupalGet('rss.xml');
     $this->assertText('Foobar');
@@ -107,7 +100,7 @@ class StandardTest extends BrowserTestBase {
 
     // Ensure block body exists.
     $this->drupalGet('block/add');
-    $this->assertFieldByName('body[0][value]');
+    $this->assertSession()->fieldExists('body[0][value]');
 
     // Now we have all configuration imported, test all of them for schema
     // conformance. Ensures all imported default configuration is valid when
@@ -188,22 +181,27 @@ class StandardTest extends BrowserTestBase {
     $this->drupalLogin($this->adminUser);
     $url = Url::fromRoute('contact.site_page');
     $this->drupalGet($url);
-    $this->assertEqual('UNCACHEABLE', $this->drupalGetHeader(DynamicPageCacheSubscriber::HEADER), 'Site-wide contact page cannot be cached by Dynamic Page Cache.');
+    // Verify that site-wide contact page cannot be cached by Dynamic Page
+    // Cache.
+    $this->assertSession()->responseHeaderEquals(DynamicPageCacheSubscriber::HEADER, 'UNCACHEABLE');
 
     $url = Url::fromRoute('<front>');
     $this->drupalGet($url);
     $this->drupalGet($url);
-    $this->assertEqual('HIT', $this->drupalGetHeader(DynamicPageCacheSubscriber::HEADER), 'Frontpage is cached by Dynamic Page Cache.');
+    // Verify that frontpage is cached by Dynamic Page Cache.
+    $this->assertSession()->responseHeaderEquals(DynamicPageCacheSubscriber::HEADER, 'HIT');
 
     $url = Url::fromRoute('entity.node.canonical', ['node' => 1]);
     $this->drupalGet($url);
     $this->drupalGet($url);
-    $this->assertEqual('HIT', $this->drupalGetHeader(DynamicPageCacheSubscriber::HEADER), 'Full node page is cached by Dynamic Page Cache.');
+    // Verify that full node page is cached by Dynamic Page Cache.
+    $this->assertSession()->responseHeaderEquals(DynamicPageCacheSubscriber::HEADER, 'HIT');
 
     $url = Url::fromRoute('entity.user.canonical', ['user' => 1]);
     $this->drupalGet($url);
     $this->drupalGet($url);
-    $this->assertEqual('HIT', $this->drupalGetHeader(DynamicPageCacheSubscriber::HEADER), 'User profile page is cached by Dynamic Page Cache.');
+    // Verify that user profile page is cached by Dynamic Page Cache.
+    $this->assertSession()->responseHeaderEquals(DynamicPageCacheSubscriber::HEADER, 'HIT');
 
     // Make sure the editorial workflow is installed after enabling the
     // content_moderation module.
@@ -253,11 +251,11 @@ class StandardTest extends BrowserTestBase {
       // The source field should be shown before the vertical tabs.
       $test_source_field = $assert_session->fieldExists($media_type->getSource()->getSourceFieldDefinition($media_type)->getLabel(), $form)->getOuterHtml();
       $vertical_tabs = $assert_session->elementExists('css', '.form-type-vertical-tabs', $form)->getOuterHtml();
-      $this->assertTrue(strpos($form_html, $vertical_tabs) > strpos($form_html, $test_source_field));
+      $this->assertGreaterThan(strpos($form_html, $test_source_field), strpos($form_html, $vertical_tabs));
       // The "Published" checkbox should be the last element.
       $date_field = $assert_session->fieldExists('Date', $form)->getOuterHtml();
       $published_checkbox = $assert_session->fieldExists('Published', $form)->getOuterHtml();
-      $this->assertTrue(strpos($form_html, $published_checkbox) > strpos($form_html, $date_field));
+      $this->assertGreaterThan(strpos($form_html, $date_field), strpos($form_html, $published_checkbox));
       if (is_a($media_type->getSource(), Image::class, TRUE)) {
         // Assert the default entity view display is configured with an image
         // style.

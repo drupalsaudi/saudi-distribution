@@ -20,7 +20,7 @@ class PagerTest extends BrowserTestBase {
    *
    * @var array
    */
-  public static $modules = ['dblog', 'image', 'pager_test'];
+  protected static $modules = ['dblog', 'image', 'pager_test'];
 
   /**
    * {@inheritdoc}
@@ -36,7 +36,7 @@ class PagerTest extends BrowserTestBase {
 
   protected $profile = 'testing';
 
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     // Insert 300 log messages.
@@ -84,14 +84,14 @@ class PagerTest extends BrowserTestBase {
   public function testPagerQueryParametersAndCacheContext() {
     // First page.
     $this->drupalGet('pager-test/query-parameters');
-    $this->assertText(t('Pager calls: 0'), 'Initial call to pager shows 0 calls.');
+    $this->assertText('Pager calls: 0', 'Initial call to pager shows 0 calls.');
     $this->assertText('[url.query_args.pagers:0]=0.0');
     $this->assertCacheContext('url.query_args');
 
     // Go to last page, the count of pager calls need to go to 1.
     $elements = $this->xpath('//li[contains(@class, :class)]/a', [':class' => 'pager__item--last']);
     $elements[0]->click();
-    $this->assertText(t('Pager calls: 1'), 'First link call to pager shows 1 calls.');
+    $this->assertText('Pager calls: 1', 'First link call to pager shows 1 calls.');
     $this->assertText('[url.query_args.pagers:0]=0.60');
     $this->assertCacheContext('url.query_args');
 
@@ -102,7 +102,7 @@ class PagerTest extends BrowserTestBase {
     $elements[0]->click();
     $elements = $this->xpath('//li[contains(@class, :class)]/a', [':class' => 'pager__item--first']);
     $elements[0]->click();
-    $this->assertText(t('Pager calls: 2'), 'Second link call to pager shows 2 calls.');
+    $this->assertText('Pager calls: 2', 'Second link call to pager shows 2 calls.');
     $this->assertText('[url.query_args.pagers:0]=0.0');
     $this->assertCacheContext('url.query_args');
   }

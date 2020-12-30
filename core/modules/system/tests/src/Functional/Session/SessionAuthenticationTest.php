@@ -25,7 +25,7 @@ class SessionAuthenticationTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['basic_auth', 'session_test'];
+  protected static $modules = ['basic_auth', 'session_test'];
 
   /**
    * {@inheritdoc}
@@ -35,7 +35,7 @@ class SessionAuthenticationTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     // Create a test administrator user.
@@ -136,7 +136,7 @@ class SessionAuthenticationTest extends BrowserTestBase {
     $this->drupalGet($cookie_url);
     $this->assertEmpty($this->getSessionCookies());
     $edit = ['name' => $this->user->getAccountName(), 'pass' => $this->user->passRaw];
-    $this->drupalPostForm($cookie_url, $edit, t('Log in'));
+    $this->drupalPostForm($cookie_url, $edit, 'Log in');
     $this->assertNotEmpty($this->getSessionCookies());
   }
 

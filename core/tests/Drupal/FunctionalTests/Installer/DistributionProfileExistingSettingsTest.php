@@ -5,7 +5,6 @@ namespace Drupal\FunctionalTests\Installer;
 use Drupal\Component\Serialization\Yaml;
 use Drupal\Core\Database\Database;
 use Drupal\Core\DrupalKernel;
-use Drupal\Core\Site\Settings;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -44,9 +43,9 @@ class DistributionProfileExistingSettingsTest extends InstallerTestBase {
       ],
     ];
     // File API functions are not available yet.
-    $path = $this->siteDirectory . '/profiles/mydistro';
+    $path = $this->siteDirectory . '/profiles/my_distro';
     mkdir($path, 0777, TRUE);
-    file_put_contents("$path/mydistro.info.yml", Yaml::encode($this->info));
+    file_put_contents("$path/my_distro.info.yml", Yaml::encode($this->info));
 
     // Pre-configure hash salt.
     // Any string is valid, so simply use the class name of this test.
@@ -115,19 +114,17 @@ class DistributionProfileExistingSettingsTest extends InstallerTestBase {
    * Confirms that the installation succeeded.
    */
   public function testInstalled() {
-    $this->assertUrl('user/1');
+    $this->assertSession()->addressEquals('user/1');
     $this->assertSession()->statusCodeEquals(200);
     // Confirm that we are logged-in after installation.
     $this->assertText($this->rootUser->getAccountName());
 
     // Confirm that Drupal recognizes this distribution as the current profile.
-    $this->assertEqual(\Drupal::installProfile(), 'mydistro');
-    $this->assertArrayNotHasKey('install_profile', Settings::getAll(), 'The install profile has not been written to settings.php.');
-    $this->assertEqual($this->config('core.extension')->get('profile'), 'mydistro', 'The install profile has been written to core.extension configuration.');
+    $this->assertEqual(\Drupal::installProfile(), 'my_distro');
+    $this->assertEqual($this->config('core.extension')->get('profile'), 'my_distro', 'The install profile has been written to core.extension configuration.');
 
     $this->rebuildContainer();
-    $this->pass('Container can be rebuilt even though distribution is not written to settings.php.');
-    $this->assertEqual(\Drupal::installProfile(), 'mydistro');
+    $this->assertEqual(\Drupal::installProfile(), 'my_distro');
   }
 
 }

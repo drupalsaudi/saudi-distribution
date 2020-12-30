@@ -6,6 +6,12 @@ use Drupal\Core\Database\SchemaObjectExistsException;
 use Drupal\Core\Database\SchemaObjectDoesNotExistException;
 use Drupal\Core\Database\Schema as DatabaseSchema;
 
+// cSpell:ignore adbin adnum adrelid adsrc attisdropped attname attnum attrdef
+// cSpell:ignore attrelid atttypid atttypmod bigserial conkey conname conrelid
+// cSpell:ignore contype fillfactor indexname indexrelid indisprimary indkey
+// cSpell:ignore indrelid nextval nspname regclass relkind relname relnamespace
+// cSpell:ignore schemaname setval
+
 /**
  * @addtogroup schemaapi
  * @{
@@ -320,9 +326,6 @@ EOD;
    * Create an SQL string for a field to be used in table creation or
    * alteration.
    *
-   * Before passing a field out of a schema definition into this
-   * function it has to be processed by _db_process_field().
-   *
    * @param $name
    *   Name of the field.
    * @param $spec
@@ -385,7 +388,7 @@ EOD;
     }
 
     if (!empty($field['unsigned'])) {
-      // Unsigned data types are not supported in PostgreSQL 9.1. In MySQL,
+      // Unsigned data types are not supported in PostgreSQL 10. In MySQL,
       // they are used to ensure a positive number is inserted and it also
       // doubles the maximum integer size that can be stored in a field.
       // The PostgreSQL schema in Drupal creates a check constraint
@@ -556,7 +559,7 @@ EOD;
     }
 
     // Get the schema and tablename for the old table.
-    $old_full_name = $this->connection->prefixTables('{' . $table . '}');
+    $old_full_name = str_replace('"', '', $this->connection->prefixTables('{' . $table . '}'));
     list($old_schema, $old_table_name) = strpos($old_full_name, '.') ? explode('.', $old_full_name) : ['public', $old_full_name];
 
     // Index names and constraint names are global in PostgreSQL, so we need to
@@ -569,6 +572,7 @@ EOD;
 
       // If the index is already rewritten by ensureIdentifiersLength() to not
       // exceed the 63 chars limit of PostgreSQL, we need to take care of that.
+      // cSpell:disable-next-line
       // Example (drupal_Gk7Su_T1jcBHVuvSPeP22_I3Ni4GrVEgTYlIYnBJkro_idx).
       if (strpos($index->indexname, 'drupal_') !== FALSE) {
         preg_match('/^drupal_(.*)_' . preg_quote($index_type) . '/', $index->indexname, $matches);
@@ -702,32 +706,6 @@ EOD;
   /**
    * {@inheritdoc}
    */
-  public function fieldSetDefault($table, $field, $default) {
-    @trigger_error('fieldSetDefault() is deprecated in drupal:8.7.0 and will be removed before drupal:9.0.0. Instead, call ::changeField() passing a full field specification. See https://www.drupal.org/node/2999035', E_USER_DEPRECATED);
-    if (!$this->fieldExists($table, $field)) {
-      throw new SchemaObjectDoesNotExistException("Cannot set default value of field '$table.$field': field doesn't exist.");
-    }
-
-    $default = $this->escapeDefaultValue($default);
-
-    $this->connection->query('ALTER TABLE {' . $table . '} ALTER COLUMN "' . $field . '" SET DEFAULT ' . $default);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function fieldSetNoDefault($table, $field) {
-    @trigger_error('fieldSetNoDefault() is deprecated in drupal:8.7.0 and will be removed before drupal:9.0.0. Instead, call ::changeField() passing a full field specification. See https://www.drupal.org/node/2999035', E_USER_DEPRECATED);
-    if (!$this->fieldExists($table, $field)) {
-      throw new SchemaObjectDoesNotExistException("Cannot remove default value of field '$table.$field': field doesn't exist.");
-    }
-
-    $this->connection->query('ALTER TABLE {' . $table . '} ALTER COLUMN "' . $field . '" DROP DEFAULT');
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function fieldExists($table, $column) {
     $prefixInfo = $this->getPrefixInfo($table);
 
@@ -738,7 +716,7 @@ EOD;
    * {@inheritdoc}
    */
   public function indexExists($table, $name) {
-    // Details http://www.postgresql.org/docs/9.1/interactive/view-pg-indexes.html
+    // Details https://www.postgresql.org/docs/10/view-pg-indexes.html
     $index_name = $this->ensureIdentifiersLength($table, $name, 'idx');
     // Remove leading and trailing quotes because the index name is in a WHERE
     // clause and not used as an identifier.
@@ -812,20 +790,7 @@ EOD;
     if (!$this->tableExists($table)) {
       return FALSE;
     }
-
-    // Fetch the 'indkey' column from 'pg_index' to figure out the order of the
-    // primary key.
-    // @todo Use 'array_position()' to be able to perform the ordering in SQL
-    //   directly when 9.5 is the minimum  PostgreSQL version.
-    $result = $this->connection->query("SELECT a.attname, i.indkey FROM pg_index i JOIN pg_attribute a ON a.attrelid = i.indrelid AND a.attnum = ANY(i.indkey) WHERE i.indrelid = '{" . $table . "}'::regclass AND i.indisprimary")->fetchAllKeyed();
-    if (!$result) {
-      return [];
-    }
-
-    $order = explode(' ', reset($result));
-    $columns = array_combine($order, array_keys($result));
-    ksort($columns);
-    return array_values($columns);
+    return $this->connection->query("SELECT array_position(i.indkey, a.attnum) AS position, a.attname FROM pg_index i JOIN pg_attribute a ON a.attrelid = i.indrelid AND a.attnum = ANY(i.indkey) WHERE i.indrelid = '{" . $table . "}'::regclass AND i.indisprimary ORDER BY position")->fetchAllKeyed();
   }
 
   /**
@@ -898,8 +863,10 @@ EOD;
       'indexes' => [],
     ];
 
+    // Get the schema and tablename for the table without identifier quotes.
+    $full_name = str_replace('"', '', $this->connection->prefixTables('{' . $table . '}'));
     $result = $this->connection->query("SELECT i.relname AS index_name, a.attname AS column_name FROM pg_class t, pg_class i, pg_index ix, pg_attribute a WHERE t.oid = ix.indrelid AND i.oid = ix.indexrelid AND a.attrelid = t.oid AND a.attnum = ANY(ix.indkey) AND t.relkind = 'r' AND t.relname = :table_name ORDER BY index_name ASC, column_name ASC", [
-      ':table_name' => $this->connection->prefixTables('{' . $table . '}'),
+      ':table_name' => $full_name,
     ])->fetchAll();
     foreach ($result as $row) {
       if (preg_match('/_pkey$/', $row->index_name)) {
@@ -985,12 +952,12 @@ EOD;
 
     if (isset($spec['not null'])) {
       if ($spec['not null']) {
-        $nullaction = 'SET NOT NULL';
+        $null_action = 'SET NOT NULL';
       }
       else {
-        $nullaction = 'DROP NOT NULL';
+        $null_action = 'DROP NOT NULL';
       }
-      $this->connection->query('ALTER TABLE {' . $table . '} ALTER "' . $field . '" ' . $nullaction);
+      $this->connection->query('ALTER TABLE {' . $table . '} ALTER "' . $field . '" ' . $null_action);
     }
 
     if (in_array($spec['pgsql_type'], ['serial', 'bigserial'])) {

@@ -19,11 +19,11 @@ class Error {
   const ERROR = 3;
 
   /**
-   * An array of blacklisted functions.
+   * An array of ignored functions.
    *
    * @var array
    */
-  protected static $blacklistFunctions = ['debug', '_drupal_error_handler', '_drupal_exception_handler'];
+  protected static $ignoredFunctions = ['debug', '_drupal_error_handler', '_drupal_exception_handler'];
 
   /**
    * Decodes an exception and retrieves the correct caller.
@@ -46,11 +46,10 @@ class Error {
     if ($exception instanceof \PDOException || $exception instanceof DatabaseExceptionWrapper) {
       // The first element in the stack is the call, the second element gives us
       // the caller. We skip calls that occurred in one of the classes of the
-      // database layer or in one of its global functions.
-      $db_functions = ['db_query', 'db_query_range'];
+      // database layer.
       while (!empty($backtrace[1]) && ($caller = $backtrace[1]) &&
-        ((isset($caller['class']) && (strpos($caller['class'], 'Query') !== FALSE || strpos($caller['class'], 'Database') !== FALSE || strpos($caller['class'], 'PDO') !== FALSE)) ||
-          in_array($caller['function'], $db_functions))) {
+        ((isset($caller['class']) && (strpos($caller['class'], 'Query') !== FALSE || strpos($caller['class'], 'Database') !== FALSE || strpos($caller['class'], 'PDO') !== FALSE))
+        )) {
         // We remove that call.
         array_shift($backtrace);
       }
@@ -111,9 +110,9 @@ class Error {
    */
   public static function getLastCaller(array &$backtrace) {
     // Errors that occur inside PHP internal functions do not generate
-    // information about file and line. Ignore black listed functions.
+    // information about file and line. Ignore the ignored functions.
     while (($backtrace && !isset($backtrace[0]['line'])) ||
-      (isset($backtrace[1]['function']) && in_array($backtrace[1]['function'], static::$blacklistFunctions))) {
+      (isset($backtrace[1]['function']) && in_array($backtrace[1]['function'], static::$ignoredFunctions))) {
       array_shift($backtrace);
     }
 

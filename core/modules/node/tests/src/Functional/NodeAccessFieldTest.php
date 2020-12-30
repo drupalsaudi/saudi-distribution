@@ -17,7 +17,7 @@ class NodeAccessFieldTest extends NodeTestBase {
    *
    * @var array
    */
-  public static $modules = ['node_access_test', 'field_ui'];
+  protected static $modules = ['node_access_test', 'field_ui'];
 
   /**
    * {@inheritdoc}
@@ -45,7 +45,7 @@ class NodeAccessFieldTest extends NodeTestBase {
    */
   protected $fieldName;
 
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     node_access_rebuild();
@@ -109,7 +109,7 @@ class NodeAccessFieldTest extends NodeTestBase {
     $this->drupalPostForm(
       "admin/structure/types/manage/page/fields/node.page.{$this->fieldName}",
       $edit,
-      t('Save settings')
+      'Save settings'
     );
 
     // Log in as the administrator.
@@ -121,7 +121,7 @@ class NodeAccessFieldTest extends NodeTestBase {
 
     // Confirm that the new default value appears when creating a new node.
     $this->drupalGet('node/add/page');
-    $this->assertRaw($default, 'The updated default value is displayed when creating a new node.');
+    $this->assertRaw($default);
   }
 
 }

@@ -4,6 +4,8 @@ namespace Drupal\Tests\taxonomy\Kernel\Migrate;
 
 use Drupal\Tests\migrate_drupal\Kernel\d7\MigrateDrupal7TestBase;
 
+// cspell:ignore vocabfixed vocablocalized vocabtranslate
+
 /**
  * Tests d7 taxonomy term deriver.
  *
@@ -11,7 +13,7 @@ use Drupal\Tests\migrate_drupal\Kernel\d7\MigrateDrupal7TestBase;
  */
 class TaxonomyTermDeriverTest extends MigrateDrupal7TestBase {
 
-  public static $modules = ['taxonomy', 'text'];
+  protected static $modules = ['taxonomy', 'text'];
 
   /**
    * Tests fields exist in  process pipeline for term migrations.

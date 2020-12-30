@@ -21,7 +21,12 @@ class ContextualFiltersBlockContextTest extends ViewTestBase {
    *
    * @var array
    */
-  public static $modules = ['block', 'block_test_views', 'views_ui', 'node'];
+  protected static $modules = [
+    'block',
+    'block_test_views',
+    'views_ui',
+    'node',
+  ];
 
   /**
    * {@inheritdoc}
@@ -52,10 +57,10 @@ class ContextualFiltersBlockContextTest extends ViewTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp($import_test_views = TRUE) {
+  protected function setUp($import_test_views = TRUE): void {
     parent::setUp($import_test_views);
 
-    ViewTestData::createTestViews(get_class($this), ['block_test_views']);
+    ViewTestData::createTestViews(static::class, ['block_test_views']);
     $this->enableViewsTestModule();
 
     $this->nodeType = $this->container->get('entity_type.manager')
@@ -104,7 +109,7 @@ class ContextualFiltersBlockContextTest extends ViewTestBase {
     $edit = [
       'settings[context_mapping][nid]' => '@node.node_route_context:node',
     ];
-    $this->drupalPostForm(NULL, $edit, 'Save block');
+    $this->submitForm($edit, 'Save block');
 
     // Check if mapping saved correctly.
     /** @var \Drupal\block\BlockInterface $block */

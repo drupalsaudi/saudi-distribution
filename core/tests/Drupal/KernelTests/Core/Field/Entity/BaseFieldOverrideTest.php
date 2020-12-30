@@ -19,7 +19,7 @@ class BaseFieldOverrideTest extends KernelTestBase {
    *
    * @var array
    */
-  public static $modules = [
+  protected static $modules = [
     'system',
     'user',
     'entity_test',
@@ -28,7 +28,7 @@ class BaseFieldOverrideTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
     $this->installEntitySchema('base_field_override');
   }
@@ -59,7 +59,7 @@ class BaseFieldOverrideTest extends KernelTestBase {
         FALSE,
         FieldItemList::class,
       ],
-      'String (overriden class)' => [
+      'String (overridden class)' => [
         'string',
         static::class,
         static::class,

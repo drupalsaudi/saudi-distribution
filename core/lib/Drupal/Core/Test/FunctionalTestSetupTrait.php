@@ -21,7 +21,7 @@ use Drupal\Tests\SessionTestTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Yaml\Yaml as SymfonyYaml;
-use Symfony\Cmf\Component\Routing\RouteObjectInterface;
+use Drupal\Core\Routing\RouteObjectInterface;
 use Symfony\Component\Routing\Route;
 
 /**
@@ -45,16 +45,6 @@ trait FunctionalTestSetupTrait {
    * @var \Symfony\Component\Classloader\Classloader
    */
   protected $classLoader;
-
-  /**
-   * The config directories used in this test.
-   *
-   * @deprecated in drupal:8.8.0 and is removed from drupal:9.0.0. Use
-   *   \Drupal\Core\Site\Settings::get('config_sync_directory') instead.
-   *
-   * @see https://www.drupal.org/node/3018145
-   */
-  protected $configDirectories = [];
 
   /**
    * The flag to set 'apcu_ensure_unique_prefix' setting.
@@ -120,7 +110,7 @@ trait FunctionalTestSetupTrait {
       copy($settings_testing_file, $directory . '/settings.testing.php');
       // Add the name of the testing class to settings.php and include the
       // testing specific overrides.
-      file_put_contents($directory . '/settings.php', "\n\$test_class = '" . get_class($this) . "';\n" . 'include DRUPAL_ROOT . \'/\' . $site_path . \'/settings.testing.php\';' . "\n", FILE_APPEND);
+      file_put_contents($directory . '/settings.php', "\n\$test_class = '" . static::class . "';\n" . 'include DRUPAL_ROOT . \'/\' . $site_path . \'/settings.testing.php\';' . "\n", FILE_APPEND);
     }
     $settings_services_file = DRUPAL_ROOT . '/' . $this->originalSite . '/testing.services.yml';
     if (!file_exists($settings_services_file)) {
@@ -301,7 +291,6 @@ trait FunctionalTestSetupTrait {
    */
   protected function initSettings() {
     Settings::initialize(DRUPAL_ROOT, $this->siteDirectory, $this->classLoader);
-    $this->configDirectories['sync'] = Settings::get('config_sync_directory');
 
     // After writing settings.php, the installer removes write permissions
     // from the site directory. To allow drupal_generate_test_ua() to write
@@ -411,6 +400,9 @@ trait FunctionalTestSetupTrait {
    *
    * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
    *   The container.
+   *
+   * @throws \Exception
+   *   If the test case does not initialize default theme.
    */
   protected function installDefaultThemeFromClassProperty(ContainerInterface $container) {
     // Use the install profile to determine the default theme if configured and
@@ -431,11 +423,7 @@ trait FunctionalTestSetupTrait {
 
     // Require a default theme to be specified at this point.
     if (!isset($this->defaultTheme)) {
-      // For backwards compatibility, tests using the 'testing' install profile
-      // on Drupal 8 automatically get 'classy' set, and other profiles use
-      // 'stark'.
-      @trigger_error('Drupal\Tests\BrowserTestBase::$defaultTheme is required in drupal:9.0.0 when using an install profile that does not set a default theme. See https://www.drupal.org/node/3083055, which includes recommendations on which theme to use.', E_USER_DEPRECATED);
-      $this->defaultTheme = $profile === 'testing' ? 'classy' : 'stark';
+      throw new \Exception('Drupal\Tests\BrowserTestBase::$defaultTheme is required. See https://www.drupal.org/node/3083055, which includes recommendations on which theme to use.');
     }
 
     // Ensure the default theme is installed.
@@ -462,7 +450,7 @@ trait FunctionalTestSetupTrait {
    *   The container.
    */
   protected function installModulesFromClassProperty(ContainerInterface $container) {
-    $class = get_class($this);
+    $class = static::class;
     $modules = [];
     while ($class) {
       if (property_exists($class, 'modules')) {
@@ -660,7 +648,6 @@ trait FunctionalTestSetupTrait {
     $this->container = NULL;
 
     // Unset globals.
-    unset($GLOBALS['config_directories']);
     unset($GLOBALS['config']);
     unset($GLOBALS['conf']);
 

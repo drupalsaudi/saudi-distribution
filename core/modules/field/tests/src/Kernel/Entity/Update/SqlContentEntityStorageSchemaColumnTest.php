@@ -21,7 +21,7 @@ class SqlContentEntityStorageSchemaColumnTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['entity_test', 'field', 'text', 'user'];
+  protected static $modules = ['entity_test', 'field', 'text', 'user'];
 
   /**
    * The created entity.
@@ -47,7 +47,7 @@ class SqlContentEntityStorageSchemaColumnTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->installEntitySchema('entity_test_rev');
@@ -90,15 +90,10 @@ class SqlContentEntityStorageSchemaColumnTest extends KernelTestBase {
 
     // Now attempt to run automatic updates. An exception should be thrown
     // since there is data in the table.
-    try {
-      $entity_definition_update_manager = \Drupal::entityDefinitionUpdateManager();
-      $field_storage_definition = $entity_definition_update_manager->getFieldStorageDefinition('test', 'entity_test_rev');
-      $entity_definition_update_manager->updateFieldStorageDefinition($field_storage_definition);
-      $this->fail('Failed to detect a schema change in a field with data.');
-    }
-    catch (FieldStorageDefinitionUpdateForbiddenException $e) {
-      $this->pass('Detected a schema change in a field with data.');
-    }
+    $this->expectException(FieldStorageDefinitionUpdateForbiddenException::class);
+    $entity_definition_update_manager = \Drupal::entityDefinitionUpdateManager();
+    $field_storage_definition = $entity_definition_update_manager->getFieldStorageDefinition('test', 'entity_test_rev');
+    $entity_definition_update_manager->updateFieldStorageDefinition($field_storage_definition);
   }
 
 }

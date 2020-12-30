@@ -37,6 +37,11 @@ class TestSqlIdMap extends Sql implements \Iterator {
   /**
    * {@inheritdoc}
    */
+  public $message;
+
+  /**
+   * {@inheritdoc}
+   */
   public function getDatabase() {
     return parent::getDatabase();
   }
@@ -74,6 +79,13 @@ class TestSqlIdMap extends Sql implements \Iterator {
       default:
         throw new MigrateException($id_definition['type'] . ' not supported');
     }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function ensureTables() {
+    parent::ensureTables();
   }
 
 }

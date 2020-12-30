@@ -9,7 +9,9 @@ use Drupal\Core\Cache\CacheTagsInvalidatorInterface;
 use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\Core\StringTranslation\PluralTranslatableMarkup;
+use Drupal\Tests\Traits\PhpUnitWarnings;
 use PHPUnit\Framework\TestCase;
+use Symfony\Bridge\PhpUnit\ExpectDeprecationTrait;
 
 /**
  * Provides a base class and helpers for Drupal unit tests.
@@ -18,7 +20,9 @@ use PHPUnit\Framework\TestCase;
  */
 abstract class UnitTestCase extends TestCase {
 
-  use PhpunitCompatibilityTrait;
+  use PhpUnitWarnings;
+  use PhpUnitCompatibilityTrait;
+  use ExpectDeprecationTrait;
 
   /**
    * The random generator.
@@ -49,7 +53,7 @@ abstract class UnitTestCase extends TestCase {
     // Ensure that FileCacheFactory has a prefix.
     FileCacheFactory::setPrefix('prefix');
 
-    $this->root = dirname(dirname(substr(__DIR__, 0, -strlen(__NAMESPACE__))));
+    $this->root = dirname(substr(__DIR__, 0, -strlen(__NAMESPACE__)), 2);
   }
 
   /**
@@ -86,8 +90,14 @@ abstract class UnitTestCase extends TestCase {
    * @param array $expected
    * @param array $actual
    * @param string $message
+   *
+   * @deprecated in drupal:9.1.0 and is removed from drupal:10.0.0. Use
+   *   ::assertEquals, ::assertEqualsCanonicalizing, or ::assertSame instead.
+   *
+   * @see https://www.drupal.org/node/3136304
    */
   protected function assertArrayEquals(array $expected, array $actual, $message = NULL) {
+    @trigger_error(__METHOD__ . "() is deprecated in drupal:9.1.0 and is removed from drupal:10.0.0. Use ::assertEquals(), ::assertEqualsCanonicalizing(), or ::assertSame() instead. See https://www.drupal.org/node/3136304", E_USER_DEPRECATED);
     ksort($expected);
     ksort($actual);
     $this->assertEquals($expected, $actual, !empty($message) ? $message : '');
@@ -183,39 +193,6 @@ abstract class UnitTestCase extends TestCase {
         ->will($this->returnValue($config));
     }
     return $config_storage;
-  }
-
-  /**
-   * Mocks a block with a block plugin.
-   *
-   * @param string $machine_name
-   *   The machine name of the block plugin.
-   *
-   * @return \Drupal\block\BlockInterface|\PHPUnit\Framework\MockObject\MockObject
-   *   The mocked block.
-   *
-   * @deprecated in drupal:8.5.0 and is removed from drupal:9.0.0. Unit test
-   *   base classes should not have dependencies on extensions. Set up mocks in
-   *   individual tests.
-   *
-   * @see https://www.drupal.org/node/2896072
-   */
-  protected function getBlockMockWithMachineName($machine_name) {
-    $plugin = $this->getMockBuilder('Drupal\Core\Block\BlockBase')
-      ->disableOriginalConstructor()
-      ->getMock();
-    $plugin->expects($this->any())
-      ->method('getMachineNameSuggestion')
-      ->will($this->returnValue($machine_name));
-
-    $block = $this->getMockBuilder('Drupal\block\Entity\Block')
-      ->disableOriginalConstructor()
-      ->getMock();
-    $block->expects($this->any())
-      ->method('getPlugin')
-      ->will($this->returnValue($plugin));
-    @trigger_error(__METHOD__ . ' is deprecated in Drupal 8.5.x, will be removed before Drupal 9.0.0. Unit test base classes should not have dependencies on extensions. Set up mocks in individual tests.', E_USER_DEPRECATED);
-    return $block;
   }
 
   /**

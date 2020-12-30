@@ -20,7 +20,7 @@ class BlockViewBuilderTest extends KernelTestBase {
    *
    * @var array
    */
-  public static $modules = ['block', 'block_test', 'system', 'user'];
+  protected static $modules = ['block', 'block_test', 'system', 'user'];
 
   /**
    * The block being tested.
@@ -46,7 +46,7 @@ class BlockViewBuilderTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->controller = $this->container
@@ -207,7 +207,9 @@ class BlockViewBuilderTest extends KernelTestBase {
     $build = $this->getBlockRenderArray();
     $this->assertFalse(isset($build['#prefix']), 'The appended #pre_render callback has not yet run before rendering.');
     $this->assertIdentical((string) $this->renderer->renderRoot($build), 'Hiya!<br>');
-    $this->assertTrue(isset($build['#prefix']) && $build['#prefix'] === 'Hiya!<br>', 'A cached block without content is altered.');
+    // Check that a cached block without content is altered.
+    $this->assertArrayHasKey('#prefix', $build);
+    $this->assertSame('Hiya!<br>', $build['#prefix']);
   }
 
   /**
@@ -292,7 +294,6 @@ class BlockViewBuilderTest extends KernelTestBase {
 
     // Check that the expected cacheability metadata is present in:
     // - the built render array;
-    $this->pass('Built render array');
     $build = $this->getBlockRenderArray();
     $this->assertIdentical($expected_keys, $build['#cache']['keys']);
     $this->assertIdentical($expected_contexts, $build['#cache']['contexts']);
@@ -300,10 +301,8 @@ class BlockViewBuilderTest extends KernelTestBase {
     $this->assertIdentical($expected_max_age, $build['#cache']['max-age']);
     $this->assertFalse(isset($build['#create_placeholder']));
     // - the rendered render array;
-    $this->pass('Rendered render array');
     $this->renderer->renderRoot($build);
     // - the render cache item.
-    $this->pass('Render cache item');
     $final_cache_contexts = Cache::mergeContexts($expected_contexts, $required_cache_contexts);
     $cid = implode(':', $expected_keys) . ':' . implode(':', \Drupal::service('cache_contexts_manager')->convertTokensToKeys($final_cache_contexts)->getKeys());
     $cache_item = $this->container->get('cache.render')->get($cid);

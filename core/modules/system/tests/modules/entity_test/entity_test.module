@@ -194,7 +194,7 @@ function entity_test_entity_base_field_info_alter(&$fields, EntityTypeInterface 
  *   'entity_test'.
  */
 function entity_test_create_bundle($bundle, $text = NULL, $entity_type = 'entity_test') {
-  $bundles = \Drupal::state()->get($entity_type . '.bundles') ?: [$entity_type => ['label' => 'Entity Test Bundle']];
+  $bundles = \Drupal::state()->get($entity_type . '.bundles', [$entity_type => ['label' => 'Entity Test Bundle']]);
   $bundles += [$bundle => ['label' => $text ? $text : $bundle]];
   \Drupal::state()->set($entity_type . '.bundles', $bundles);
 
@@ -211,7 +211,7 @@ function entity_test_create_bundle($bundle, $text = NULL, $entity_type = 'entity
  *   'entity_test'.
  */
 function entity_test_delete_bundle($bundle, $entity_type = 'entity_test') {
-  $bundles = \Drupal::state()->get($entity_type . '.bundles') ?: [$entity_type => ['label' => 'Entity Test Bundle']];
+  $bundles = \Drupal::state()->get($entity_type . '.bundles', [$entity_type => ['label' => 'Entity Test Bundle']]);
   unset($bundles[$bundle]);
   \Drupal::state()->set($entity_type . '.bundles', $bundles);
 
@@ -226,7 +226,7 @@ function entity_test_entity_bundle_info() {
   $entity_types = \Drupal::entityTypeManager()->getDefinitions();
   foreach ($entity_types as $entity_type_id => $entity_type) {
     if ($entity_type->getProvider() == 'entity_test' && $entity_type_id != 'entity_test_with_bundle') {
-      $bundles[$entity_type_id] = \Drupal::state()->get($entity_type_id . '.bundles') ?: [$entity_type_id => ['label' => 'Entity Test Bundle']];
+      $bundles[$entity_type_id] = \Drupal::state()->get($entity_type_id . '.bundles', [$entity_type_id => ['label' => 'Entity Test Bundle']]);
     }
   }
   return $bundles;
@@ -353,106 +353,6 @@ function entity_test_form_entity_test_form_validate_check(array &$form, FormStat
 function entity_test_form_node_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   $langcode = $form_state->getFormObject()->getFormLangcode($form_state);
   \Drupal::state()->set('entity_test.form_langcode', $langcode);
-}
-
-/**
- * Loads a test entity.
- *
- * @param int $id
- *   A test entity ID.
- * @param bool $reset
- *   A boolean indicating that the internal cache should be reset.
- *
- * @return \Drupal\entity_test\Entity\EntityTest
- *   The loaded entity object, or NULL if the entity cannot be loaded.
- *
- * @deprecated in drupal:8.0.0 and is removed from drupal:9.0.0. Use
- *   \Drupal::entityTypeManager()->getStorage('entity_test')->load().
- *
- * @see https://www.drupal.org/node/2266845
- */
-function entity_test_load($id, $reset = FALSE) {
-  @trigger_error('entity_test_load() is deprecated in Drupal 8.0.0 and will be removed before Drupal 9.0.0. Use \Drupal::entityTypeManager()->getStorage(\'entity_test\')->load(). See https://www.drupal.org/node/2266845', E_USER_DEPRECATED);
-  $storage = \Drupal::entityTypeManager()->getStorage('entity_test');
-  if ($reset) {
-    $storage->resetCache([$id]);
-  }
-  return $storage->load($id);
-}
-
-/**
- * Loads a test entity.
- *
- * @param int $id
- *   A test entity ID.
- * @param bool $reset
- *   A boolean indicating that the internal cache should be reset.
- *
- * @return \Drupal\entity_test\Entity\EntityTestRev
- *   The loaded entity object, or NULL if the entity cannot be loaded.
- *
- * @deprecated in drupal:8.0.0 and is removed from drupal:9.0.0. Use
- *   \Drupal::entityTypeManager()->getStorage('entity_test_rev')->load().
- *
- * @see https://www.drupal.org/node/2266845
- */
-function entity_test_rev_load($id, $reset = FALSE) {
-  @trigger_error('entity_test_rev_load() is deprecated in Drupal 8.0.0 and will be removed before Drupal 9.0.0. Use \Drupal::entityTypeManager()->getStorage(\'entity_test_rev\')->load(). See https://www.drupal.org/node/2266845', E_USER_DEPRECATED);
-  $storage = \Drupal::entityTypeManager()->getStorage('entity_test_rev');
-  if ($reset) {
-    $storage->resetCache([$id]);
-  }
-  return $storage->load($id);
-}
-
-/**
- * Loads a test entity.
- *
- * @param int $id
- *   A test entity ID.
- * @param bool $reset
- *   A boolean indicating that the internal cache should be reset.
- *
- * @return \Drupal\entity_test\Entity\EntityTestMul
- *   The loaded entity object, or FALSE if the entity cannot be loaded.
- *
- * @deprecated in drupal:8.0.0 and is removed from drupal:9.0.0. Use
- *   \Drupal::entityTypeManager()->getStorage('entity_test_mul')->load().
- *
- * @see https://www.drupal.org/node/2266845
- */
-function entity_test_mul_load($id, $reset = FALSE) {
-  @trigger_error('entity_test_mul_load() is deprecated in Drupal 8.0.0 and will be removed before Drupal 9.0.0. Use \Drupal::entityTypeManager()->getStorage(\'entity_test_mul\')->load(). See https://www.drupal.org/node/2266845', E_USER_DEPRECATED);
-  $storage = \Drupal::entityTypeManager()->getStorage('entity_test_mul');
-  if ($reset) {
-    $storage->resetCache([$id]);
-  }
-  return $storage->load($id);
-}
-
-/**
- * Loads a test entity.
- *
- * @param int $id
- *   A test entity ID.
- * @param bool $reset
- *   A boolean indicating that the internal cache should be reset.
- *
- * @return \Drupal\entity_test\Entity\EntityTestMulRev
- *   The loaded entity object, or NULL if the entity cannot be loaded.
- *
- * @deprecated in drupal:8.0.0 and is removed from drupal:9.0.0. Use
- *   \Drupal::entityTypeManager()->getStorage('entity_test_mulrev_load')->load().
- *
- * @see https://www.drupal.org/node/2266845
- */
-function entity_test_mulrev_load($id, $reset = FALSE) {
-  @trigger_error('entity_test_mulrev_load() is deprecated in Drupal 8.0.0 and will be removed before Drupal 9.0.0. Use \Drupal::entityTypeManager()->getStorage(\'entity_test_mulrev\')->load(). See https://www.drupal.org/node/2266845', E_USER_DEPRECATED);
-  $storage = \Drupal::entityTypeManager()->getStorage('entity_test_mulrev');
-  if ($reset) {
-    $storage->resetCache([$id]);
-  }
-  return $storage->load($id);
 }
 
 /**

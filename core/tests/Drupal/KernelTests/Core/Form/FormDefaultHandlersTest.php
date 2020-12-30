@@ -15,21 +15,6 @@ use Drupal\KernelTests\KernelTestBase;
 class FormDefaultHandlersTest extends KernelTestBase implements FormInterface {
 
   /**
-   * Modules to enable.
-   *
-   * @var array
-   */
-  public static $modules = ['system'];
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function setUp() {
-    parent::setUp();
-    $this->installSchema('system', ['key_value_expire']);
-  }
-
-  /**
    * {@inheritdoc}
    */
   public function getFormId() {

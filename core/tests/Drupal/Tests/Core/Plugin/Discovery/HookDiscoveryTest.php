@@ -29,7 +29,7 @@ class HookDiscoveryTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     $this->moduleHandler = $this->createMock('Drupal\Core\Extension\ModuleHandlerInterface');
     $this->hookDiscovery = new HookDiscovery($this->moduleHandler, 'test_plugin');
   }
@@ -100,7 +100,7 @@ class HookDiscoveryTest extends UnitTestCase {
         ]
       ));
 
-    $this->assertNull($this->hookDiscovery->getDefinition('test_non_existant', FALSE));
+    $this->assertNull($this->hookDiscovery->getDefinition('test_non_existent', FALSE));
 
     $plugin_definition = $this->hookDiscovery->getDefinition('test_id_1');
     $this->assertEquals($plugin_definition['class'], 'Drupal\plugin_test\Plugin\plugin_test\fruit\Apple');
@@ -126,7 +126,7 @@ class HookDiscoveryTest extends UnitTestCase {
       ->will($this->returnValue([]));
 
     $this->expectException(PluginNotFoundException::class);
-    $this->hookDiscovery->getDefinition('test_non_existant', TRUE);
+    $this->hookDiscovery->getDefinition('test_non_existent', TRUE);
   }
 
   protected function hookDiscoveryTestTestPlugin() {

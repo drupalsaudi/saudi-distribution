@@ -16,7 +16,7 @@ abstract class CommentViewsKernelTestBase extends ViewsKernelTestBase {
    *
    * @var array
    */
-  public static $modules = ['comment_test_views', 'user', 'comment'];
+  protected static $modules = ['comment_test_views', 'user', 'comment'];
 
   /**
    * Admin user.
@@ -42,7 +42,7 @@ abstract class CommentViewsKernelTestBase extends ViewsKernelTestBase {
   protected function setUp($import_test_views = TRUE) {
     parent::setUp($import_test_views);
 
-    ViewTestData::createTestViews(get_class($this), ['comment_test_views']);
+    ViewTestData::createTestViews(static::class, ['comment_test_views']);
 
     $this->installEntitySchema('user');
     $this->installEntitySchema('comment');

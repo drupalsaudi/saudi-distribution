@@ -40,10 +40,10 @@ class WorkspacesContentModerationStateTest extends ContentModerationStateTest {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
-    $this->installSchema('system', ['key_value_expire', 'sequences']);
+    $this->installSchema('system', ['sequences']);
 
     $this->initializeWorkspacesModule();
     $this->switchToWorkspace('stage');

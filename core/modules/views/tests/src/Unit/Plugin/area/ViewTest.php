@@ -28,7 +28,7 @@ class ViewTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
     $this->entityStorage = $this->createMock('Drupal\Core\Entity\EntityStorageInterface');
     $this->viewHandler = new ViewAreaPlugin([], 'view', [], $this->entityStorage);
@@ -59,10 +59,10 @@ class ViewTest extends UnitTestCase {
     $this->viewHandler->view->storage = $view_this;
 
     $this->viewHandler->options['view_to_insert'] = 'other:default';
-    $this->assertArrayEquals(['config' => ['view.other']], $this->viewHandler->calculateDependencies());
+    $this->assertEquals(['config' => ['view.other']], $this->viewHandler->calculateDependencies());
 
     $this->viewHandler->options['view_to_insert'] = 'this:default';
-    $this->assertArrayEquals([], $this->viewHandler->calculateDependencies());
+    $this->assertSame([], $this->viewHandler->calculateDependencies());
   }
 
 }

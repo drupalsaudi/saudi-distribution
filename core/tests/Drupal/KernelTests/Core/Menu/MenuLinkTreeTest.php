@@ -35,7 +35,7 @@ class MenuLinkTreeTest extends KernelTestBase {
    *
    * @var array
    */
-  public static $modules = [
+  protected static $modules = [
     'system',
     'menu_test',
     'menu_link_content',
@@ -47,9 +47,8 @@ class MenuLinkTreeTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
-    \Drupal::service('router.builder')->rebuild();
     $this->installEntitySchema('user');
     $this->installEntitySchema('menu_link_content');
 

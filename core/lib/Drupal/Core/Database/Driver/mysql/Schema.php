@@ -140,9 +140,6 @@ class Schema extends DatabaseSchema {
   /**
    * Create an SQL string for a field to be used in table creation or alteration.
    *
-   * Before passing a field out of a schema definition into this function it has
-   * to be processed by _db_process_field().
-   *
    * @param string $name
    *   Name of the field.
    * @param array $spec
@@ -489,30 +486,6 @@ class Schema extends DatabaseSchema {
   /**
    * {@inheritdoc}
    */
-  public function fieldSetDefault($table, $field, $default) {
-    @trigger_error('fieldSetDefault() is deprecated in drupal:8.7.0 and will be removed before drupal:9.0.0. Instead, call ::changeField() passing a full field specification. See https://www.drupal.org/node/2999035', E_USER_DEPRECATED);
-    if (!$this->fieldExists($table, $field)) {
-      throw new SchemaObjectDoesNotExistException("Cannot set default value of field '$table.$field': field doesn't exist.");
-    }
-
-    $this->connection->query('ALTER TABLE {' . $table . '} ALTER COLUMN `' . $field . '` SET DEFAULT ' . $this->escapeDefaultValue($default));
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function fieldSetNoDefault($table, $field) {
-    @trigger_error('fieldSetNoDefault() is deprecated in drupal:8.7.0 and will be removed before drupal:9.0.0. Instead, call ::changeField() passing a full field specification. See https://www.drupal.org/node/2999035', E_USER_DEPRECATED);
-    if (!$this->fieldExists($table, $field)) {
-      throw new SchemaObjectDoesNotExistException("Cannot remove default value of field '$table.$field': field doesn't exist.");
-    }
-
-    $this->connection->query('ALTER TABLE {' . $table . '} ALTER COLUMN `' . $field . '` DROP DEFAULT');
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function indexExists($table, $name) {
     // Returns one row for each column in the index. Result is string or FALSE.
     // Details at http://dev.mysql.com/doc/refman/5.0/en/show-index.html
@@ -686,11 +659,11 @@ class Schema extends DatabaseSchema {
       $condition->condition('column_name', $column);
       $condition->compile($this->connection, $this);
       // Don't use {} around information_schema.columns table.
-      return $this->connection->query("SELECT column_comment as column_comment FROM information_schema.columns WHERE " . (string) $condition, $condition->arguments())->fetchField();
+      return $this->connection->query("SELECT column_comment AS column_comment FROM information_schema.columns WHERE " . (string) $condition, $condition->arguments())->fetchField();
     }
     $condition->compile($this->connection, $this);
     // Don't use {} around information_schema.tables table.
-    $comment = $this->connection->query("SELECT table_comment as table_comment FROM information_schema.tables WHERE " . (string) $condition, $condition->arguments())->fetchField();
+    $comment = $this->connection->query("SELECT table_comment AS table_comment FROM information_schema.tables WHERE " . (string) $condition, $condition->arguments())->fetchField();
     // Work-around for MySQL 5.0 bug http://bugs.mysql.com/bug.php?id=11379
     return preg_replace('/; InnoDB free:.*$/', '', $comment);
   }

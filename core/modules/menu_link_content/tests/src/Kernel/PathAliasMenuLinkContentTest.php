@@ -21,7 +21,7 @@ class PathAliasMenuLinkContentTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = [
+  protected static $modules = [
     'menu_link_content',
     'system',
     'link',
@@ -33,7 +33,7 @@ class PathAliasMenuLinkContentTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->installEntitySchema('user');
@@ -60,8 +60,6 @@ class PathAliasMenuLinkContentTest extends KernelTestBase {
    * Tests the path aliasing changing.
    */
   public function testPathAliasChange() {
-    \Drupal::service('router.builder')->rebuild();
-
     $path_alias = $this->createPathAlias('/test-page', '/my-blog');
     $menu_link_content = MenuLinkContent::create([
       'title' => 'Menu title',

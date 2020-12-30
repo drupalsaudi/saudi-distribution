@@ -54,11 +54,8 @@ function drupal_error_levels() {
  *   The filename that the error was raised in.
  * @param $line
  *   The line number the error was raised at.
- * @param $context
- *   An array that points to the active symbol table at the point the error
- *   occurred.
  */
-function _drupal_error_handler_real($error_level, $message, $filename, $line, $context) {
+function _drupal_error_handler_real($error_level, $message, $filename, $line) {
   if ($error_level & error_reporting()) {
     $types = drupal_error_levels();
     list($severity_msg, $severity_level) = $types[$error_level];
@@ -74,7 +71,7 @@ function _drupal_error_handler_real($error_level, $message, $filename, $line, $c
     _drupal_log_error([
       '%type' => isset($types[$error_level]) ? $severity_msg : 'Unknown error',
       // The standard PHP error handler considers that the error messages
-      // are HTML. We mimick this behavior here.
+      // are HTML. We mimic this behavior here.
       '@message' => Markup::create(Xss::filterAdmin($message)),
       '%function' => $caller['function'],
       '%file' => $caller['file'],
@@ -149,6 +146,10 @@ function error_displayable($error = NULL) {
 function _drupal_log_error($error, $fatal = FALSE) {
   $is_installer = InstallerKernel::installationAttempted();
 
+  // Remove 'severity_level' as is not a valid replacement for t().
+  $severity = $error['severity_level'];
+  unset($error['severity_level']);
+
   // Backtrace array is not a valid replacement value for t().
   $backtrace = $error['backtrace'];
   unset($error['backtrace']);
@@ -166,8 +167,10 @@ function _drupal_log_error($error, $fatal = FALSE) {
   // installer.
   if (\Drupal::hasService('logger.factory')) {
     try {
-      // Provide the PHP backtrace to logger implementations.
-      \Drupal::logger('php')->log($error['severity_level'], '%type: @message in %function (line %line of %file) @backtrace_string.', $error + ['backtrace' => $backtrace]);
+      // Provide the PHP backtrace to logger implementations. Add
+      // 'severity_level' to the context to maintain BC and allow logging
+      // implementations to use it.
+      \Drupal::logger('php')->log($severity, '%type: @message in %function (line %line of %file) @backtrace_string.', $error + ['backtrace' => $backtrace, 'severity_level' => $severity]);
     }
     catch (\Exception $e) {
       // We can't log, for example because the database connection is not
@@ -220,7 +223,7 @@ function _drupal_log_error($error, $fatal = FALSE) {
 
       // Attempt to reduce verbosity by removing DRUPAL_ROOT from the file path
       // in the message. This does not happen for (false) security.
-      if (\Drupal::hasService('app.root')) {
+      if (\Drupal::hasService('kernel')) {
         $root_length = strlen(\Drupal::root());
         if (substr($error['%file'], 0, $root_length) == \Drupal::root()) {
           $error['%file'] = substr($error['%file'], $root_length + 1);

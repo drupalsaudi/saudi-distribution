@@ -19,7 +19,7 @@ class SortTranslationTest extends ViewsKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = [
+  protected static $modules = [
     'node',
     'field',
     'language',
@@ -35,7 +35,7 @@ class SortTranslationTest extends ViewsKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp($import_test_views = TRUE) {
+  protected function setUp($import_test_views = TRUE): void {
     parent::setUp($import_test_views);
     ConfigurableLanguage::createFromLangcode('de')->save();
     $this->installSchema('node', 'node_access');
@@ -89,7 +89,6 @@ class SortTranslationTest extends ViewsKernelTestBase {
       $translation->title->value = 'Title DE ' . $i;
       $translation->text->value = 'moo DE ' . $i;
       $translation->save();
-      $nodes[] = $node;
     }
   }
 

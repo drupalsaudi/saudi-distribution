@@ -12,35 +12,41 @@
 # and understand that Claro could break your modifications as it changes.
 name: Claro
 type: theme
-base theme: classy
+base theme: false
 description: 'A clean, accessible, and powerful Drupal administration theme.'
 alt text: 'Screenshot of Claro, Drupal administration theme.'
 package: Core
 # version: VERSION
 experimental: true
-core: 8.x
 libraries:
- - claro/global-styling
+  - core/drupal.message
+  - core/normalize
+  - claro/global-styling
 libraries-override:
   system/base:
     css:
       component:
-        /core/themes/stable/css/system/components/ajax-progress.module.css: css/components/ajax-progress.module.css
-        /core/themes/stable/css/system/components/autocomplete-loading.module.css: css/components/autocomplete-loading.module.css
-        /core/themes/stable/css/system/components/system-status-counter.css: css/components/system-status-counter.css
-        /core/themes/stable/css/system/components/system-status-report-counters.css: css/components/system-status-report-counters.css
-        /core/themes/stable/css/system/components/system-status-report-general-info.css: css/components/system-status-report-general-info.css
-        /core/themes/stable/css/system/components/tabledrag.module.css: css/components/tabledrag.css
+        css/components/ajax-progress.module.css: css/components/ajax-progress.module.css
+        css/components/autocomplete-loading.module.css: css/components/autocomplete-loading.module.css
+        css/components/system-status-counter.css: css/components/system-status-counter.css
+        css/components/system-status-report-counters.css: css/components/system-status-report-counters.css
+        css/components/system-status-report-general-info.css: css/components/system-status-report-general-info.css
+        css/components/tabledrag.module.css: css/components/tabledrag.css
 
   system/admin:
     css:
       theme:
-        /core/themes/stable/css/system/system.admin.css: false
+        css/system.admin.css: false
+
+  core/drupal.dialog.off_canvas:
+    css:
+      base:
+        misc/dialog/off-canvas.theme.css: css/base/off-canvas.theme.css
 
   core/drupal.dropbutton:
     css:
       component:
-        /core/themes/stable/css/core/dropbutton/dropbutton.css: css/components/dropbutton.css
+        misc/dropbutton/dropbutton.css: css/components/dropbutton.css
 
   core/drupal.tabledrag:
     js:
@@ -49,7 +55,7 @@ libraries-override:
   core/drupal.vertical-tabs:
     css:
       component:
-        /core/themes/stable/css/core/vertical-tabs.css: false
+        misc/vertical-tabs.css: false
     js:
       misc/vertical-tabs.js: js/vertical-tabs.js
 
@@ -63,95 +69,45 @@ libraries-override:
       component:
         assets/vendor/jquery.ui/themes/base/dialog.css: false
 
-  classy/dialog: claro/claro.drupal.dialog
-
-  classy/base:
+  user/drupal.user:
     css:
       component:
-        css/components/action-links.css: false
-        css/components/breadcrumb.css: false
-        css/components/button.css: false
-        css/components/collapse-processed.css: false
-        css/components/container-inline.css: css/classy/components/container-inline.css
-        css/components/details.css: false
-        css/components/dropbutton.css: false
-        css/components/exposed-filters.css: css/classy/components/exposed-filters.css
-        css/components/field.css: css/classy/components/field.css
-        css/components/form.css: false
-        css/components/icons.css: css/classy/components/icons.css
-        css/components/inline-form.css: css/classy/components/inline-form.css
-        css/components/item-list.css: css/classy/components/item-list.css
-        css/components/link.css: css/classy/components/link.css
-        css/components/links.css: css/classy/components/links.css
-        css/components/menu.css: css/classy/components/menu.css
-        css/components/more-link.css: css/classy/components/more-link.css
-        css/components/pager.css: false
-        css/components/tabledrag.css: false
-        css/components/tableselect.css: css/components/tableselect.css
-        css/components/tablesort.css: css/classy/components/tablesort.css
-        css/components/tabs.css: false
-        css/components/textarea.css: css/classy/components/textarea.css
-        css/components/ui-dialog.css: css/classy/components/ui-dialog.css
-
-  classy/book-navigation: claro/classy.book-navigation
-
-  classy/dropbutton:
-    css:
-      component:
-        css/components/dropbutton.css: false
-
-  classy/file: claro/classy.file
-
-  classy/forum: claro/classy.forum
-
-  classy/image-widget: claro/image-widget
-
-  classy/indented: claro/classy.indented
-
-  classy/media_embed_ckeditor_theme: claro/classy.media_embed_ckeditor_theme
-
-  classy/media_embed_error: claro/classy.media_embed_error
-
-  classy/messages:
-    css:
-      component:
-        css/components/messages.css: false
-
-  classy/node: claro/classy.node
-
-  classy/progress: claro/progress
-
-  classy/search-results: claro/classy.search-results
-
-  classy/user: false
-
-  user/drupal.user: claro/form.password-confirm
+        css/user.module.css: false
 
   field_ui/drupal.field_ui:
     css:
       theme:
-        /core/themes/stable/css/field_ui/field_ui.admin.css: css/theme/field-ui.admin.css
+        css/field_ui.admin.css: css/theme/field-ui.admin.css
 
-  filter/drupal.filter.admin:
+  node/drupal.node:
     css:
-      theme:
-        /core/themes/stable/css/filter/filter.admin.css: css/theme/filter.theme.css
+      layout:
+        css/node.module.css: false
 
-  filter/drupal.filter:
+  node/form:
     css:
+      layout:
+        css/node.module.css: false
+
+  toolbar/toolbar:
+    css:
+      component:
+        css/toolbar.module.css: css/components/toolbar.module.css
       theme:
-        /core/themes/stable/css/filter/filter.admin.css: css/theme/filter.theme.css
+        css/toolbar.theme.css: css/theme/toolbar.theme.css
+        css/toolbar.icons.theme.css: css/theme/toolbar.icons.theme.css
+
+  toolbar/toolbar.menu:
+    css:
+      state:
+        css/toolbar.menu.css: css/state/toolbar.menu.css
 
   views_ui/admin.styling:
     css:
+      component:
+          css/views_ui.admin.css: css/components/views_ui.admin.css
       theme:
-        /core/themes/stable/css/views_ui/views_ui.admin.theme.css: css/theme/views_ui.admin.theme.css
-
-  # Drupal throws an IncompleteLibraryDefinitionException if a base theme
-  # defined library is set to false in a subtheme's libraries-override. We use
-  # 'claro/empty' for working around this behavior.
-  # @see https://www.drupal.org/node/3098375
-  classy/media_library: claro/empty
+        css/views_ui.admin.theme.css: css/theme/views_ui.admin.theme.css
 
 libraries-extend:
   ckeditor/drupal.ckeditor:
@@ -176,6 +132,10 @@ libraries-extend:
     - claro/claro.jquery.ui
   file/drupal.file:
     - claro/file
+  filter/drupal.filter.admin:
+    - claro/filter
+  filter/drupal.filter:
+    - claro/filter
   system/admin:
     - claro/system.admin
   core/drupal.autocomplete:
@@ -186,10 +146,14 @@ libraries-extend:
     - claro/drupal.shortcut
   core/drupal.ajax:
     - claro/ajax
+  user/drupal.user:
+    - claro/form.password-confirm
   views/views.module:
     - claro/views
   media/media_embed_ckeditor_theme:
     - claro/classy.media_embed_ckeditor_theme
+  media_library/ui:
+    - claro/media_library.ui
   media_library/view:
     - claro/media_library.theme
   media_library/widget:
@@ -216,7 +180,7 @@ regions:
 regions_hidden:
   - sidebar_first
 
-# Information added by Drupal.org packaging script on 2020-07-08
-version: '8.9.2'
+# Information added by Drupal.org packaging script on 2020-12-02
+version: '9.1.0'
 project: 'drupal'
-datestamp: 1594238019
+datestamp: 1606933306

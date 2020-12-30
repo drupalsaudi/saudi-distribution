@@ -29,7 +29,7 @@ class TwigMarkupInterfaceTest extends KernelTestBase {
    *
    * @var array
    */
-  public static $modules = [
+  protected static $modules = [
     'language',
   ];
 
@@ -99,7 +99,7 @@ class TwigMarkupInterfaceTest extends KernelTestBase {
 }
 
 /**
- * Implements MarkupInterface without implementing \Countable
+ * Implements MarkupInterface without implementing \Countable.
  */
 class SafeMarkupTestMarkup implements MarkupInterface {
   use MarkupTrait;

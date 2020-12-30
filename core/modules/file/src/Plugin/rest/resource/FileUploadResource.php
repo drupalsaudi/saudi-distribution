@@ -23,11 +23,11 @@ use Drupal\rest\Plugin\rest\resource\EntityResourceValidationTrait;
 use Drupal\rest\RequestHandler;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesserInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
+use Symfony\Component\Mime\MimeTypeGuesserInterface;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -48,7 +48,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
  *   label = @Translation("File Upload"),
  *   serialization_class = "Drupal\file\Entity\File",
  *   uri_paths = {
- *     "https://www.drupal.org/link-relations/create" = "/file/upload/{entity_type_id}/{bundle}/{field_name}"
+ *     "create" = "/file/upload/{entity_type_id}/{bundle}/{field_name}"
  *   }
  * )
  */
@@ -103,7 +103,7 @@ class FileUploadResource extends ResourceBase {
   /**
    * The MIME type guesser.
    *
-   * @var \Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesserInterface
+   * @var \Symfony\Component\Mime\MimeTypeGuesserInterface
    */
   protected $mimeTypeGuesser;
 
@@ -147,7 +147,7 @@ class FileUploadResource extends ResourceBase {
    *   The entity field manager.
    * @param \Drupal\Core\Session\AccountInterface $current_user
    *   The currently authenticated user.
-   * @param \Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesserInterface $mime_type_guesser
+   * @param \Symfony\Component\Mime\MimeTypeGuesserInterface $mime_type_guesser
    *   The MIME type guesser.
    * @param \Drupal\Core\Utility\Token $token
    *   The token replacement instance.
@@ -156,7 +156,7 @@ class FileUploadResource extends ResourceBase {
    * @param \Drupal\Core\Config\Config $system_file_config
    *   The system file configuration.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, $serializer_formats, LoggerInterface $logger, FileSystemInterface $file_system, EntityTypeManagerInterface $entity_type_manager, EntityFieldManagerInterface $entity_field_manager, AccountInterface $current_user, MimeTypeGuesserInterface $mime_type_guesser, Token $token, LockBackendInterface $lock, Config $system_file_config) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, $serializer_formats, LoggerInterface $logger, FileSystemInterface $file_system, EntityTypeManagerInterface $entity_type_manager, EntityFieldManagerInterface $entity_field_manager, AccountInterface $current_user, $mime_type_guesser, Token $token, LockBackendInterface $lock, Config $system_file_config) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->fileSystem = $file_system;
     $this->entityTypeManager = $entity_type_manager;
@@ -254,7 +254,13 @@ class FileUploadResource extends ResourceBase {
     $file = File::create([]);
     $file->setOwnerId($this->currentUser->id());
     $file->setFilename($prepared_filename);
-    $file->setMimeType($this->mimeTypeGuesser->guess($prepared_filename));
+    if ($this->mimeTypeGuesser instanceof MimeTypeGuesserInterface) {
+      $file->setMimeType($this->mimeTypeGuesser->guessMimeType($prepared_filename));
+    }
+    else {
+      $file->setMimeType($this->mimeTypeGuesser->guess($prepared_filename));
+      @trigger_error('\Symfony\Component\HttpFoundation\File\MimeType\MimeTypeGuesserInterface is deprecated in drupal:9.1.0 and is removed from drupal:10.0.0. Implement \Symfony\Component\Mime\MimeTypeGuesserInterface instead. See https://www.drupal.org/node/3133341', E_USER_DEPRECATED);
+    }
     $file->setFileUri($file_uri);
     // Set the size. This is done in File::preSave() but we validate the file
     // before it is saved.
@@ -462,26 +468,42 @@ class FileUploadResource extends ResourceBase {
    *   The prepared/munged filename.
    */
   protected function prepareFilename($filename, array &$validators) {
-    if (!empty($validators['file_validate_extensions'][0])) {
-      // If there is a file_validate_extensions validator and a list of
-      // valid extensions, munge the filename to protect against possible
-      // malicious extension hiding within an unknown file type. For example,
-      // "filename.html.foo".
-      $filename = file_munge_filename($filename, $validators['file_validate_extensions'][0]);
-    }
-
-    // Rename potentially executable files, to help prevent exploits (i.e. will
-    // rename filename.php.foo and filename.php to filename.php.foo.txt and
-    // filename.php.txt, respectively). Don't rename if 'allow_insecure_uploads'
-    // evaluates to TRUE.
-    if (!$this->systemFileConfig->get('allow_insecure_uploads') && preg_match(FILE_INSECURE_EXTENSION_REGEX, $filename) && (substr($filename, -4) != '.txt')) {
-      // The destination filename will also later be used to create the URI.
-      $filename .= '.txt';
-
-      // The .txt extension may not be in the allowed list of extensions. We
-      // have to add it here or else the file upload will fail.
+    // Don't rename if 'allow_insecure_uploads' evaluates to TRUE.
+    if (!$this->systemFileConfig->get('allow_insecure_uploads')) {
       if (!empty($validators['file_validate_extensions'][0])) {
-        $validators['file_validate_extensions'][0] .= ' txt';
+        // If there is a file_validate_extensions validator and a list of
+        // valid extensions, munge the filename to protect against possible
+        // malicious extension hiding within an unknown file type. For example,
+        // "filename.html.foo".
+        $filename = file_munge_filename($filename, $validators['file_validate_extensions'][0]);
+      }
+
+      // Rename potentially executable files, to help prevent exploits (i.e.
+      // will rename filename.php.foo and filename.php to filename._php._foo.txt
+      // and filename._php.txt, respectively).
+      if (preg_match(FILE_INSECURE_EXTENSION_REGEX, $filename)) {
+        // If the file will be rejected anyway due to a disallowed extension, it
+        // should not be renamed; rather, we'll let file_validate_extensions()
+        // reject it below.
+        $passes_validation = FALSE;
+        if (!empty($validators['file_validate_extensions'][0])) {
+          $file = File::create([]);
+          $file->setFilename($filename);
+          $passes_validation = empty(file_validate_extensions($file, $validators['file_validate_extensions'][0]));
+        }
+        if (empty($validators['file_validate_extensions'][0]) || $passes_validation) {
+          if ((substr($filename, -4) != '.txt')) {
+            // The destination filename will also later be used to create the URI.
+            $filename .= '.txt';
+          }
+          $filename = file_munge_filename($filename, $validators['file_validate_extensions'][0] ?? '');
+
+          // The .txt extension may not be in the allowed list of extensions. We
+          // have to add it here or else the file upload will fail.
+          if (!empty($validators['file_validate_extensions'][0])) {
+            $validators['file_validate_extensions'][0] .= ' txt';
+          }
+        }
       }
     }
 
@@ -528,9 +550,9 @@ class FileUploadResource extends ResourceBase {
     $settings = $field_definition->getSettings();
 
     // Cap the upload size according to the PHP limit.
-    $max_filesize = Bytes::toInt(Environment::getUploadMaxSize());
+    $max_filesize = Bytes::toNumber(Environment::getUploadMaxSize());
     if (!empty($settings['max_filesize'])) {
-      $max_filesize = min($max_filesize, Bytes::toInt($settings['max_filesize']));
+      $max_filesize = min($max_filesize, Bytes::toNumber($settings['max_filesize']));
     }
 
     // There is always a file size limit due to the PHP server limit.

@@ -236,6 +236,22 @@ EOS;
 
     $signature_line .= implode(', ', $parameters);
     $signature_line .= ')';
+    if ($reflection_method->hasReturnType()) {
+      $signature_line .= ': ';
+      $return_type = $reflection_method->getReturnType();
+      if ($return_type->allowsNull()) {
+        $signature_line .= '?';
+      }
+      if (!$return_type->isBuiltin()) {
+        // The parameter is a class or interface.
+        $signature_line .= '\\';
+      }
+      $return_type_name = $return_type->getName();
+      if ($return_type_name === 'self') {
+        $return_type_name = $reflection_method->getDeclaringClass()->getName();
+      }
+      $signature_line .= $return_type_name;
+    }
 
     $output = $signature_line . "\n{\n";
 
@@ -256,14 +272,20 @@ EOS;
   protected function buildParameter(\ReflectionParameter $parameter) {
     $parameter_string = '';
 
-    if ($parameter->isArray()) {
-      $parameter_string .= 'array ';
-    }
-    elseif ($parameter->isCallable()) {
-      $parameter_string .= 'callable ';
-    }
-    elseif ($class = $parameter->getClass()) {
-      $parameter_string .= '\\' . $class->getName() . ' ';
+    if ($parameter->hasType()) {
+      $type = $parameter->getType();
+      if ($type->allowsNull()) {
+        $parameter_string .= '?';
+      }
+      if (!$type->isBuiltin()) {
+        // The parameter is a class or interface.
+        $parameter_string .= '\\';
+      }
+      $type_name = $type->getName();
+      if ($type_name === 'self') {
+        $type_name = $parameter->getDeclaringClass()->getName();
+      }
+      $parameter_string .= $type_name . ' ';
     }
 
     if ($parameter->isPassedByReference()) {
@@ -294,7 +316,12 @@ EOS;
     $function_name = $reflection_method->getName();
 
     if (!$reflection_method->isStatic()) {
-      $output .= '    return $this->lazyLoadItself()->' . $function_name . '(';
+      if ($reflection_method->getReturnType() && $reflection_method->getReturnType()->getName() === 'void') {
+        $output .= '    $this->lazyLoadItself()->' . $function_name . '(';
+      }
+      else {
+        $output .= '    return $this->lazyLoadItself()->' . $function_name . '(';
+      }
     }
     else {
       $class_name = $reflection_method->getDeclaringClass()->getName();

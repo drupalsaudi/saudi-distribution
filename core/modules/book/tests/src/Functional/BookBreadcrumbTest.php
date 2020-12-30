@@ -16,7 +16,7 @@ class BookBreadcrumbTest extends BrowserTestBase {
    *
    * @var array
    */
-  public static $modules = ['book', 'block', 'book_breadcrumb_test'];
+  protected static $modules = ['book', 'block', 'book_breadcrumb_test'];
 
   /**
    * {@inheritdoc}
@@ -47,7 +47,7 @@ class BookBreadcrumbTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
     $this->drupalPlaceBlock('system_breadcrumb_block');
     $this->drupalPlaceBlock('page_title_block');
@@ -134,16 +134,16 @@ class BookBreadcrumbTest extends BrowserTestBase {
     $edit['book[bid]'] = $book_nid;
 
     if ($parent !== NULL) {
-      $this->drupalPostForm('node/add/book', $edit, t('Change book (update list of parents)'));
+      $this->drupalPostForm('node/add/book', $edit, 'Change book (update list of parents)');
 
       $edit['book[pid]'] = $parent;
-      $this->drupalPostForm(NULL, $edit, t('Save'));
+      $this->submitForm($edit, 'Save');
       // Make sure the parent was flagged as having children.
       $parent_node = \Drupal::entityTypeManager()->getStorage('node')->loadUnchanged($parent);
       $this->assertFalse(empty($parent_node->book['has_children']), 'Parent node is marked as having children');
     }
     else {
-      $this->drupalPostForm('node/add/book', $edit, t('Save'));
+      $this->drupalPostForm('node/add/book', $edit, 'Save');
     }
 
     // Check to make sure the book node was created.

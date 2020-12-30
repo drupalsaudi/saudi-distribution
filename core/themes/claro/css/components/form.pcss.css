@@ -70,16 +70,11 @@ tr .form-item,
 .form-item__label.form-required::after,
 .fieldset__label.form-required::after {
   display: inline-block;
-  width: var(--input--required-mark-size);
-  height: var(--input--required-mark-size);
-  margin-right: 0.3em;
-  margin-left: 0.3em;
-  content: "";
-  vertical-align: super;
-  /* Use a background image to prevent screen readers from announcing the text. */
-  background-image: url(../../images/core/ee0000/required.svg);
-  background-repeat: no-repeat;
-  background-size: var(--input--required-mark-size) var(--input--required-mark-size);
+  margin-right: 0.15em;
+  margin-left: 0.15em;
+  content: "*";
+  color: var(--color-maximumred);
+  font-size: 0.875rem;
 }
 
 /**
@@ -209,4 +204,24 @@ tr .form-item,
   div.form-item div.password-suggestions {
     float: none;
   }
+}
+
+/**
+ * Prevent regression due to explicit line-heights applied to these elements in
+ * normalize.css 7.0.0.
+ */
+button {
+  line-height: 1.125rem;
+}
+input,
+optgroup {
+  line-height: 1.5rem;
+}
+
+/**
+ * Prevent regression due to -webkit-appearance being set to button in
+ * normalize.css 4.1.0.
+ */
+::-webkit-file-upload-button {
+  -webkit-appearance: push-button;
 }

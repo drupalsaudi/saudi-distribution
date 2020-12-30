@@ -13,6 +13,12 @@ use Drupal\migrate\Plugin\MigrationInterface;
 use Drupal\migrate\Row;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+// cspell:ignore abbrfilter adsense autofloat biblio cincopa codefilter
+// cspell:ignore commonmark deepzoom emogrifier emptyparagraphkiller forena
+// cspell:ignore gotwo htmlpurifier htmltidy intlinks intlinks lazyloader
+// cspell:ignore linktitle multicolumn multilink mytube openlayers opengraph
+// cspell:ignore sanitizable shortcode shortcode typogrify wordfilter xbbcode
+
 /**
  * @MigrateProcessPlugin(
  *   id = "filter_id"
@@ -234,7 +240,7 @@ class FilterID extends StaticMap implements ContainerFactoryPluginInterface {
         return FilterInterface::TYPE_HTML_RESTRICTOR;
 
       // https://www.drupal.org/project/entity_embed
-      case 'emtity_embed':
+      case 'entity_embed':
         return FilterInterface::TYPE_TRANSFORM_IRREVERSIBLE;
 
       case 'filter_align':

@@ -67,14 +67,10 @@ class LibraryDiscoveryParser {
    * @param \Drupal\Core\Asset\LibrariesDirectoryFileFinder $libraries_directory_file_finder
    *   The libraries directory file finder.
    */
-  public function __construct($root, ModuleHandlerInterface $module_handler, ThemeManagerInterface $theme_manager, StreamWrapperManagerInterface $stream_wrapper_manager = NULL, LibrariesDirectoryFileFinder $libraries_directory_file_finder = NULL) {
+  public function __construct($root, ModuleHandlerInterface $module_handler, ThemeManagerInterface $theme_manager, StreamWrapperManagerInterface $stream_wrapper_manager, LibrariesDirectoryFileFinder $libraries_directory_file_finder = NULL) {
     $this->root = $root;
     $this->moduleHandler = $module_handler;
     $this->themeManager = $theme_manager;
-    if (!$stream_wrapper_manager) {
-      @trigger_error('Calling LibraryDiscoveryParser::__construct() without the $stream_wrapper_manager argument is deprecated in drupal:8.8.0. The $stream_wrapper_manager argument will be required in drupal:9.0.0. See https://www.drupal.org/node/3035273', E_USER_DEPRECATED);
-      $stream_wrapper_manager = \Drupal::service('stream_wrapper_manager');
-    }
     $this->streamWrapperManager = $stream_wrapper_manager;
     if (!$libraries_directory_file_finder) {
       @trigger_error('Calling LibraryDiscoveryParser::__construct() without the $libraries_directory_file_finder argument is deprecated in drupal:8.9.0. The $libraries_directory_file_finder argument will be required in drupal:10.0.0. See https://www.drupal.org/node/3099614', E_USER_DEPRECATED);
@@ -345,7 +341,7 @@ class LibraryDiscoveryParser {
     $library_file = $path . '/' . $extension . '.libraries.yml';
     if (file_exists($this->root . '/' . $library_file)) {
       try {
-        $libraries = Yaml::decode(file_get_contents($this->root . '/' . $library_file));
+        $libraries = Yaml::decode(file_get_contents($this->root . '/' . $library_file)) ?? [];
       }
       catch (InvalidDataTypeException $e) {
         // Rethrow a more helpful exception to provide context.
@@ -386,6 +382,11 @@ class LibraryDiscoveryParser {
       foreach ($libraries as $library_name => $library) {
         // Process libraries overrides.
         if (isset($libraries_overrides["$extension/$library_name"])) {
+          if (isset($library['deprecated'])) {
+            $override_message = sprintf('Theme "%s" is overriding a deprecated library.', $extension);
+            $library_deprecation = str_replace('%library_id%', "$extension/$library_name", $library['deprecated']);
+            @trigger_error("$override_message $library_deprecation", E_USER_DEPRECATED);
+          }
           // Active theme defines an override for this library.
           $override_definition = $libraries_overrides["$extension/$library_name"];
           if (is_string($override_definition) || $override_definition === FALSE) {
@@ -435,18 +436,6 @@ class LibraryDiscoveryParser {
    */
   protected function drupalGetPath($type, $name) {
     return drupal_get_path($type, $name);
-  }
-
-  /**
-   * Wraps \Drupal\Core\StreamWrapper\StreamWrapperManagerInterface::isValidUri().
-   *
-   * @deprecated in drupal:8.8.0 and is removed from drupal:9.0.0. Use
-   *   \Drupal\Core\StreamWrapper\StreamWrapperManagerInterface::isValidUri()
-   *   instead.
-   */
-  protected function fileValidUri($source) {
-    @trigger_error('fileValidUri() is deprecated in Drupal 8.8.0 and will be removed before Drupal 9.0.0. Use \Drupal\Core\StreamWrapper\StreamWrapperManagerInterface::isValidUri() instead. See https://www.drupal.org/node/3035273', E_USER_DEPRECATED);
-    return $this->streamWrapperManager->isValidUri($source);
   }
 
   /**

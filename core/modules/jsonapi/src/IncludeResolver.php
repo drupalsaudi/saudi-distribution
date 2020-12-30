@@ -24,7 +24,7 @@ use Drupal\jsonapi\ResourceType\ResourceType;
  * @internal JSON:API maintains no PHP API since its API is the HTTP API. This
  *   class may change at any time and this will break any dependencies on it.
  *
- * @see https://www.drupal.org/project/jsonapi/issues/3032787
+ * @see https://www.drupal.org/project/drupal/issues/3032787
  * @see jsonapi.api.php
  */
 class IncludeResolver {
@@ -166,7 +166,7 @@ class IncludeResolver {
    *   The raw include parameter value.
    *
    * @return array
-   *   An multi-dimensional array representing a tree of field names to be
+   *   A multi-dimensional array representing a tree of field names to be
    *   included. Array keys are the field names. Leaves are empty arrays.
    */
   protected static function toIncludeTree(ResourceObjectData $data, $include_parameter) {
@@ -238,7 +238,7 @@ class IncludeResolver {
    *   An array of exploded include paths.
    *
    * @return array
-   *   An multi-dimensional array representing a tree of field names to be
+   *   A multi-dimensional array representing a tree of field names to be
    *   included. Array keys are the field names. Leaves are empty arrays.
    */
   protected static function buildTree(array $paths) {

@@ -1,4 +1,0 @@
-entity.simple_block.collection:
-  title: 'Simple blocks'
-  base_route: block.admin_display
-  route_name: entity.simple_block.collection

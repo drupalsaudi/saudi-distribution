@@ -4,7 +4,6 @@ namespace Drupal\Core\Entity\Sql;
 
 use Drupal\Core\Database\Connection;
 use Drupal\Core\DependencyInjection\DependencySerializationTrait;
-use Drupal\Core\DependencyInjection\DeprecatedServicePropertyTrait;
 use Drupal\Core\Entity\ContentEntityTypeInterface;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -30,15 +29,9 @@ use Drupal\Core\Site\Settings;
 class SqlContentEntityStorageSchema implements DynamicallyFieldableEntityStorageSchemaInterface {
 
   use DependencySerializationTrait;
-  use DeprecatedServicePropertyTrait;
   use SqlFieldableEntityTypeListenerTrait {
     onFieldableEntityTypeUpdate as traitOnFieldableEntityTypeUpdate;
   }
-
-  /**
-   * {@inheritdoc}
-   */
-  protected $deprecatedProperties = ['entityManager' => 'entity.manager'];
 
   /**
    * The entity type manager.
@@ -124,14 +117,10 @@ class SqlContentEntityStorageSchema implements DynamicallyFieldableEntityStorage
    * @param \Drupal\Core\Entity\EntityFieldManagerInterface $entity_field_manager
    *   The entity field manager.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, ContentEntityTypeInterface $entity_type, SqlContentEntityStorage $storage, Connection $database, EntityFieldManagerInterface $entity_field_manager = NULL) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, ContentEntityTypeInterface $entity_type, SqlContentEntityStorage $storage, Connection $database, EntityFieldManagerInterface $entity_field_manager) {
     $this->entityTypeManager = $entity_type_manager;
     $this->storage = clone $storage;
     $this->database = $database;
-    if (!$entity_field_manager) {
-      @trigger_error('Calling SqlContentEntityStorageSchema::__construct() with the $entity_field_manager argument is supported in drupal:8.7.0 and will be required before drupal:9.0.0. See https://www.drupal.org/node/2549139.', E_USER_DEPRECATED);
-      $entity_field_manager = \Drupal::service('entity_field.manager');
-    }
     $this->entityFieldManager = $entity_field_manager;
 
     $this->entityType = $entity_type_manager->getActiveDefinition($entity_type->id());
@@ -846,8 +835,19 @@ class SqlContentEntityStorageSchema implements DynamicallyFieldableEntityStorage
 
     // Add the bundle column.
     if ($bundle = $this->entityType->getKey('bundle')) {
-      if ($base_table) {
-        $select->join($base_table, 'base_table', "entity_table.{$this->entityType->getKey('id')} = %alias.{$this->entityType->getKey('id')}");
+      // The bundle field is not stored in the revision table, so we need to
+      // join the data (or base) table and retrieve it from there.
+      if ($base_table && $base_table !== $table_name) {
+        $join_condition = "entity_table.{$this->entityType->getKey('id')} = %alias.{$this->entityType->getKey('id')}";
+
+        // If the entity type is translatable, we also need to add the langcode
+        // to the join, otherwise we'll get duplicate rows for each language.
+        if ($this->entityType->isTranslatable()) {
+          $langcode = $this->entityType->getKey('langcode');
+          $join_condition .= " AND entity_table.{$langcode} = %alias.{$langcode}";
+        }
+
+        $select->join($base_table, 'base_table', $join_condition);
         $select->addField('base_table', $bundle, 'bundle');
       }
       else {
@@ -977,10 +977,6 @@ class SqlContentEntityStorageSchema implements DynamicallyFieldableEntityStorage
       }
 
       // Process tables after having gathered field information.
-      $this->processBaseTable($entity_type, $schema[$tables['base_table']]);
-      if (isset($tables['revision_table'])) {
-        $this->processRevisionTable($entity_type, $schema[$tables['revision_table']]);
-      }
       if (isset($tables['data_table'])) {
         $this->processDataTable($entity_type, $schema[$tables['data_table']]);
       }
@@ -1447,36 +1443,6 @@ class SqlContentEntityStorageSchema implements DynamicallyFieldableEntityStorage
       'indexes' => [],
       'foreign keys' => [],
     ];
-  }
-
-  /**
-   * Processes the gathered schema for a base table.
-   *
-   * This function will be removed in Drupal 9.0.x.
-   *
-   * @param \Drupal\Core\Entity\ContentEntityTypeInterface $entity_type
-   *   The entity type.
-   * @param array $schema
-   *   The table schema, passed by reference.
-   *
-   * @see https://www.drupal.org/node/3111613
-   */
-  protected function processBaseTable(ContentEntityTypeInterface $entity_type, array &$schema) {
-  }
-
-  /**
-   * Processes the gathered schema for a base table.
-   *
-   * This function will be removed in Drupal 9.0.x.
-   *
-   * @param \Drupal\Core\Entity\ContentEntityTypeInterface $entity_type
-   *   The entity type.
-   * @param array $schema
-   *   The table schema, passed by reference.
-   *
-   * @see https://www.drupal.org/node/3111613
-   */
-  protected function processRevisionTable(ContentEntityTypeInterface $entity_type, array &$schema) {
   }
 
   /**
@@ -2367,7 +2333,11 @@ class SqlContentEntityStorageSchema implements DynamicallyFieldableEntityStorage
       // A dedicated table only contain rows for actual field values, and no
       // rows for entities where the field is empty. Thus, we can safely
       // enforce 'not null' on the columns for the field's required properties.
-      $data_schema['fields'][$real_name]['not null'] = $properties[$column_name]->isRequired();
+      // Fields can have dynamic properties, so we need to make sure that the
+      // property is statically defined.
+      if (isset($properties[$column_name])) {
+        $data_schema['fields'][$real_name]['not null'] = $properties[$column_name]->isRequired();
+      }
     }
 
     // Add indexes.

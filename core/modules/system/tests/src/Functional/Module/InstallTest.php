@@ -19,7 +19,7 @@ class InstallTest extends BrowserTestBase {
    *
    * @var array
    */
-  public static $modules = ['module_test'];
+  protected static $modules = ['module_test'];
 
   /**
    * {@inheritdoc}
@@ -31,7 +31,7 @@ class InstallTest extends BrowserTestBase {
    */
   public function testGetSchemaAtInstallTime() {
     // @see module_test_install()
-    $value = Database::getConnection()->query("SELECT data FROM {module_test}")->fetchField();
+    $value = Database::getConnection()->select('module_test', 'mt')->fields('mt', ['data'])->execute()->fetchField();
     $this->assertIdentical($value, 'varchar');
   }
 
@@ -52,9 +52,9 @@ class InstallTest extends BrowserTestBase {
    */
   public function testRequiredModuleSchemaVersions() {
     $version = drupal_get_installed_schema_version('system', TRUE);
-    $this->assertTrue($version > 0, 'System module version is > 0.');
+    $this->assertGreaterThan(0, $version);
     $version = drupal_get_installed_schema_version('user', TRUE);
-    $this->assertTrue($version > 0, 'User module version is > 0.');
+    $this->assertGreaterThan(0, $version);
 
     $post_update_key_value = \Drupal::keyValue('post_update');
     $existing_updates = $post_update_key_value->get('existing_updates', []);
@@ -82,8 +82,8 @@ class InstallTest extends BrowserTestBase {
       $this->container->get('module_installer')->install([$module_name]);
       $this->fail($message);
     }
-    catch (ExtensionNameLengthException $e) {
-      $this->pass($message);
+    catch (\Exception $e) {
+      $this->assertInstanceOf(ExtensionNameLengthException::class, $e);
     }
 
     // Since for the UI, the submit callback uses FALSE, test that too.
@@ -92,8 +92,8 @@ class InstallTest extends BrowserTestBase {
       $this->container->get('module_installer')->install([$module_name], FALSE);
       $this->fail($message);
     }
-    catch (ExtensionNameLengthException $e) {
-      $this->pass($message);
+    catch (\Exception $e) {
+      $this->assertInstanceOf(ExtensionNameLengthException::class, $e);
     }
   }
 

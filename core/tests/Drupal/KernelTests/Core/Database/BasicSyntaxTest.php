@@ -37,7 +37,7 @@ class BasicSyntaxTest extends DatabaseTestBase {
    */
   public function testConcatFields() {
     $result = $this->connection->query(
-      'SELECT CONCAT(:a1, CONCAT(job, CONCAT(:a2, CONCAT(age, :a3)))) FROM {test} WHERE age = :age', [
+      'SELECT CONCAT(:a1, CONCAT([job], CONCAT(:a2, CONCAT([age], :a3)))) FROM {test} WHERE [age] = :age', [
         ':a1' => 'The age of ',
         ':a2' => ' is ',
         ':a3' => '.',
@@ -64,7 +64,7 @@ class BasicSyntaxTest extends DatabaseTestBase {
    * Tests string concatenation with separator, with field values.
    */
   public function testConcatWsFields() {
-    $result = $this->connection->query("SELECT CONCAT_WS('-', :a1, name, :a2, age) FROM {test} WHERE age = :age", [
+    $result = $this->connection->query("SELECT CONCAT_WS('-', :a1, [name], :a2, [age]) FROM {test} WHERE [age] = :age", [
       ':a1' => 'name',
       ':a2' => 'age',
       ':age' => 25,
@@ -139,6 +139,35 @@ class BasicSyntaxTest extends DatabaseTestBase {
       ->execute()
       ->fetchField();
     $this->assertIdentical($num_matches, '4', 'Found 4 records.');
+  }
+
+  /**
+   * Tests allowing square brackets in queries.
+   *
+   * @see \Drupal\Core\Database\Connection::prepareQuery()
+   */
+  public function testAllowSquareBrackets() {
+    $this->connection->insert('test')
+      ->fields(['name'])
+      ->values([
+        'name' => '[square]',
+      ])
+      ->execute();
+
+    // Note that this is a very bad example query because arguments should be
+    // passed in via the $args parameter.
+    $result = $this->connection->query("select name from {test} where name = '[square]'", [], ['allow_square_brackets' => TRUE]);
+    $this->assertIdentical('[square]', $result->fetchField());
+
+    // Test that allow_square_brackets has no effect on arguments.
+    $result = $this->connection->query("select [name] from {test} where [name] = :value", [':value' => '[square]']);
+    $this->assertIdentical('[square]', $result->fetchField());
+    $result = $this->connection->query("select name from {test} where name = :value", [':value' => '[square]'], ['allow_square_brackets' => TRUE]);
+    $this->assertIdentical('[square]', $result->fetchField());
+
+    // Test square brackets using the query builder.
+    $result = $this->connection->select('test')->fields('test', ['name'])->condition('name', '[square]')->execute();
+    $this->assertIdentical('[square]', $result->fetchField());
   }
 
 }

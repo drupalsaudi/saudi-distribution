@@ -28,7 +28,7 @@ class TextFormatElementFormTest extends KernelTestBase implements FormInterface 
    *
    * @var array
    */
-  public static $modules = [
+  protected static $modules = [
     'system',
     'user',
     'filter',
@@ -39,13 +39,11 @@ class TextFormatElementFormTest extends KernelTestBase implements FormInterface 
   /**
    * Sets up the test.
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
     $this->installEntitySchema('user');
     $this->installSchema('system', ['sequences']);
     $this->installConfig(['filter', 'filter_test']);
-    // Filter tips link to the full-page.
-    \Drupal::service('router.builder')->rebuild();
     /* @var \Drupal\Core\Render\ElementInfoManager $manager */
     $manager = \Drupal::service('plugin.manager.element_info');
     $manager->clearCachedDefinitions();

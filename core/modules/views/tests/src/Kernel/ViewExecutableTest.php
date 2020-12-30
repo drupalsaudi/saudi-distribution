@@ -33,7 +33,7 @@ class ViewExecutableTest extends ViewsKernelTestBase {
 
   use CommentTestTrait;
 
-  public static $modules = [
+  protected static $modules = [
     'system',
     'node',
     'comment',
@@ -362,7 +362,7 @@ class ViewExecutableTest extends ViewsKernelTestBase {
    *
    * @param \Drupal\views\ViewExecutable $view
    */
-  protected function assertViewDestroy($view) {
+  protected function assertViewDestroy(ViewExecutable $view) {
     $reflection = new \ReflectionClass($view);
     $defaults = $reflection->getDefaultProperties();
     // The storage and user should remain.
@@ -449,7 +449,7 @@ class ViewExecutableTest extends ViewsKernelTestBase {
       $count++;
     }
 
-    $this->assertEqual(count($view->displayHandlers), $count, 'Error messages from all handlers merged.');
+    $this->assertCount($count, $view->displayHandlers, 'Error messages from all handlers merged.');
 
     // Test that a deleted display is not included.
     $display = &$view->storage->getDisplay('default');

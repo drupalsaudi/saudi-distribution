@@ -8,6 +8,7 @@
 namespace Drupal\Tests\Component\DependencyInjection;
 
 use Drupal\Component\Utility\Crypt;
+use Drupal\Tests\PhpUnitCompatibilityTrait;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
@@ -23,6 +24,8 @@ use Prophecy\Argument;
  * @group DependencyInjection
  */
 class ContainerTest extends TestCase {
+
+  use PhpUnitCompatibilityTrait;
 
   /**
    * The tested container.
@@ -55,7 +58,7 @@ class ContainerTest extends TestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     $this->machineFormat = TRUE;
     $this->containerClass = '\Drupal\Component\DependencyInjection\Container';
     $this->containerDefinition = $this->getMockContainerDefinition();
@@ -254,7 +257,7 @@ class ContainerTest extends TestCase {
    * @covers ::getAlternatives
    * @covers ::getServiceAlternatives
    */
-  public function testGetForNonExistantService() {
+  public function testGetForNonExistentService() {
     $this->expectException(ServiceNotFoundException::class);
     $this->container->get('service_not_exists');
   }
@@ -286,7 +289,7 @@ class ContainerTest extends TestCase {
    * @covers ::createService
    * @covers ::resolveServicesAndParameters
    */
-  public function testGetForNonExistantParameterDependency() {
+  public function testGetForNonExistentParameterDependency() {
     $service = $this->container->get('service_parameter_not_exists', ContainerInterface::NULL_ON_INVALID_REFERENCE);
     $this->assertNull($service, 'Service is NULL.');
   }
@@ -315,7 +318,7 @@ class ContainerTest extends TestCase {
    * @covers ::createService
    * @covers ::resolveServicesAndParameters
    */
-  public function testGetForNonExistantParameterDependencyWithException() {
+  public function testGetForNonExistentParameterDependencyWithException() {
     $this->expectException(InvalidArgumentException::class);
     $this->container->get('service_parameter_not_exists');
   }
@@ -327,7 +330,7 @@ class ContainerTest extends TestCase {
    * @covers ::createService
    * @covers ::resolveServicesAndParameters
    */
-  public function testGetForNonExistantServiceDependency() {
+  public function testGetForNonExistentServiceDependency() {
     $service = $this->container->get('service_dependency_not_exists', ContainerInterface::NULL_ON_INVALID_REFERENCE);
     $this->assertNull($service, 'Service is NULL.');
   }
@@ -340,7 +343,7 @@ class ContainerTest extends TestCase {
    * @covers ::resolveServicesAndParameters
    * @covers ::getAlternatives
    */
-  public function testGetForNonExistantServiceDependencyWithException() {
+  public function testGetForNonExistentServiceDependencyWithException() {
     $this->expectException(ServiceNotFoundException::class);
     $this->container->get('service_dependency_not_exists');
   }
@@ -351,7 +354,7 @@ class ContainerTest extends TestCase {
    * @covers ::get
    * @covers ::createService
    */
-  public function testGetForNonExistantServiceWhenUsingNull() {
+  public function testGetForNonExistentServiceWhenUsingNull() {
     $this->assertNull($this->container->get('service_not_exists', ContainerInterface::NULL_ON_INVALID_REFERENCE), 'Not found service does not throw exception.');
   }
 
@@ -360,7 +363,7 @@ class ContainerTest extends TestCase {
    * @covers ::get
    * @covers ::createService
    */
-  public function testGetForNonExistantNULLService() {
+  public function testGetForNonExistentNULLService() {
     $this->expectException(ServiceNotFoundException::class);
     $this->container->get(NULL);
   }
@@ -371,7 +374,7 @@ class ContainerTest extends TestCase {
    * @covers ::get
    * @covers ::createService
    */
-  public function testGetForNonExistantServiceMultipleTimes() {
+  public function testGetForNonExistentServiceMultipleTimes() {
     $container = new $this->containerClass();
 
     $this->assertNull($container->get('service_not_exists', ContainerInterface::NULL_ON_INVALID_REFERENCE), 'Not found service does not throw exception.');
@@ -385,7 +388,7 @@ class ContainerTest extends TestCase {
    * @covers ::createService
    * @covers ::getAlternatives
    */
-  public function testGetForNonExistantServiceWithExceptionOnSecondCall() {
+  public function testGetForNonExistentServiceWithExceptionOnSecondCall() {
     $this->assertNull($this->container->get('service_not_exists', ContainerInterface::NULL_ON_INVALID_REFERENCE), 'Not found service does nto throw exception.');
     $this->expectException(ServiceNotFoundException::class);
     $this->container->get('service_not_exists');
@@ -434,7 +437,7 @@ class ContainerTest extends TestCase {
    * @covers ::createService
    */
   public function testGetWithFileInclude() {
-    $file_service = $this->container->get('container_test_file_service_test');
+    $this->container->get('container_test_file_service_test');
     $this->assertTrue(function_exists('container_test_file_service_test_service_function'));
     $this->assertEquals('Hello Container', container_test_file_service_test_service_function());
   }

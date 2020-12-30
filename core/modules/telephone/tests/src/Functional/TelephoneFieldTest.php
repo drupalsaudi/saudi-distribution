@@ -18,7 +18,7 @@ class TelephoneFieldTest extends BrowserTestBase {
    *
    * @var array
    */
-  public static $modules = [
+  protected static $modules = [
     'field',
     'node',
     'telephone',
@@ -39,7 +39,7 @@ class TelephoneFieldTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->drupalCreateContentType(['type' => 'article']);
@@ -88,7 +88,7 @@ class TelephoneFieldTest extends BrowserTestBase {
    */
   public function testTelephoneWidget() {
     $this->drupalGet('node/add/article');
-    $this->assertFieldByName("field_telephone[0][value]", '', 'Widget found.');
+    $this->assertSession()->fieldValueEquals("field_telephone[0][value]", '');
     $this->assertRaw('placeholder="123-456-7890"');
   }
 
@@ -106,7 +106,7 @@ class TelephoneFieldTest extends BrowserTestBase {
       'field_telephone[0][value]' => $input,
     ];
 
-    $this->drupalPostForm('node/add/article', $edit, t('Save'));
+    $this->drupalPostForm('node/add/article', $edit, 'Save');
     $this->assertRaw('<a href="tel:' . $expected . '">');
   }
 

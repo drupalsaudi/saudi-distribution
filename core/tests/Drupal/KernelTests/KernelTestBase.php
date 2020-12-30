@@ -16,11 +16,11 @@ use Drupal\Core\Extension\ExtensionDiscovery;
 use Drupal\Core\Language\Language;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\Test\TestDatabase;
-use Drupal\Tests\AssertHelperTrait;
 use Drupal\Tests\ConfigTestTrait;
-use Drupal\Tests\PhpunitCompatibilityTrait;
 use Drupal\Tests\RandomGeneratorTrait;
+use Drupal\Tests\PhpUnitCompatibilityTrait;
 use Drupal\Tests\TestRequirementsTrait;
+use Drupal\Tests\Traits\PhpUnitWarnings;
 use Drupal\TestTools\Comparator\MarkupInterfaceComparator;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
@@ -28,8 +28,9 @@ use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpFoundation\Request;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\visitor\vfsStreamPrintVisitor;
-use Symfony\Cmf\Component\Routing\RouteObjectInterface;
+use Drupal\Core\Routing\RouteObjectInterface;
 use Symfony\Component\Routing\Route;
+use Symfony\Bridge\PhpUnit\ExpectDeprecationTrait;
 
 /**
  * Base class for functional integration tests.
@@ -76,11 +77,12 @@ abstract class KernelTestBase extends TestCase implements ServiceProviderInterfa
 
   use AssertLegacyTrait;
   use AssertContentTrait;
-  use AssertHelperTrait;
   use RandomGeneratorTrait;
   use ConfigTestTrait;
   use TestRequirementsTrait;
-  use PhpunitCompatibilityTrait;
+  use PhpUnitWarnings;
+  use PhpUnitCompatibilityTrait;
+  use ExpectDeprecationTrait;
 
   /**
    * {@inheritdoc}
@@ -164,17 +166,12 @@ abstract class KernelTestBase extends TestCase implements ServiceProviderInterfa
    * it extends, and so on up the class hierarchy. It is not necessary to
    * include modules in your list that a parent class has already declared.
    *
-   * The Path Alias module is always installed because the functionality has
-   * moved from core to a required module in Drupal 8.8.0. If a kernel test
-   * requires path alias functionality it is recommended to add the module to
-   * the test's own $modules property for Drupal 9 compatibility.
-   *
    * @see \Drupal\Tests\KernelTestBase::enableModules()
    * @see \Drupal\Tests\KernelTestBase::bootKernel()
    *
    * @var array
    */
-  protected static $modules = ['path_alias'];
+  protected static $modules = [];
 
   /**
    * The virtual filesystem root directory.
@@ -261,8 +258,6 @@ abstract class KernelTestBase extends TestCase implements ServiceProviderInterfa
 
     $this->classLoader = require $this->root . '/autoload.php';
 
-    require_once $this->root . '/core/includes/bootstrap.inc';
-
     // Set up virtual filesystem.
     Database::addConnectionInfo('default', 'test-runner', $this->getDatabaseConnectionInfo()['default']);
     $test_db = new TestDatabase();
@@ -275,11 +270,8 @@ abstract class KernelTestBase extends TestCase implements ServiceProviderInterfa
     drupal_valid_test_ua($this->databasePrefix);
 
     $settings = [
-      'hash_salt' => get_class($this),
+      'hash_salt' => static::class,
       'file_public_path' => $this->siteDirectory . '/files',
-      // Skip the "path_alias" schema check for kernel tests, since they do not
-      // rely on the full schema being installed.
-      'system.path_alias_schema_check' => FALSE,
       // Disable Twig template caching/dumping.
       'twig_cache' => FALSE,
       // @see \Drupal\KernelTests\KernelTestBase::register()
@@ -342,7 +334,7 @@ abstract class KernelTestBase extends TestCase implements ServiceProviderInterfa
     // Add this test class as a service provider.
     $GLOBALS['conf']['container_service_providers']['test'] = $this;
 
-    $modules = self::getModulesToEnable(get_class($this));
+    $modules = self::getModulesToEnable(static::class);
 
     // Bootstrap the kernel. Do not use createFromRequest() to retain Settings.
     $kernel = new DrupalKernel('testing', $this->classLoader, FALSE);
@@ -377,7 +369,7 @@ abstract class KernelTestBase extends TestCase implements ServiceProviderInterfa
       $this->container->get('module_handler')->loadAll();
     }
 
-    // Setup the destion to the be frontpage by default.
+    // Setup the destination to the be frontpage by default.
     \Drupal::destination()->set('/');
 
     // Write the core.extension configuration.
@@ -576,7 +568,7 @@ abstract class KernelTestBase extends TestCase implements ServiceProviderInterfa
    *   An array of config object names that are excluded from schema checking.
    */
   protected function getConfigSchemaExclusions() {
-    $class = get_class($this);
+    $class = static::class;
     $exceptions = [];
     while ($class) {
       if (property_exists($class, 'configSchemaCheckerExclusions')) {
@@ -717,13 +709,15 @@ abstract class KernelTestBase extends TestCase implements ServiceProviderInterfa
     }
     $tables = (array) $tables;
     foreach ($tables as $table) {
+      // The tables key_value and key_value_expire are lazy loaded and therefore
+      // no longer have to be created with the installSchema() method.
+      // @see https://www.drupal.org/node/3143286
+      if ($module === 'system' && in_array($table, ['key_value', 'key_value_expire'])) {
+        @trigger_error('Installing the tables key_value and key_value_expire with the method KernelTestBase::installSchema() is deprecated in drupal:9.1.0 and is removed from drupal:10.0.0. The tables are now lazy loaded and therefore will be installed automatically when used. See https://www.drupal.org/node/3143286', E_USER_DEPRECATED);
+        continue;
+      }
       $schema = drupal_get_module_schema($module, $table);
       if (empty($schema)) {
-        // BC layer to avoid some contrib tests to fail.
-        if ($module == 'system') {
-          @trigger_error('Special handling of system module schemas in \Drupal\KernelTests\KernelTestBase::installSchema has been deprecated in Drupal 8.7.x, remove any calls to this method that use invalid schema names. See https://www.drupal.org/node/3003360.', E_USER_DEPRECATED);
-          continue;
-        }
         throw new \LogicException("$module module does not define a schema for table '$table'.");
       }
       $this->container->get('database')->schema()->createTable($table, $schema);
@@ -778,12 +772,6 @@ abstract class KernelTestBase extends TestCase implements ServiceProviderInterfa
    *   If a module is not enabled after enabling it.
    */
   protected function enableModules(array $modules) {
-    $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
-    if ($trace[1]['function'] === 'setUp') {
-      trigger_error('KernelTestBase::enableModules() should not be called from setUp(). Use the $modules property instead.', E_USER_DEPRECATED);
-    }
-    unset($trace);
-
     // Perform an ExtensionDiscovery scan as this function may receive a
     // profile that is not the current profile, and we don't yet have a cached
     // way to receive inactive profile information.
@@ -910,10 +898,6 @@ abstract class KernelTestBase extends TestCase implements ServiceProviderInterfa
    *   \Drupal\Core\Site\Settings::get() to perform custom merges.
    */
   protected function setSetting($name, $value) {
-    if ($name === 'install_profile') {
-      @trigger_error('Use \Drupal\KernelTests\KernelTestBase::setInstallProfile() to set the install profile in kernel tests. See https://www.drupal.org/node/2538996', E_USER_DEPRECATED);
-      $this->setInstallProfile($value);
-    }
     $settings = Settings::getInstance() ? Settings::getAll() : [];
     $settings[$name] = $value;
     new Settings($settings);
@@ -973,7 +957,7 @@ abstract class KernelTestBase extends TestCase implements ServiceProviderInterfa
     // Modules have been collected in reverse class hierarchy order; modules
     // defined by base classes should be sorted first. Then, merge the results
     // together.
-    $modules = array_reverse($modules);
+    $modules = array_values(array_reverse($modules));
     return call_user_func_array('array_merge_recursive', $modules);
   }
 
@@ -996,87 +980,6 @@ abstract class KernelTestBase extends TestCase implements ServiceProviderInterfa
       'included_files' => '',
       'globals' => $bootstrap_globals,
     ]);
-  }
-
-  /**
-   * Returns whether the current test method is running in a separate process.
-   *
-   * Note that KernelTestBase will run in a separate process by default.
-   *
-   * @return bool
-   *
-   * @see \Drupal\KernelTests\KernelTestBase::$runTestInSeparateProcess
-   * @see https://github.com/sebastianbergmann/phpunit/pull/1350
-   *
-   * @deprecated in drupal:8.4.0 and is removed from drupal:9.0.0.
-   *   KernelTestBase tests are always run in isolated processes.
-   */
-  protected function isTestInIsolation() {
-    @trigger_error(__CLASS__ . '::' . __FUNCTION__ . '() is deprecated in Drupal 8.4.x, for removal before the Drupal 9.0.0 release. KernelTestBase tests are always run in isolated processes.', E_USER_DEPRECATED);
-    return function_exists('__phpunit_run_isolated_test');
-  }
-
-  /**
-   * BC: Automatically resolve former KernelTestBase class properties.
-   *
-   * Test authors should follow the provided instructions and adjust their tests
-   * accordingly.
-   *
-   * @deprecated in drupal:8.0.0 and is removed from drupal:9.0.0.
-   */
-  public function __get($name) {
-    if (in_array($name, [
-      'public_files_directory',
-      'private_files_directory',
-      'temp_files_directory',
-      'translation_files_directory',
-    ])) {
-      // @comment it in again.
-      trigger_error(sprintf("KernelTestBase::\$%s no longer exists. Use the regular API method to retrieve it instead (e.g., Settings).", $name), E_USER_DEPRECATED);
-      switch ($name) {
-        case 'public_files_directory':
-          return Settings::get('file_public_path', \Drupal::service('site.path') . '/files');
-
-        case 'private_files_directory':
-          return Settings::get('file_private_path');
-
-        case 'temp_files_directory':
-          return \Drupal::service('file_system')->getTempDirectory();
-
-        case 'translation_files_directory':
-          return Settings::get('file_public_path', \Drupal::service('site.path') . '/translations');
-      }
-    }
-
-    if ($name === 'configDirectories') {
-      trigger_error(sprintf("KernelTestBase::\$%s no longer exists. Use Settings::get('config_sync_directory') directly instead.", $name), E_USER_DEPRECATED);
-      return [
-        CONFIG_SYNC_DIRECTORY => Settings::get('config_sync_directory'),
-      ];
-    }
-
-    $denied = [
-      // @see \Drupal\simpletest\TestBase
-      'testId',
-      'timeLimit',
-      'results',
-      'assertions',
-      'skipClasses',
-      'verbose',
-      'verboseId',
-      'verboseClassName',
-      'verboseDirectory',
-      'verboseDirectoryUrl',
-      'dieOnFail',
-      'kernel',
-      // @see \Drupal\simpletest\TestBase::prepareEnvironment()
-      'generatedTestFiles',
-      // Properties from the old KernelTestBase class that has been removed.
-      'keyValueFactory',
-    ];
-    if (in_array($name, $denied) || strpos($name, 'original') === 0) {
-      throw new \RuntimeException(sprintf('TestBase::$%s property no longer exists', $name));
-    }
   }
 
   /**

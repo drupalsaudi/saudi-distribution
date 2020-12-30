@@ -2,7 +2,6 @@
 
 namespace Drupal\Tests\system\Functional\Menu;
 
-use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Url;
 use Drupal\Tests\BrowserTestBase;
@@ -19,7 +18,7 @@ class LocalTasksTest extends BrowserTestBase {
    *
    * @var string[]
    */
-  public static $modules = ['block', 'menu_test', 'entity_test', 'node'];
+  protected static $modules = ['block', 'menu_test', 'entity_test', 'node'];
 
   /**
    * {@inheritdoc}
@@ -36,7 +35,7 @@ class LocalTasksTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->sut = $this->drupalPlaceBlock('local_tasks_block', ['id' => 'tabs_block']);
@@ -61,12 +60,7 @@ class LocalTasksTest extends BrowserTestBase {
     foreach ($routes as $index => $route_info) {
       list($route_name, $route_parameters) = $route_info;
       $expected = Url::fromRoute($route_name, $route_parameters)->toString();
-      $method = ($elements[$index]->getAttribute('href') == $expected ? 'pass' : 'fail');
-      $this->{$method}(new FormattableMarkup('Task @number href @value equals @expected.', [
-        '@number' => $index + 1,
-        '@value' => $elements[$index]->getAttribute('href'),
-        '@expected' => $expected,
-      ]));
+      $this->assertEquals($expected, $elements[$index]->getAttribute('href'), "Task " . ($index + 1) . "number href " . $elements[$index]->getAttribute('href') . " equals $expected.");
     }
   }
 
@@ -84,7 +78,7 @@ class LocalTasksTest extends BrowserTestBase {
     // so use a pattern instead to check the raw content.
     // This behavior is a bug in libxml, see
     // https://bugs.php.net/bug.php?id=49437.
-    return $this->assertPattern('@<a [^>]*>' . preg_quote($title, '@') . '</a>@');
+    return $this->assertSession()->responseMatches('@<a [^>]*>' . preg_quote($title, '@') . '</a>@');
   }
 
   /**
@@ -160,8 +154,8 @@ class LocalTasksTest extends BrowserTestBase {
     $this->assertEqual('Settings(active tab)', $result[0]->getText(), 'The settings tab is active.');
     $this->assertEqual('Dynamic title for TestTasksSettingsSub1(active tab)', $result[1]->getText(), 'The sub1 tab is active.');
 
-    $this->assertCacheTag('kittens:ragdoll');
-    $this->assertCacheTag('kittens:dwarf-cat');
+    $this->assertSession()->responseHeaderContains('X-Drupal-Cache-Tags', 'kittens:ragdoll');
+    $this->assertSession()->responseHeaderContains('X-Drupal-Cache-Tags', 'kittens:dwarf-cat');
 
     $this->drupalGet(Url::fromRoute('menu_test.local_task_test_tasks_settings_derived', ['placeholder' => 'derive1']));
     $this->assertLocalTasks($sub_tasks, 1);

@@ -2,7 +2,6 @@
 
 namespace Drupal\Tests\views\Functional\Plugin;
 
-use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Url;
 use Drupal\node\Entity\Node;
 use Drupal\node\Entity\NodeType;
@@ -41,9 +40,9 @@ class ArgumentDefaultTest extends ViewTestBase {
    *
    * @var array
    */
-  public static $modules = ['node', 'views_ui', 'block'];
+  protected static $modules = ['node', 'views_ui', 'block'];
 
-  protected function setUp($import_test_views = TRUE) {
+  protected function setUp($import_test_views = TRUE): void {
     parent::setUp($import_test_views);
 
     $this->enableViewsTestModule();
@@ -102,7 +101,7 @@ class ArgumentDefaultTest extends ViewTestBase {
     $edit = [
       'options[default_argument_type]' => $argument_type,
     ];
-    $this->drupalPostForm('admin/structure/views/nojs/handler/test_argument_default_current_user/default/argument/uid', $edit, t('Apply'));
+    $this->drupalPostForm('admin/structure/views/nojs/handler/test_argument_default_current_user/default/argument/uid', $edit, 'Apply');
 
     // Note, the undefined index error has two spaces after it.
     $error = [
@@ -111,7 +110,7 @@ class ArgumentDefaultTest extends ViewTestBase {
       '%function' => 'views_handler_argument->validateOptionsForm()',
     ];
     $message = t('%type: @message in %function', $error);
-    $this->assertNoRaw($message, new FormattableMarkup('Did not find error message: @message.', ['@message' => $message]));
+    $this->assertNoRaw($message);
   }
 
   /**

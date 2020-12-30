@@ -19,7 +19,7 @@ class QuickEditIntegrationLoadingTest extends BrowserTestBase {
    *
    * @var array
    */
-  public static $modules = ['quickedit', 'filter', 'node', 'editor'];
+  protected static $modules = ['quickedit', 'filter', 'node', 'editor'];
 
   /**
    * {@inheritdoc}
@@ -33,7 +33,7 @@ class QuickEditIntegrationLoadingTest extends BrowserTestBase {
    */
   protected static $basicPermissions = ['access content', 'create article content', 'use text format filtered_html', 'access contextual links'];
 
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     // Create a text format.
@@ -91,7 +91,7 @@ class QuickEditIntegrationLoadingTest extends BrowserTestBase {
 
       $client = $this->getHttpClient();
 
-      // Retrieving the untransformed text should result in an 403 response and
+      // Retrieving the untransformed text should result in a 403 response and
       // return a different error message depending of the missing permission.
       $response = $client->post($this->buildUrl('editor/node/1/body/en/full'), [
         'query' => http_build_query([MainContentViewSubscriber::WRAPPER_FORMAT => 'drupal_ajax']),

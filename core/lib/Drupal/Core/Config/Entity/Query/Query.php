@@ -59,7 +59,7 @@ class Query extends QueryBase implements QueryInterface {
    * Overrides \Drupal\Core\Entity\Query\QueryBase::condition().
    *
    * Additional to the syntax defined in the QueryInterface you can use
-   * placeholders (*) to match all keys of an subarray. Let's take the follow
+   * placeholders (*) to match all keys of a subarray. Let's take the follow
    * yaml file as example:
    * @code
    *  level1:
@@ -89,7 +89,14 @@ class Query extends QueryBase implements QueryInterface {
       $direction = $sort['direction'] == 'ASC' ? -1 : 1;
       $field = $sort['field'];
       uasort($result, function ($a, $b) use ($field, $direction) {
-        return ($a[$field] <= $b[$field]) ? $direction : -$direction;
+        $properties = explode('.', $field);
+        foreach ($properties as $property) {
+          if (isset($a[$property]) || isset($b[$property])) {
+            $a = isset($a[$property]) ? $a[$property] : NULL;
+            $b = isset($b[$property]) ? $b[$property] : NULL;
+          }
+        }
+        return ($a <= $b) ? $direction : -$direction;
       });
     }
 

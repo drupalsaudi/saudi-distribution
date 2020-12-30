@@ -14,7 +14,7 @@ use Drupal\views\Tests\ViewTestData;
 abstract class BlockContentTestBase extends ViewTestBase {
 
   /**
-   * Admin user
+   * Admin user.
    *
    * @var object
    */
@@ -34,7 +34,7 @@ abstract class BlockContentTestBase extends ViewTestBase {
    *
    * @var array
    */
-  public static $modules = [
+  protected static $modules = [
     'block',
     'block_content',
     'block_content_test_views',
@@ -48,7 +48,7 @@ abstract class BlockContentTestBase extends ViewTestBase {
     $this->adminUser = $this->drupalCreateUser($this->permissions);
 
     if ($import_test_views) {
-      ViewTestData::createTestViews(get_class($this), ['block_content_test_views']);
+      ViewTestData::createTestViews(static::class, ['block_content_test_views']);
     }
   }
 

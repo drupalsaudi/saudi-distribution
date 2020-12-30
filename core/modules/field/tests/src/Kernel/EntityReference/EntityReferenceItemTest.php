@@ -39,7 +39,7 @@ class EntityReferenceItemTest extends FieldKernelTestBase {
    *
    * @var array
    */
-  public static $modules = [
+  protected static $modules = [
     'node',
     'comment',
     'file',
@@ -74,7 +74,7 @@ class EntityReferenceItemTest extends FieldKernelTestBase {
   /**
    * Sets up the test.
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->installEntitySchema('entity_test_string_id');
@@ -187,8 +187,8 @@ class EntityReferenceItemTest extends FieldKernelTestBase {
       $entity->field_test_taxonomy_term = ['target_id' => 'invalid', 'entity' => $term2];
       $this->fail('Assigning an invalid item throws an exception.');
     }
-    catch (\InvalidArgumentException $e) {
-      $this->pass('Assigning an invalid item throws an exception.');
+    catch (\Exception $e) {
+      $this->assertInstanceOf(\InvalidArgumentException::class, $e);
     }
 
     // Delete terms so we have nothing to reference and try again

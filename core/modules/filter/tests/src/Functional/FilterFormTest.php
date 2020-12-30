@@ -33,7 +33,7 @@ class FilterFormTest extends BrowserTestBase {
   protected $adminUser;
 
   /**
-   * An basic user account that can only access basic HTML text format.
+   * A basic user account that can only access basic HTML text format.
    *
    * @var \Drupal\user\Entity\User
    */
@@ -42,7 +42,7 @@ class FilterFormTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     /** @var \Drupal\filter\FilterFormatInterface $filter_test_format */
@@ -207,10 +207,6 @@ class FilterFormTest extends BrowserTestBase {
     foreach ($found_options as $found_key => $found_option) {
       $expected_key = array_search($found_option->getValue(), $expected_options);
       if ($expected_key !== FALSE) {
-        $this->pass(new FormattableMarkup('Option @option for field @id exists.', [
-          '@option' => $expected_options[$expected_key],
-          '@id' => $id,
-        ]));
         unset($found_options[$found_key]);
         unset($expected_options[$expected_key]);
       }
@@ -231,7 +227,7 @@ class FilterFormTest extends BrowserTestBase {
       ]));
     }
 
-    $this->assertOptionSelected($id, $selected);
+    $this->assertTrue($this->assertSession()->optionExists($id, $selected)->isSelected());
   }
 
   /**

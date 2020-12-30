@@ -19,7 +19,7 @@ class OptionsFieldTest extends OptionsFieldUnitTestBase {
    *
    * @var array
    */
-  public static $modules = ['options'];
+  protected static $modules = ['options'];
 
   /**
    * Test that allowed values can be updated.
@@ -43,7 +43,7 @@ class OptionsFieldTest extends OptionsFieldUnitTestBase {
       $this->fail('Cannot update a list field storage to not include keys with existing data.');
     }
     catch (FieldStorageDefinitionUpdateForbiddenException $e) {
-      $this->pass('Cannot update a list field storage to not include keys with existing data.');
+      // Expected exception; just continue testing.
     }
     // Empty the value, so that we can actually remove the option.
     unset($entity->{$this->fieldName});

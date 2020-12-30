@@ -8,7 +8,7 @@ use Drupal\Tests\system\Functional\Entity\Traits\EntityDefinitionTestTrait;
 use Drupal\Tests\views\Kernel\ViewsKernelTestBase;
 
 /**
- * Tests \Drupal\views\EventSubscriber\ViewsEntitySchemaSubscriber
+ * Tests \Drupal\views\EventSubscriber\ViewsEntitySchemaSubscriber.
  *
  * @group Views
  */
@@ -26,7 +26,7 @@ class ViewsEntitySchemaSubscriberIntegrationTest extends ViewsKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = [
+  protected static $modules = [
     'entity_test',
     'entity_test_update',
     'user',
@@ -71,7 +71,7 @@ class ViewsEntitySchemaSubscriberIntegrationTest extends ViewsKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp($import_test_views = TRUE) {
+  protected function setUp($import_test_views = TRUE): void {
     parent::setUp();
 
     $this->eventDispatcher = $this->container->get('event_dispatcher');
@@ -107,7 +107,7 @@ class ViewsEntitySchemaSubscriberIntegrationTest extends ViewsKernelTestBase {
     $this->assertTrue(isset($views['test_view_entity_test_additional_base_field']));
 
     $event = new EntityTypeEvent($this->entityTypeManager->getDefinition('entity_test_update'));
-    $this->eventDispatcher->dispatch(EntityTypeEvents::DELETE, $event);
+    $this->eventDispatcher->dispatch($event, EntityTypeEvents::DELETE);
 
     // We expect that views which use 'entity_test_update' as base tables are
     // disabled.

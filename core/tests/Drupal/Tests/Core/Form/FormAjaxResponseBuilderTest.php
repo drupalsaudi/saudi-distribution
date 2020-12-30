@@ -35,7 +35,7 @@ class FormAjaxResponseBuilderTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
     $this->renderer = $this->createMock('Drupal\Core\Render\MainContent\MainContentRendererInterface');
     $this->routeMatch = $this->createMock('Drupal\Core\Routing\RouteMatchInterface');
@@ -54,7 +54,6 @@ class FormAjaxResponseBuilderTest extends UnitTestCase {
     $form_state = new FormState();
     $commands = [];
 
-    $expected = [];
     $this->expectException(HttpException::class);
     $this->formAjaxResponseBuilder->buildResponse($request, $form, $form_state, $commands);
   }
@@ -73,7 +72,6 @@ class FormAjaxResponseBuilderTest extends UnitTestCase {
     $form_state->setTriggeringElement($triggering_element);
     $commands = [];
 
-    $expected = [];
     $this->expectException(HttpException::class);
     $this->formAjaxResponseBuilder->buildResponse($request, $form, $form_state, $commands);
   }

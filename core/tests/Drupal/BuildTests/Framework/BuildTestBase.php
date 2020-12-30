@@ -7,12 +7,12 @@ use Behat\Mink\Driver\GoutteDriver;
 use Behat\Mink\Mink;
 use Behat\Mink\Session;
 use Drupal\Component\FileSystem\FileSystem as DrupalFilesystem;
-use Drupal\Tests\PhpunitCompatibilityTrait;
+use Drupal\Tests\PhpUnitCompatibilityTrait;
+use Drupal\Tests\Traits\PhpUnitWarnings;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\BrowserKit\Client as SymfonyClient;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 use Symfony\Component\Finder\Finder;
-use Symfony\Component\Lock\Factory;
+use Symfony\Component\Lock\LockFactory;
 use Symfony\Component\Lock\Store\FlockStore;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Process;
@@ -53,7 +53,8 @@ use Symfony\Component\Process\Process;
 abstract class BuildTestBase extends TestCase {
 
   use ExternalCommandRequirementsTrait;
-  use PhpunitCompatibilityTrait;
+  use PhpUnitWarnings;
+  use PhpUnitCompatibilityTrait;
 
   /**
    * The working directory where this test will manipulate files.
@@ -218,14 +219,7 @@ abstract class BuildTestBase extends TestCase {
    * @return \Behat\Mink\Session
    */
   protected function initMink() {
-    // If the Symfony BrowserKit client can followMetaRefresh(), we should use
-    // the Goutte descendent instead of ours.
-    if (method_exists(SymfonyClient::class, 'followMetaRefresh')) {
-      $client = new Client();
-    }
-    else {
-      $client = new DrupalMinkClient();
-    }
+    $client = new Client();
     $client->followMetaRefresh(TRUE);
     $driver = new GoutteDriver($client);
     $session = new Session($driver);
@@ -319,7 +313,7 @@ abstract class BuildTestBase extends TestCase {
    * @return \Symfony\Component\Process\Process
    */
   public function executeCommand($command_line, $working_dir = NULL) {
-    $this->commandProcess = new Process($command_line);
+    $this->commandProcess = Process::fromShellCommandline($command_line);
     $this->commandProcess->setWorkingDirectory($this->getWorkingPath($working_dir))
       ->setTimeout(300)
       ->setIdleTimeout(300);
@@ -465,7 +459,7 @@ abstract class BuildTestBase extends TestCase {
    */
   protected function findAvailablePort() {
     $store = new FlockStore(DrupalFilesystem::getOsTemporaryDirectory());
-    $lock_factory = new Factory($store);
+    $lock_factory = new LockFactory($store);
 
     $counter = 100;
     while ($counter--) {

@@ -30,7 +30,7 @@ class SearchNodeUpdateAndDeletionTest extends BrowserTestBase {
    */
   public $testUser;
 
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->drupalCreateContentType(['type' => 'page', 'name' => 'Basic page']);
@@ -62,7 +62,7 @@ class SearchNodeUpdateAndDeletionTest extends BrowserTestBase {
 
     // Search the node to verify it appears in search results
     $edit = ['keys' => 'knights'];
-    $this->drupalPostForm('search/node', $edit, t('Search'));
+    $this->drupalPostForm('search/node', $edit, 'Search');
     $this->assertText($node->label());
 
     // Update the node
@@ -74,7 +74,7 @@ class SearchNodeUpdateAndDeletionTest extends BrowserTestBase {
 
     // Search again to verify the new text appears in test results.
     $edit = ['keys' => 'shrubbery'];
-    $this->drupalPostForm('search/node', $edit, t('Search'));
+    $this->drupalPostForm('search/node', $edit, 'Search');
     $this->assertText($node->label());
   }
 
@@ -95,12 +95,16 @@ class SearchNodeUpdateAndDeletionTest extends BrowserTestBase {
 
     // Search the node to verify it appears in search results
     $edit = ['keys' => 'dragons'];
-    $this->drupalPostForm('search/node', $edit, t('Search'));
+    $this->drupalPostForm('search/node', $edit, 'Search');
     $this->assertText($node->label());
 
     // Get the node info from the search index tables.
     $connection = Database::getConnection();
-    $search_index_dataset = $connection->query("SELECT sid FROM {search_index} WHERE type = 'node_search' AND  word = :word", [':word' => 'dragons'])
+    $search_index_dataset = $connection->select('search_index', 'si')
+      ->fields('si', ['sid'])
+      ->condition('type', 'node_search')
+      ->condition('word', 'dragons')
+      ->execute()
       ->fetchField();
     $this->assertNotEqual($search_index_dataset, FALSE, t('Node info found on the search_index'));
 
@@ -108,12 +112,16 @@ class SearchNodeUpdateAndDeletionTest extends BrowserTestBase {
     $node->delete();
 
     // Check if the node info is gone from the search table.
-    $search_index_dataset = $connection->query("SELECT sid FROM {search_index} WHERE type = 'node_search' AND  word = :word", [':word' => 'dragons'])
+    $search_index_dataset = $connection->select('search_index', 'si')
+      ->fields('si', ['sid'])
+      ->condition('type', 'node_search')
+      ->condition('word', 'dragons')
+      ->execute()
       ->fetchField();
-    $this->assertFalse($search_index_dataset, t('Node info successfully removed from search_index'));
+    $this->assertFalse($search_index_dataset, 'Node info successfully removed from search_index');
 
     // Search again to verify the node doesn't appear anymore.
-    $this->drupalPostForm('search/node', $edit, t('Search'));
+    $this->drupalPostForm('search/node', $edit, 'Search');
     $this->assertNoText($node->label());
   }
 

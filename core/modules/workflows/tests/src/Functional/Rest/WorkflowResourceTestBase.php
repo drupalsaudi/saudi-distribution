@@ -13,7 +13,7 @@ abstract class WorkflowResourceTestBase extends EntityResourceTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = [
+  protected static $modules = [
     'workflows',
     'workflow_type_test',
   ];
@@ -48,7 +48,7 @@ abstract class WorkflowResourceTestBase extends EntityResourceTestBase {
   protected function createEntity() {
     $workflow = Workflow::create([
       'id' => 'rest_workflow',
-      'label' => 'REST Worklow',
+      'label' => 'REST Workflow',
       'type' => 'workflow_type_complex_test',
     ]);
     $workflow
@@ -74,7 +74,7 @@ abstract class WorkflowResourceTestBase extends EntityResourceTestBase {
         ],
       ],
       'id' => 'rest_workflow',
-      'label' => 'REST Worklow',
+      'label' => 'REST Workflow',
       'langcode' => 'en',
       'status' => TRUE,
       'type' => 'workflow_type_complex_test',

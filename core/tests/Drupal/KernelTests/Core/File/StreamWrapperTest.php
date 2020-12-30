@@ -20,7 +20,7 @@ class StreamWrapperTest extends FileTestBase {
    *
    * @var array
    */
-  public static $modules = ['file_test'];
+  protected static $modules = ['file_test'];
 
   /**
    * A stream wrapper scheme to register for the test.
@@ -36,7 +36,7 @@ class StreamWrapperTest extends FileTestBase {
    */
   protected $classname = 'Drupal\file_test\StreamWrapper\DummyStreamWrapper';
 
-  public function setUp() {
+  public function setUp(): void {
     parent::setUp();
 
     // Add file_private_path setting.
@@ -101,7 +101,6 @@ class StreamWrapperTest extends FileTestBase {
     // Test file_create_url()
     // TemporaryStream::getExternalUrl() uses Url::fromRoute(), which needs
     // route information to work.
-    $this->container->get('router.builder')->rebuild();
     $this->assertStringContainsString('system/temporary?file=test.txt', file_create_url('temporary://test.txt'), 'Temporary external URL correctly built.');
     $this->assertStringContainsString(Settings::get('file_public_path') . '/test.txt', file_create_url('public://test.txt'), 'Public external URL correctly built.');
     $this->assertStringContainsString('system/files/test.txt', file_create_url('private://test.txt'), 'Private external URL correctly built.');

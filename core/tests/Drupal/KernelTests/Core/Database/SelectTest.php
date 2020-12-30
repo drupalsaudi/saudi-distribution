@@ -4,6 +4,7 @@ namespace Drupal\KernelTests\Core\Database;
 
 use Drupal\Core\Database\InvalidQueryException;
 use Drupal\Core\Database\Database;
+use Drupal\Core\Database\DatabaseExceptionWrapper;
 
 /**
  * Tests the Select query builder.
@@ -318,8 +319,8 @@ class SelectTest extends DatabaseTestBase {
 
     // Ensure we only get 2 records.
     $this->assertCount(2, $names, 'UNION correctly discarded duplicates.');
-    sort($names);
-    $this->assertEquals(['George', 'Ringo'], $names);
+
+    $this->assertEqualsCanonicalizing(['George', 'Ringo'], $names);
   }
 
   /**
@@ -360,12 +361,10 @@ class SelectTest extends DatabaseTestBase {
 
     $query_1->union($query_2, 'ALL');
     $names = $query_1->execute()->fetchCol();
-
-    $query_3 = $query_1->countQuery();
-    $count = $query_3->execute()->fetchField();
+    $count = (int) $query_1->countQuery()->execute()->fetchField();
 
     // Ensure the counts match.
-    $this->assertEqual(count($names), $count, "The count query's result matched the number of rows in the UNION query.");
+    $this->assertSame(count($names), $count, "The count query's result matched the number of rows in the UNION query.");
   }
 
   /**
@@ -446,7 +445,7 @@ class SelectTest extends DatabaseTestBase {
     // same as the chance that a deck of cards will come out in the same order
     // after shuffling it (in other words, nearly impossible).
     $number_of_items = 52;
-    while ($this->connection->query("SELECT MAX(id) FROM {test}")->fetchField() < $number_of_items) {
+    while ($this->connection->query("SELECT MAX([id]) FROM {test}")->fetchField() < $number_of_items) {
       $this->connection->insert('test')->fields(['name' => $this->randomMachineName()])->execute();
     }
 
@@ -551,7 +550,7 @@ class SelectTest extends DatabaseTestBase {
   }
 
   /**
-   * Tests that an invalid merge query throws an exception.
+   * Tests that an invalid count query throws an exception.
    */
   public function testInvalidSelectCount() {
     try {
@@ -563,12 +562,9 @@ class SelectTest extends DatabaseTestBase {
         ->fields('t')
         ->countQuery()
         ->execute();
-
-      $this->pass('$options[\'throw_exception\'] is FALSE, no Exception thrown.');
     }
     catch (\Exception $e) {
       $this->fail('$options[\'throw_exception\'] is FALSE, but Exception thrown for invalid query.');
-      return;
     }
 
     try {
@@ -577,12 +573,11 @@ class SelectTest extends DatabaseTestBase {
         ->fields('t')
         ->countQuery()
         ->execute();
+      $this->fail('No Exception thrown.');
     }
     catch (\Exception $e) {
-      $this->pass('Exception thrown for invalid query.');
-      return;
+      $this->assertInstanceOf(DatabaseExceptionWrapper::class, $e);
     }
-    $this->fail('No Exception thrown.');
   }
 
   /**

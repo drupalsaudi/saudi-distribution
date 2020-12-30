@@ -43,12 +43,12 @@ class FrontPageTest extends ViewTestBase {
    *
    * @var array
    */
-  public static $modules = ['node', 'contextual'];
+  protected static $modules = ['node', 'contextual'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp($import_test_views = TRUE) {
+  protected function setUp($import_test_views = TRUE): void {
     parent::setUp($import_test_views);
 
     $this->nodeStorage = $this->container->get('entity_type.manager')
@@ -187,7 +187,7 @@ class FrontPageTest extends ViewTestBase {
     $this->drupalGet('node');
     $this->assertSession()->statusCodeEquals(200);
     // Check that the frontpage view was rendered.
-    $this->assertPattern('/class=".+view-frontpage/', 'Frontpage view was rendered');
+    $this->assertSession()->responseMatches('/class=".+view-frontpage/');
   }
 
   /**
@@ -304,7 +304,6 @@ class FrontPageTest extends ViewTestBase {
       'timezone',
     ]);
 
-    $this->pass('First page');
     // First page.
     $first_page_result_cache_tags = [
       'config:views.view.frontpage',
@@ -344,7 +343,6 @@ class FrontPageTest extends ViewTestBase {
     );
 
     // Second page.
-    $this->pass('Second page');
     $this->assertPageCacheContextsAndTags(Url::fromRoute('view.frontpage.page_1', [], ['query' => ['page' => 1]]), $cache_contexts, [
       // The cache tags for the listed nodes.
       'node:1',

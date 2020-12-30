@@ -16,7 +16,7 @@ use Drupal\views\Views;
  */
 class FieldKernelTest extends ViewsKernelTestBase {
 
-  public static $modules = ['user'];
+  protected static $modules = ['user'];
 
   /**
    * Views used by this test.
@@ -802,6 +802,7 @@ class FieldKernelTest extends ViewsKernelTestBase {
    */
   public function testTrimText() {
     // Test unicode. See https://www.drupal.org/node/513396#comment-2839416.
+    // cSpell:disable
     $text = [
       'Tuy nhiên, những hi vọng',
       'Giả sử chúng tôi có 3 Apple',
@@ -849,6 +850,7 @@ class FieldKernelTest extends ViewsKernelTestBase {
       $result_text = FieldPluginBase::trimText($alter, $line);
       $this->assertEqual($result_text, $expect[$key]);
     }
+    // cSpell:enable
   }
 
 }

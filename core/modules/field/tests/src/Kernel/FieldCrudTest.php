@@ -38,7 +38,7 @@ class FieldCrudTest extends FieldKernelTestBase {
    */
   protected $fieldDefinition;
 
-  public function setUp() {
+  public function setUp(): void {
     parent::setUp();
 
     $this->fieldStorageDefinition = [
@@ -103,7 +103,7 @@ class FieldCrudTest extends FieldKernelTestBase {
       $this->fail('Cannot create two fields with the same field / bundle combination.');
     }
     catch (EntityStorageException $e) {
-      $this->pass('Cannot create two fields with the same field / bundle combination.');
+      // Expected exception; just continue testing.
     }
 
     // Check that the specified field exists.
@@ -113,7 +113,7 @@ class FieldCrudTest extends FieldKernelTestBase {
       $this->fail('Cannot create a field with a non-existing storage.');
     }
     catch (FieldException $e) {
-      $this->pass('Cannot create a field with a non-existing storage.');
+      // Expected exception; just continue testing.
     }
 
     // TODO: test other failures.
@@ -284,7 +284,7 @@ class FieldCrudTest extends FieldKernelTestBase {
 
     // Test that the first field is not deleted, and then delete it.
     $field = current(\Drupal::entityTypeManager()->getStorage('field_config')->loadByProperties(['entity_type' => 'entity_test', 'field_name' => $this->fieldDefinition['field_name'], 'bundle' => $this->fieldDefinition['bundle'], 'include_deleted' => TRUE]));
-    $this->assertTrue(!empty($field) && empty($field->deleted), 'A new field is not marked for deletion.');
+    $this->assertFalse($field->isDeleted());
     $field->delete();
 
     // Make sure the field was deleted without being marked for purging as there
@@ -298,7 +298,7 @@ class FieldCrudTest extends FieldKernelTestBase {
 
     // Make sure the other field is not deleted.
     $another_field = FieldConfig::load('entity_test.' . $another_field_definition['bundle'] . '.' . $another_field_definition['field_name']);
-    $this->assertTrue(!empty($another_field) && !$another_field->isDeleted(), 'A non-deleted field is not marked for deletion.');
+    $this->assertFalse($another_field->isDeleted());
   }
 
   /**

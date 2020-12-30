@@ -13,7 +13,7 @@ use Drupal\KernelTests\KernelTestBase;
  */
 class BlockInterfaceTest extends KernelTestBase {
 
-  public static $modules = ['system', 'block', 'block_test', 'user'];
+  protected static $modules = ['system', 'block', 'block_test', 'user'];
 
   /**
    * Test configuration and subsequent form() and build() method calls.
@@ -87,7 +87,7 @@ class BlockInterfaceTest extends KernelTestBase {
     $actual_form = $display_block->buildConfigurationForm([], $form_state);
     // Remove the visibility sections, as that just tests condition plugins.
     unset($actual_form['visibility'], $actual_form['visibility_tabs']);
-    $this->assertIdentical($this->castSafeStrings($actual_form), $this->castSafeStrings($expected_form), 'Only the expected form elements were present.');
+    $this->assertEquals($expected_form, $actual_form, 'Only the expected form elements were present.');
 
     $expected_build = [
       '#children' => 'My custom display message.',

@@ -2,7 +2,7 @@
 
 namespace Drupal\KernelTests\Core\Database;
 
-use Drupal\Component\Render\FormattableMarkup;
+use Drupal\Core\Database\Connection;
 use Drupal\Core\Database\Database;
 use Drupal\Core\Database\DatabaseExceptionWrapper;
 use Drupal\Core\Database\Query\Condition;
@@ -100,7 +100,7 @@ class ConnectionTest extends DatabaseTestBase {
     Database::addConnectionInfo('default', 'replica', $connection_info['default']);
     $db2 = Database::getConnection('replica', 'default');
     // Getting a driver class ensures the namespace option is set.
-    $this->assertEquals($db->getDriverClass('select'), $db2->getDriverClass('select'));
+    $this->assertEquals($db->getDriverClass('Select'), $db2->getDriverClass('Select'));
     $connectionOptions2 = $db2->getConnectionOptions();
 
     // Get a fresh copy of the default connection options.
@@ -119,6 +119,22 @@ class ConnectionTest extends DatabaseTestBase {
   }
 
   /**
+   * Tests the deprecation of the 'transactions' connection option.
+   *
+   * @group legacy
+   */
+  public function testTransactionsOptionDeprecation() {
+    $this->expectDeprecation('Passing a \'transactions\' connection option to Drupal\Core\Database\Connection::__construct is deprecated in drupal:9.1.0 and is removed in drupal:10.0.0. All database drivers must support transactions. See https://www.drupal.org/node/2278745');
+    $this->expectDeprecation('Drupal\Core\Database\Connection::supportsTransactions is deprecated in drupal:9.1.0 and is removed in drupal:10.0.0. All database drivers must support transactions. See https://www.drupal.org/node/2278745');
+    $connection_info = Database::getConnectionInfo('default');
+    $connection_info['default']['transactions'] = FALSE;
+    Database::addConnectionInfo('default', 'foo', $connection_info['default']);
+    $foo_connection = Database::getConnection('foo', 'default');
+    $this->assertInstanceOf(Connection::class, $foo_connection);
+    $this->assertTrue($foo_connection->supportsTransactions());
+  }
+
+  /**
    * Ensure that you cannot execute multiple statements on MySQL.
    */
   public function testMultipleStatementsForNewPhp() {
@@ -128,52 +144,17 @@ class ConnectionTest extends DatabaseTestBase {
       $this->markTestSkipped("This test only runs for MySQL");
     }
 
-    $db = Database::getConnection('default', 'default');
     // Disable the protection at the PHP level.
-    try {
-      $db->query('SELECT * FROM {test}; SELECT * FROM {test_people}',
-        [],
-        ['allow_delimiter_in_query' => TRUE]
-      );
-      $this->fail('No PDO exception thrown for multiple statements.');
-    }
-    catch (DatabaseExceptionWrapper $e) {
-      $this->pass('PDO exception thrown for multiple statements.');
-    }
+    $this->expectException(DatabaseExceptionWrapper::class);
+    Database::getConnection('default', 'default')->query('SELECT * FROM {test}; SELECT * FROM {test_people}', [], ['allow_delimiter_in_query' => TRUE]);
   }
 
   /**
    * Ensure that you cannot execute multiple statements.
    */
   public function testMultipleStatements() {
-
-    $db = Database::getConnection('default', 'default');
-    try {
-      $db->query('SELECT * FROM {test}; SELECT * FROM {test_people}');
-      $this->fail('No exception thrown for multiple statements.');
-    }
-    catch (\InvalidArgumentException $e) {
-      $this->pass('Exception thrown for multiple statements.');
-    }
-  }
-
-  /**
-   * Test the escapeTable(), escapeField() and escapeAlias() methods with all possible reserved words in PostgreSQL.
-   */
-  public function testPostgresqlReservedWords() {
-    if (Database::getConnection()->databaseType() !== 'pgsql') {
-      $this->markTestSkipped("This test only runs for PostgreSQL");
-    }
-
-    $db = Database::getConnection('default', 'default');
-    $stmt = $db->query("SELECT word FROM pg_get_keywords() WHERE catcode IN ('R', 'T')");
-    $stmt->execute();
-    foreach ($stmt->fetchAllAssoc('word') as $word => $row) {
-      $expected = '"' . $word . '"';
-      $this->assertIdentical($db->escapeTable($word), $expected, new FormattableMarkup('The reserved word %word was correctly escaped when used as a table name.', ['%word' => $word]));
-      $this->assertIdentical($db->escapeField($word), $expected, new FormattableMarkup('The reserved word %word was correctly escaped when used as a column name.', ['%word' => $word]));
-      $this->assertIdentical($db->escapeAlias($word), $expected, new FormattableMarkup('The reserved word %word was correctly escaped when used as an alias.', ['%word' => $word]));
-    }
+    $this->expectException(\InvalidArgumentException::class);
+    Database::getConnection('default', 'default')->query('SELECT * FROM {test}; SELECT * FROM {test_people}');
   }
 
   /**

@@ -16,12 +16,12 @@ class MigrateCommentFieldTest extends MigrateDrupal7TestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['node', 'comment', 'text'];
+  protected static $modules = ['node', 'comment', 'text'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
     $this->migrateCommentTypes();
     $this->executeMigration('d7_comment_field');
@@ -51,6 +51,7 @@ class MigrateCommentFieldTest extends MigrateDrupal7TestBase {
     $this->assertEntity('comment_node_book');
     $this->assertEntity('comment_forum');
     $this->assertEntity('comment_node_test_content_type');
+    $this->assertEntity('comment_node_et');
   }
 
 }

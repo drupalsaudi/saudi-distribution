@@ -13,7 +13,7 @@ class StatusReport extends RenderElement {
    * {@inheritdoc}
    */
   public function getInfo() {
-    $class = get_class($this);
+    $class = static::class;
     return [
       '#theme' => 'status_report_grouped',
       '#priorities' => [
@@ -52,7 +52,7 @@ class StatusReport extends RenderElement {
     // Order the grouped requirements by a set order.
     $order = array_flip($element['#priorities']);
     uksort($grouped_requirements, function ($a, $b) use ($order) {
-      return $order[$a] > $order[$b];
+      return $order[$a] <=> $order[$b];
     });
 
     $element['#grouped_requirements'] = $grouped_requirements;

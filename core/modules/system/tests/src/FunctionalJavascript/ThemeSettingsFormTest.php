@@ -18,7 +18,7 @@ class ThemeSettingsFormTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['file'];
+  protected static $modules = ['file'];
 
   /**
    * {@inheritdoc}
@@ -28,7 +28,7 @@ class ThemeSettingsFormTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $admin = $this->drupalCreateUser(['administer themes']);
@@ -56,7 +56,7 @@ class ThemeSettingsFormTest extends WebDriverTestBase {
     $assert_session->waitForButton('custom_logo_remove_button');
 
     // Assert the new file is uploaded as temporary. This file should not be
-    // saved as permanent if settings are not submited.
+    // saved as permanent if settings are not submitted.
     $image_field = $this->xpath('//input[@name="custom_logo[fids]"]')[0];
     $file = File::load($image_field->getValue());
     $this->assertFalse($file->isPermanent());

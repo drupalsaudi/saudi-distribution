@@ -18,7 +18,7 @@ class ConfigLanguageOverrideWebTest extends BrowserTestBase {
    *
    * @var array
    */
-  public static $modules = [
+  protected static $modules = [
     'block',
     'language',
     'system',
@@ -32,7 +32,7 @@ class ConfigLanguageOverrideWebTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
   }
 
@@ -55,7 +55,7 @@ class ConfigLanguageOverrideWebTest extends BrowserTestBase {
       'label' => $name,
       'direction' => LanguageInterface::DIRECTION_LTR,
     ];
-    $this->drupalPostForm('admin/config/regional/language/add', $edit, t('Add custom language'));
+    $this->drupalPostForm('admin/config/regional/language/add', $edit, 'Add custom language');
     \Drupal::languageManager()
       ->getLanguageConfigOverride($langcode, 'system.site')
       ->set('name', 'XX site name')

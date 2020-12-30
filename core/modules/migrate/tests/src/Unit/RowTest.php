@@ -116,7 +116,7 @@ class RowTest extends UnitTestCase {
       'title' => 'node X',
     ];
     $this->expectException(\Exception::class);
-    $row = new Row($invalid_values, $this->testSourceIds);
+    new Row($invalid_values, $this->testSourceIds);
   }
 
   /**
@@ -366,7 +366,7 @@ class RowTest extends UnitTestCase {
    */
   public function testGetMultiple(array $keys, array $expected_values) {
     $row = $this->createRowWithDestinationProperties($this->testGetSourceProperties, $this->testGetSourceIds, $this->testGetDestinationProperties);
-    $this->assertArrayEquals(array_combine($keys, $expected_values), $row->getMultiple($keys));
+    $this->assertEquals(array_combine($keys, $expected_values), $row->getMultiple($keys));
   }
 
   /**
@@ -405,15 +405,15 @@ class RowTest extends UnitTestCase {
           'destination_value_3',
         ],
       ],
-      'Mix of keys including non-existant' => [
+      'Mix of keys including non-existent' => [
         'keys' => [
           'shared_key_1',
           '@shared_key_1',
           '@@shared_key_2',
           '@@@shared_key_2',
           '@@@@@@@@@shared_key_3',
-          'non_existant_source_key',
-          '@non_existant_destination_key',
+          'non_existent_source_key',
+          '@non_existent_destination_key',
         ],
         'values' => [
           'source_shared_value_1',

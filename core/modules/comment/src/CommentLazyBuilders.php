@@ -3,7 +3,6 @@
 namespace Drupal\comment;
 
 use Drupal\comment\Plugin\Field\FieldType\CommentItemInterface;
-use Drupal\Core\DependencyInjection\DeprecatedServicePropertyTrait;
 use Drupal\Core\Entity\EntityFormBuilderInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -18,12 +17,6 @@ use Drupal\Core\Url;
  * Defines a service for comment #lazy_builder callbacks.
  */
 class CommentLazyBuilders implements TrustedCallbackInterface {
-  use DeprecatedServicePropertyTrait;
-
-  /**
-   * {@inheritdoc}
-   */
-  protected $deprecatedProperties = ['entityManager' => 'entity.manager'];
 
   /**
    * The entity type manager service.
@@ -144,9 +137,9 @@ class CommentLazyBuilders implements TrustedCallbackInterface {
     if (!$is_in_preview) {
       /** @var \Drupal\comment\CommentInterface $entity */
       $entity = $this->entityTypeManager->getStorage('comment')->load($comment_entity_id);
-      $commented_entity = $entity->getCommentedEntity();
-
-      $links['comment'] = $this->buildLinks($entity, $commented_entity);
+      if ($commented_entity = $entity->getCommentedEntity()) {
+        $links['comment'] = $this->buildLinks($entity, $commented_entity);
+      }
 
       // Allow other modules to alter the comment links.
       $hook_context = [

@@ -18,13 +18,13 @@ class ModuleHandlerTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['system'];
+  protected static $modules = ['system'];
 
   /**
    * The basic functionality of retrieving enabled modules.
    */
   public function testModuleList() {
-    $module_list = ['path_alias', 'system'];
+    $module_list = ['system'];
 
     $this->assertModuleList($module_list, 'Initial');
 
@@ -96,7 +96,7 @@ class ModuleHandlerTest extends KernelTestBase {
       $this->fail('ModuleInstaller::install() throws an exception if dependencies are missing.');
     }
     catch (MissingDependencyException $e) {
-      $this->pass('ModuleInstaller::install() throws an exception if dependencies are missing.');
+      // Expected exception; just continue testing.
     }
 
     $this->assertFalse($this->moduleHandler()->moduleExists('color'), 'ModuleInstaller::install() aborts if dependencies are missing.');
@@ -109,13 +109,14 @@ class ModuleHandlerTest extends KernelTestBase {
     $this->assertTrue($result, 'ModuleInstaller::install() returns the correct value.');
 
     // Verify that the fake dependency chain was installed.
-    $this->assertTrue($this->moduleHandler()->moduleExists('config') && $this->moduleHandler()->moduleExists('help'), 'Dependency chain was installed.');
+    $this->assertTrue($this->moduleHandler()->moduleExists('config'));
+    $this->assertTrue($this->moduleHandler()->moduleExists('help'));
 
     // Verify that the original module was installed.
     $this->assertTrue($this->moduleHandler()->moduleExists('color'), 'Module installation with dependencies succeeded.');
 
     // Verify that the modules were enabled in the correct order.
-    $module_order = \Drupal::state()->get('module_test.install_order') ?: [];
+    $module_order = \Drupal::state()->get('module_test.install_order', []);
     $this->assertEqual($module_order, ['help', 'config', 'color']);
 
     // Uninstall all three modules explicitly, but in the incorrect order,
@@ -127,7 +128,7 @@ class ModuleHandlerTest extends KernelTestBase {
     foreach (['color', 'config', 'help'] as $module) {
       $this->assertEqual(drupal_get_installed_schema_version($module), SCHEMA_UNINSTALLED, "$module module was uninstalled.");
     }
-    $uninstalled_modules = \Drupal::state()->get('module_test.uninstall_order') ?: [];
+    $uninstalled_modules = \Drupal::state()->get('module_test.uninstall_order', []);
     $this->assertEqual($uninstalled_modules, ['color', 'config', 'help'], 'Modules were uninstalled in the correct order.');
 
     // Enable Color module again, which should enable both the Config module and
@@ -140,52 +141,15 @@ class ModuleHandlerTest extends KernelTestBase {
     $this->assertTrue($result, 'ModuleInstaller::install() returns the correct value.');
 
     // Verify that the fake dependency chain was installed.
-    $this->assertTrue($this->moduleHandler()->moduleExists('config') && $this->moduleHandler()->moduleExists('help'), 'Dependency chain was installed.');
+    $this->assertTrue($this->moduleHandler()->moduleExists('config'));
+    $this->assertTrue($this->moduleHandler()->moduleExists('help'));
 
     // Verify that the original module was installed.
     $this->assertTrue($this->moduleHandler()->moduleExists('color'), 'Module installation with version dependencies succeeded.');
 
     // Finally, verify that the modules were enabled in the correct order.
-    $enable_order = \Drupal::state()->get('module_test.install_order') ?: [];
+    $enable_order = \Drupal::state()->get('module_test.install_order', []);
     $this->assertIdentical($enable_order, ['help', 'config', 'color']);
-  }
-
-  /**
-   * Tests uninstalling a module that is a "dependency" of a profile.
-   *
-   * Note this test does not trigger the deprecation error because of static
-   * caching in \Drupal\Core\Extension\InfoParser::parse().
-   *
-   * @group legacy
-   */
-  public function testUninstallProfileDependencyBC() {
-    $profile = 'testing_install_profile_dependencies_bc';
-    $dependency = 'dblog';
-    $this->setInstallProfile($profile);
-    // Prime the drupal_get_filename() static cache with the location of the
-    // testing profile as it is not the currently active profile and we don't
-    // yet have any cached way to retrieve its location.
-    // @todo Remove as part of https://www.drupal.org/node/2186491
-    drupal_get_filename('profile', $profile, 'core/profiles/' . $profile . '/' . $profile . '.info.yml');
-    $this->enableModules(['module_test', $profile]);
-
-    $data = \Drupal::service('extension.list.module')->getList();
-    $this->assertFalse(isset($data[$profile]->requires[$dependency]));
-    $this->assertContains($dependency, $data[$profile]->info['install']);
-
-    $this->moduleInstaller()->install([$dependency]);
-    $this->assertTrue($this->moduleHandler()->moduleExists($dependency));
-
-    // Uninstall the profile module "dependency".
-    $result = $this->moduleInstaller()->uninstall([$dependency]);
-    $this->assertTrue($result, 'ModuleInstaller::uninstall() returns TRUE.');
-    $this->assertFalse($this->moduleHandler()->moduleExists($dependency));
-    $this->assertEqual(drupal_get_installed_schema_version($dependency), SCHEMA_UNINSTALLED, "$dependency module was uninstalled.");
-
-    // Verify that the installation profile itself was not uninstalled.
-    $uninstalled_modules = \Drupal::state()->get('module_test.uninstall_order') ?: [];
-    $this->assertTrue(in_array($dependency, $uninstalled_modules), "$dependency module is in the list of uninstalled modules.");
-    $this->assertFalse(in_array($profile, $uninstalled_modules), 'The installation profile is not in the list of uninstalled modules.');
   }
 
   /**
@@ -218,7 +182,7 @@ class ModuleHandlerTest extends KernelTestBase {
     $this->assertEquals(drupal_get_installed_schema_version($non_dependency), SCHEMA_UNINSTALLED, "$non_dependency module was uninstalled.");
 
     // Verify that the installation profile itself was not uninstalled.
-    $uninstalled_modules = \Drupal::state()->get('module_test.uninstall_order') ?: [];
+    $uninstalled_modules = \Drupal::state()->get('module_test.uninstall_order', []);
     $this->assertContains($non_dependency, $uninstalled_modules, "$non_dependency module is in the list of uninstalled modules.");
     $this->assertNotContains($profile, $uninstalled_modules, 'The installation profile is not in the list of uninstalled modules.');
 
@@ -229,7 +193,7 @@ class ModuleHandlerTest extends KernelTestBase {
   }
 
   /**
-   * Tests that a profile can supply only real dependencies
+   * Tests that a profile can supply only real dependencies.
    */
   public function testProfileAllDependencies() {
     $profile = 'testing_install_profile_all_dependencies';
@@ -292,7 +256,7 @@ class ModuleHandlerTest extends KernelTestBase {
       $this->fail($message);
     }
     catch (ModuleUninstallValidatorException $e) {
-      $this->pass(get_class($e) . ': ' . $e->getMessage());
+      // Expected exception; just continue testing.
     }
 
     // Uninstalling help needs entity_test to be un-installable.
@@ -302,7 +266,7 @@ class ModuleHandlerTest extends KernelTestBase {
       $this->fail($message);
     }
     catch (ModuleUninstallValidatorException $e) {
-      $this->pass(get_class($e) . ': ' . $e->getMessage());
+      // Expected exception; just continue testing.
     }
 
     // Deleting the entity.

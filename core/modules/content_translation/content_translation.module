@@ -9,6 +9,7 @@ use Drupal\Core\Url;
 use Drupal\content_translation\BundleTranslationSettingsInterface;
 use Drupal\content_translation\ContentTranslationManager;
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Entity\ContentEntityFormInterface;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityInterface;
@@ -374,7 +375,8 @@ function content_translation_translate_access(EntityInterface $entity) {
   $account = \Drupal::currentUser();
   $condition = $entity instanceof ContentEntityInterface && $entity->access('view') &&
     !$entity->getUntranslated()->language()->isLocked() && \Drupal::languageManager()->isMultilingual() && $entity->isTranslatable() &&
-    ($account->hasPermission('create content translations') || $account->hasPermission('update content translations') || $account->hasPermission('delete content translations'));
+    ($account->hasPermission('create content translations') || $account->hasPermission('update content translations') || $account->hasPermission('delete content translations') ||
+    ($account->hasPermission('translate editable entities') && $entity->access('update')));
   return AccessResult::allowedIf($condition)->cachePerPermissions()->addCacheableDependency($entity);
 }
 
@@ -434,14 +436,23 @@ function content_translation_language_fallback_candidates_entity_view_alter(&$ca
   /** @var \Drupal\content_translation\ContentTranslationManagerInterface $manager */
   $manager = \Drupal::service('content_translation.manager');
   if ($manager->isEnabled($entity_type_id, $entity->bundle())) {
-    $entity_type = $entity->getEntityType();
-    $permission = $entity_type->getPermissionGranularity() == 'bundle' ? $permission = "translate {$entity->bundle()} $entity_type_id" : "translate $entity_type_id";
-    $current_user = \Drupal::currentuser();
-    if (!$current_user->hasPermission('translate any entity') && !$current_user->hasPermission($permission)) {
-      foreach ($entity->getTranslationLanguages() as $langcode => $language) {
-        $metadata = $manager->getTranslationMetadata($entity->getTranslation($langcode));
-        if (!$metadata->isPublished()) {
-          unset($candidates[$langcode]);
+    /* @var \Drupal\content_translation\ContentTranslationHandlerInterface $handler */
+    $handler = \Drupal::entityTypeManager()->getHandler($entity->getEntityTypeId(), 'translation');
+    foreach ($entity->getTranslationLanguages() as $langcode => $language) {
+      $metadata = $manager->getTranslationMetadata($entity->getTranslation($langcode));
+      if (!$metadata->isPublished()) {
+        $access = $handler->getTranslationAccess($entity, 'update');
+        $entity->addCacheableDependency($access);
+        if (!$access->isAllowed()) {
+
+          // If the user has no translation update access, also check view
+          // access for that translation, to allow other modules to allow access
+          // to unpublished translations.
+          $access = $entity->getTranslation($langcode)->access('view', NULL, TRUE);
+          $entity->addCacheableDependency($access);
+          if (!$access->isAllowed()) {
+            unset($candidates[$langcode]);
+          }
         }
       }
     }
@@ -656,12 +667,14 @@ function content_translation_preprocess_language_content_settings_table(&$variab
  * Implements hook_page_attachments().
  */
 function content_translation_page_attachments(&$page) {
+  $cache = CacheableMetadata::createFromRenderArray($page);
   $route_match = \Drupal::routeMatch();
 
   // If the current route has no parameters, return.
   if (!($route = $route_match->getRouteObject()) || !($parameters = $route->getOption('parameters'))) {
     return;
   }
+  $is_front = \Drupal::service('path.matcher')->isFrontPage();
 
   // Determine if the current route represents an entity.
   foreach ($parameters as $name => $options) {
@@ -673,10 +686,28 @@ function content_translation_page_attachments(&$page) {
     if ($entity instanceof ContentEntityInterface && $entity->hasLinkTemplate('canonical')) {
       // Current route represents a content entity. Build hreflang links.
       foreach ($entity->getTranslationLanguages() as $language) {
-        $url = $entity->toUrl('canonical')
-          ->setOption('language', $language)
-          ->setAbsolute()
-          ->toString();
+        // Skip any translation that cannot be viewed.
+        $translation = $entity->getTranslation($language->getId());
+        $access = $translation->access('view', NULL, TRUE);
+        $cache->addCacheableDependency($access);
+        if (!$access->isAllowed()) {
+          continue;
+        }
+        if ($is_front) {
+          // If the current page is front page, do not create hreflang links
+          // from the entity route, just add the languages to root path.
+          $url = Url::fromRoute('<front>', [], [
+            'absolute' => TRUE,
+            'language' => $language,
+          ])->toString();
+        }
+        // Create links for the entity path.
+        else {
+          $url = $entity->toUrl('canonical')
+            ->setOption('language', $language)
+            ->setAbsolute()
+            ->toString();
+        }
         $page['#attached']['html_head_link'][] = [
           [
             'rel' => 'alternate',
@@ -688,6 +719,8 @@ function content_translation_page_attachments(&$page) {
       }
     }
     // Since entity was found, no need to iterate further.
-    return;
+    break;
   }
+  // Apply updated caching information.
+  $cache->applyTo($page);
 }

@@ -17,7 +17,7 @@ class MigrateShortcutSetUsersTest extends MigrateDrupal7TestBase {
    *
    * @var array
    */
-  public static $modules = [
+  protected static $modules = [
     'link',
     'field',
     'shortcut',
@@ -27,12 +27,11 @@ class MigrateShortcutSetUsersTest extends MigrateDrupal7TestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
     $this->installEntitySchema('shortcut');
     $this->installEntitySchema('menu_link_content');
     $this->installSchema('shortcut', ['shortcut_set_users']);
-    \Drupal::service('router.builder')->rebuild();
     $this->migrateUsers(FALSE);
     $this->executeMigration('d7_shortcut_set');
     $this->executeMigration('d7_menu');

@@ -33,9 +33,9 @@ class ConfigImporterTest extends KernelTestBase {
    *
    * @var array
    */
-  public static $modules = ['config_test', 'system', 'config_import_test'];
+  protected static $modules = ['config_test', 'system', 'config_import_test'];
 
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->installConfig(['system', 'config_test']);
@@ -84,14 +84,9 @@ class ConfigImporterTest extends KernelTestBase {
    * fails.
    */
   public function testEmptyImportFails() {
-    try {
-      $this->container->get('config.storage.sync')->deleteAll();
-      $this->configImporter->reset()->import();
-      $this->fail('ConfigImporterException thrown, successfully stopping an empty import.');
-    }
-    catch (ConfigImporterException $e) {
-      $this->pass('ConfigImporterException thrown, successfully stopping an empty import.');
-    }
+    $this->expectException(ConfigImporterException::class);
+    $this->container->get('config.storage.sync')->deleteAll();
+    $this->configImporter->reset()->import();
   }
 
   /**
@@ -142,7 +137,7 @@ class ConfigImporterTest extends KernelTestBase {
     $this->configImporter->reset()->import();
 
     // Verify the file has been removed.
-    $this->assertIdentical($storage->read($dynamic_name), FALSE);
+    $this->assertFalse($storage->read($dynamic_name));
 
     $config = $this->config($dynamic_name);
     $this->assertIdentical($config->get('id'), NULL);
@@ -169,7 +164,7 @@ class ConfigImporterTest extends KernelTestBase {
     $sync = $this->container->get('config.storage.sync');
 
     // Verify the configuration to create does not exist yet.
-    $this->assertIdentical($storage->exists($dynamic_name), FALSE, $dynamic_name . ' not found.');
+    $this->assertFalse($storage->exists($dynamic_name), $dynamic_name . ' not found.');
 
     // Create new config entity.
     $original_dynamic_data = [
@@ -187,7 +182,7 @@ class ConfigImporterTest extends KernelTestBase {
     ];
     $sync->write($dynamic_name, $original_dynamic_data);
 
-    $this->assertIdentical($sync->exists($dynamic_name), TRUE, $dynamic_name . ' found.');
+    $this->assertTrue($sync->exists($dynamic_name), $dynamic_name . ' found.');
 
     // Import.
     $this->configImporter->reset()->import();
@@ -490,8 +485,8 @@ class ConfigImporterTest extends KernelTestBase {
     $sync = $this->container->get('config.storage.sync');
 
     // Verify that the configuration objects to import exist.
-    $this->assertIdentical($storage->exists($name), TRUE, $name . ' found.');
-    $this->assertIdentical($storage->exists($dynamic_name), TRUE, $dynamic_name . ' found.');
+    $this->assertTrue($storage->exists($name), $name . ' found.');
+    $this->assertTrue($storage->exists($dynamic_name), $dynamic_name . ' found.');
 
     // Replace the file content of the existing configuration objects in the
     // sync directory.
@@ -584,7 +579,7 @@ class ConfigImporterTest extends KernelTestBase {
     $extensions['theme']['unknown_theme'] = 0;
     // Add a module and a theme that depend on uninstalled extensions.
     $extensions['module']['book'] = 0;
-    $extensions['theme']['bartik'] = 0;
+    $extensions['theme']['test_subtheme'] = 0;
 
     $sync->write('core.extension', $extensions);
     try {
@@ -597,8 +592,7 @@ class ConfigImporterTest extends KernelTestBase {
         'Unable to install the <em class="placeholder">unknown_module</em> module since it does not exist.',
         'Unable to install the <em class="placeholder">Book</em> module since it requires the <em class="placeholder">Node, Text, Field, Filter, User</em> modules.',
         'Unable to install the <em class="placeholder">unknown_theme</em> theme since it does not exist.',
-        'Unable to install the <em class="placeholder">Bartik</em> theme since it requires the <em class="placeholder">Classy</em> theme.',
-        'Unable to install the <em class="placeholder">Bartik</em> theme since it requires the <em class="placeholder">Stable</em> theme.',
+        'Unable to install the <em class="placeholder">Theme test subtheme</em> theme since it requires the <em class="placeholder">Theme test base theme</em> theme.',
         'Configuration <em class="placeholder">config_test.dynamic.dotted.config</em> depends on the <em class="placeholder">unknown</em> configuration that will not exist after import.',
         'Configuration <em class="placeholder">config_test.dynamic.dotted.existing</em> depends on the <em class="placeholder">config_test.dynamic.dotted.deleted</em> configuration that will not exist after import.',
         'Configuration <em class="placeholder">config_test.dynamic.dotted.module</em> depends on the <em class="placeholder">unknown</em> module that will not be installed after import.',
@@ -611,7 +605,6 @@ class ConfigImporterTest extends KernelTestBase {
         'Unable to install the <em class="placeholder">unknown_module</em> module since it does not exist.',
         'Unable to install the <em class="placeholder">Book</em> module since it requires the <em class="placeholder">Node, Text, Field, Filter, User</em> modules.',
         'Unable to install the <em class="placeholder">unknown_theme</em> theme since it does not exist.',
-        'Unable to install the <em class="placeholder">Bartik</em> theme since it requires the <em class="placeholder">Classy</em> theme.',
         'Configuration <em class="placeholder">config_test.dynamic.dotted.config</em> depends on the <em class="placeholder">unknown</em> configuration that will not exist after import.',
         'Configuration <em class="placeholder">config_test.dynamic.dotted.existing</em> depends on the <em class="placeholder">config_test.dynamic.dotted.deleted</em> configuration that will not exist after import.',
         'Configuration <em class="placeholder">config_test.dynamic.dotted.module</em> depends on the <em class="placeholder">unknown</em> module that will not be installed after import.',
@@ -619,7 +612,7 @@ class ConfigImporterTest extends KernelTestBase {
         'Configuration <em class="placeholder">unknown.config</em> depends on the <em class="placeholder">unknown</em> extension that will not be installed after import.',
       ];
       foreach ($expected as $expected_message) {
-        $this->assertContains($expected_message, $error_log, $expected_message);
+        $this->assertContainsEquals($expected_message, $error_log, $expected_message);
       }
     }
 
@@ -641,8 +634,7 @@ class ConfigImporterTest extends KernelTestBase {
         'Unable to install the <em class="placeholder">unknown_module</em> module since it does not exist.',
         'Unable to install the <em class="placeholder">Book</em> module since it requires the <em class="placeholder">Node, Text, Field, Filter, User</em> modules.',
         'Unable to install the <em class="placeholder">unknown_theme</em> theme since it does not exist.',
-        'Unable to install the <em class="placeholder">Bartik</em> theme since it requires the <em class="placeholder">Classy</em> theme.',
-        'Unable to install the <em class="placeholder">Bartik</em> theme since it requires the <em class="placeholder">Stable</em> theme.',
+        'Unable to install the <em class="placeholder">Theme test subtheme</em> theme since it requires the <em class="placeholder">Theme test base theme</em> theme.',
         'Configuration <em class="placeholder">config_test.dynamic.dotted.config</em> depends on the <em class="placeholder">unknown</em> configuration that will not exist after import.',
         'Configuration <em class="placeholder">config_test.dynamic.dotted.existing</em> depends on the <em class="placeholder">config_test.dynamic.dotted.deleted</em> configuration that will not exist after import.',
         'Configuration <em class="placeholder">config_test.dynamic.dotted.module</em> depends on the <em class="placeholder">unknown</em> module that will not be installed after import.',
@@ -651,8 +643,7 @@ class ConfigImporterTest extends KernelTestBase {
         'Unable to install the <em class="placeholder">unknown_module</em> module since it does not exist.',
         'Unable to install the <em class="placeholder">Book</em> module since it requires the <em class="placeholder">Node, Text, Field, Filter, User</em> modules.',
         'Unable to install the <em class="placeholder">unknown_theme</em> theme since it does not exist.',
-        'Unable to install the <em class="placeholder">Bartik</em> theme since it requires the <em class="placeholder">Classy</em> theme.',
-        'Unable to install the <em class="placeholder">Bartik</em> theme since it requires the <em class="placeholder">Stable</em> theme.',
+        'Unable to install the <em class="placeholder">Theme test subtheme</em> theme since it requires the <em class="placeholder">Theme test base theme</em> theme.',
         'Configuration <em class="placeholder">config_test.dynamic.dotted.config</em> depends on configuration (<em class="placeholder">unknown, unknown2</em>) that will not exist after import.',
         'Configuration <em class="placeholder">config_test.dynamic.dotted.existing</em> depends on the <em class="placeholder">config_test.dynamic.dotted.deleted</em> configuration that will not exist after import.',
         'Configuration <em class="placeholder">config_test.dynamic.dotted.module</em> depends on modules (<em class="placeholder">unknown, Database Logging</em>) that will not be installed after import.',
@@ -667,7 +658,7 @@ class ConfigImporterTest extends KernelTestBase {
         'Configuration <em class="placeholder">config_test.dynamic.dotted.theme</em> depends on themes (<em class="placeholder">unknown, Seven</em>) that will not be installed after import.',
       ];
       foreach ($expected as $expected_message) {
-        $this->assertContains($expected_message, $error_log, $expected_message);
+        $this->assertContainsEquals($expected_message, $error_log, $expected_message);
       }
     }
   }
@@ -748,27 +739,6 @@ class ConfigImporterTest extends KernelTestBase {
   }
 
   /**
-   * Tests config_get_config_directory().
-   *
-   * @group legacy
-   * @expectedDeprecation config_get_config_directory() is deprecated in drupal:8.8.0 and is removed from drupal:9.0.0. Use \Drupal\Core\Site\Settings::get('config_sync_directory') instead. See https://www.drupal.org/node/3018145
-   */
-  public function testConfigGetConfigDirectory() {
-    global $config_directories;
-    // Ensure the global and the setting matches.
-    $this->assertSame(config_get_config_directory(CONFIG_SYNC_DIRECTORY), $config_directories[CONFIG_SYNC_DIRECTORY]);
-
-    $message = 'Calling config_get_config_directory() with an invalid key results in an exception.';
-    try {
-      config_get_config_directory('does_not_exist');
-      $this->fail($message);
-    }
-    catch (\Exception $e) {
-      $this->pass($message);
-    }
-  }
-
-  /**
    * Tests the isSyncing flags.
    */
   public function testIsSyncingInHooks() {
@@ -834,7 +804,7 @@ class ConfigImporterTest extends KernelTestBase {
       $this->fail('Expected \InvalidArgumentException thrown');
     }
     catch (\InvalidArgumentException $e) {
-      $this->pass('Expected \InvalidArgumentException thrown');
+      // Expected exception; just continue testing.
     }
     $this->assertFalse(\Drupal::isConfigSyncing(), 'After an invalid step \Drupal::isConfigSyncing() returns FALSE');
   }

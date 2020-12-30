@@ -17,7 +17,7 @@ use Drupal\Core\Access\AccessManager;
 use Drupal\Core\Access\DefaultAccessCheck;
 use Drupal\Tests\UnitTestCase;
 use Drupal\router_test\Access\DefinedTestAccessCheck;
-use Symfony\Cmf\Component\Routing\RouteObjectInterface;
+use Drupal\Core\Routing\RouteObjectInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\Routing\Route;
@@ -91,7 +91,7 @@ class AccessManagerTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->container = new ContainerBuilder();
@@ -374,7 +374,6 @@ class AccessManagerTest extends UnitTestCase {
       ->with('test_route_1')
       ->will($this->returnValue($route));
 
-    $map = [];
     $map[] = ['test_route_1', ['value' => 'example'], '/test-route-1/example'];
 
     $this->paramConverter = $this->createMock('Drupal\Core\ParamConverter\ParamConverterManagerInterface');
@@ -423,7 +422,6 @@ class AccessManagerTest extends UnitTestCase {
       ->with('test_route_1')
       ->will($this->returnValue($route));
 
-    $map = [];
     $map[] = ['test_route_1', ['value' => 'example'], '/test-route-1/example'];
 
     $this->paramConverter = $this->createMock('Drupal\Core\ParamConverter\ParamConverterManagerInterface');

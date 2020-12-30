@@ -22,7 +22,7 @@ class FieldSqlStorageTest extends EntityKernelTestBase {
    *
    * @var array
    */
-  public static $modules = ['field', 'field_test', 'text', 'entity_test'];
+  protected static $modules = ['field', 'field_test', 'text', 'entity_test'];
 
   /**
    * The name of the created field.
@@ -71,7 +71,7 @@ class FieldSqlStorageTest extends EntityKernelTestBase {
    */
   protected $tableMapping;
 
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->installEntitySchema('entity_test_rev');
@@ -196,7 +196,7 @@ class FieldSqlStorageTest extends EntityKernelTestBase {
     $connection = Database::getConnection();
     // Read the tables and check the correct values have been stored.
     $rows = $connection->select($this->table, 't')->fields('t')->execute()->fetchAllAssoc('delta', \PDO::FETCH_ASSOC);
-    $this->assertEqual(count($rows), $this->fieldCardinality);
+    $this->assertCount($this->fieldCardinality, $rows);
     foreach ($rows as $delta => $row) {
       $expected = [
         'bundle' => $bundle,
@@ -216,10 +216,11 @@ class FieldSqlStorageTest extends EntityKernelTestBase {
     for ($delta = 0; $delta <= $this->fieldCardinality - 2; $delta++) {
       $values[$delta]['value'] = mt_rand(1, 127);
     }
+    $values_count = count($values);
     $entity->{$this->fieldName} = $values;
     $entity->save();
     $rows = $connection->select($this->table, 't')->fields('t')->execute()->fetchAllAssoc('delta', \PDO::FETCH_ASSOC);
-    $this->assertEqual(count($rows), count($values));
+    $this->assertCount($values_count, $rows);
     foreach ($rows as $delta => $row) {
       $expected = [
         'bundle' => $bundle,
@@ -247,7 +248,7 @@ class FieldSqlStorageTest extends EntityKernelTestBase {
     // Check that data for both revisions are in the revision table.
     foreach ($revision_values as $revision_id => $values) {
       $rows = $connection->select($this->revisionTable, 't')->fields('t')->condition('revision_id', $revision_id)->execute()->fetchAllAssoc('delta', \PDO::FETCH_ASSOC);
-      $this->assertEqual(count($rows), min(count($values), $this->fieldCardinality));
+      $this->assertCount(min(count($values), $this->fieldCardinality), $rows);
       foreach ($rows as $delta => $row) {
         $expected = [
           'bundle' => $bundle,
@@ -274,8 +275,8 @@ class FieldSqlStorageTest extends EntityKernelTestBase {
    */
   public function testLongNames() {
     // Use one of the longest entity_type names in core.
-    $entity_type = $bundle = 'entity_test_label_callback';
-    $this->installEntitySchema('entity_test_label_callback');
+    $entity_type = $bundle = 'entity_test_multivalue_basefield';
+    $this->installEntitySchema('entity_test_multivalue_basefield');
     $storage = $this->container->get('entity_type.manager')->getStorage($entity_type);
 
     // Create two fields and generate random values.
@@ -339,13 +340,8 @@ class FieldSqlStorageTest extends EntityKernelTestBase {
 
     // Attempt to update the field in a way that would work without data.
     $field_storage->setSetting('scale', 3);
-    try {
-      $field_storage->save();
-      $this->fail('Cannot update field schema with data.');
-    }
-    catch (FieldStorageDefinitionUpdateForbiddenException $e) {
-      $this->pass('Cannot update field schema with data.');
-    }
+    $this->expectException(FieldStorageDefinitionUpdateForbiddenException::class);
+    $field_storage->save();
   }
 
   /**
@@ -373,7 +369,7 @@ class FieldSqlStorageTest extends EntityKernelTestBase {
       $this->fail('Update succeeded.');
     }
     catch (\Exception $e) {
-      $this->pass('Update properly failed.');
+      // Expected exception; just continue testing.
     }
 
     // Ensure that the field tables are still there.
@@ -383,7 +379,7 @@ class FieldSqlStorageTest extends EntityKernelTestBase {
     ];
     $schema = Database::getConnection()->schema();
     foreach ($tables as $table_name) {
-      $this->assertTrue($schema->tableExists($table_name), t('Table %table exists.', ['%table' => $table_name]));
+      $this->assertTrue($schema->tableExists($table_name), 'Table $table_name exists.');
     }
   }
 
@@ -409,8 +405,8 @@ class FieldSqlStorageTest extends EntityKernelTestBase {
 
     // Verify the indexes we will create do not exist yet.
     foreach ($tables as $table) {
-      $this->assertFalse(Database::getConnection()->schema()->indexExists($table, 'value'), t("No index named value exists in @table", ['@table' => $table]));
-      $this->assertFalse(Database::getConnection()->schema()->indexExists($table, 'value_format'), t("No index named value_format exists in @table", ['@table' => $table]));
+      $this->assertFalse(Database::getConnection()->schema()->indexExists($table, 'value'), 'No index named value exists in $table');
+      $this->assertFalse(Database::getConnection()->schema()->indexExists($table, 'value_format'), 'No index named value_format exists in $table');
     }
 
     // Add data so the table cannot be dropped.
@@ -428,15 +424,15 @@ class FieldSqlStorageTest extends EntityKernelTestBase {
     $field_storage->setIndexes(['value' => [['value', 255]]]);
     $field_storage->save();
     foreach ($tables as $table) {
-      $this->assertTrue(Database::getConnection()->schema()->indexExists($table, "{$field_name}_value"), t("Index on value created in @table", ['@table' => $table]));
+      $this->assertTrue(Database::getConnection()->schema()->indexExists($table, "{$field_name}_value"), "Index on value created in @table", ['@table' => $table]);
     }
 
     // Add a different index, removing the existing custom one.
     $field_storage->setIndexes(['value_format' => [['value', 127], ['format', 127]]]);
     $field_storage->save();
     foreach ($tables as $table) {
-      $this->assertTrue(Database::getConnection()->schema()->indexExists($table, "{$field_name}_value_format"), t("Index on value_format created in @table", ['@table' => $table]));
-      $this->assertFalse(Database::getConnection()->schema()->indexExists($table, "{$field_name}_value"), t("Index on value removed in @table", ['@table' => $table]));
+      $this->assertTrue(Database::getConnection()->schema()->indexExists($table, "{$field_name}_value_format"), "Index on value_format created in @table", ['@table' => $table]);
+      $this->assertFalse(Database::getConnection()->schema()->indexExists($table, "{$field_name}_value"), "Index on value removed in @table", ['@table' => $table]);
     }
 
     // Verify that the tables were not dropped in the process.

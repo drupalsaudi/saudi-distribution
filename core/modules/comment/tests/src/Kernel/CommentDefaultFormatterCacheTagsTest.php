@@ -26,12 +26,12 @@ class CommentDefaultFormatterCacheTagsTest extends EntityKernelTestBase {
    *
    * @var array
    */
-  public static $modules = ['entity_test', 'comment'];
+  protected static $modules = ['entity_test', 'comment'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $session = new Session();
@@ -53,9 +53,6 @@ class CommentDefaultFormatterCacheTagsTest extends EntityKernelTestBase {
     // Install tables and config needed to render comments.
     $this->installSchema('comment', ['comment_entity_statistics']);
     $this->installConfig(['system', 'filter', 'comment']);
-
-    // Comment rendering generates links, so build the router.
-    $this->container->get('router.builder')->rebuild();
 
     // Set up a field, so that the entity that'll be referenced bubbles up a
     // cache tag when rendering it entirely.

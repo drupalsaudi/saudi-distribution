@@ -26,7 +26,7 @@ class ManagedFile extends FormElement {
    * {@inheritdoc}
    */
   public function getInfo() {
-    $class = get_class($this);
+    $class = static::class;
     return [
       '#input' => TRUE,
       '#process' => [
@@ -96,6 +96,10 @@ class ManagedFile extends FormElement {
           foreach ($input['fids'] as $fid) {
             if ($file = File::load($fid)) {
               $fids[] = $file->id();
+              if (!$file->access('download')) {
+                $force_default = TRUE;
+                break;
+              }
               // Temporary files that belong to other users should never be
               // allowed.
               if ($file->isTemporary()) {
@@ -225,7 +229,7 @@ class ManagedFile extends FormElement {
     $ajax_wrapper_id = Html::getUniqueId('ajax-wrapper');
 
     $ajax_settings = [
-      'callback' => [get_called_class(), 'uploadAjaxCallback'],
+      'callback' => [static::class, 'uploadAjaxCallback'],
       'options' => [
         'query' => [
           'element_parents' => implode('/', $element['#array_parents']),

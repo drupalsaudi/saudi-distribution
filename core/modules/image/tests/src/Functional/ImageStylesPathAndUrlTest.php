@@ -26,7 +26,7 @@ class ImageStylesPathAndUrlTest extends BrowserTestBase {
    *
    * @var array
    */
-  public static $modules = ['image', 'image_module_test', 'language'];
+  protected static $modules = ['image', 'image_module_test', 'language'];
 
   /**
    * {@inheritdoc}
@@ -43,7 +43,7 @@ class ImageStylesPathAndUrlTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->style = ImageStyle::create([
@@ -142,7 +142,7 @@ class ImageStylesPathAndUrlTest extends BrowserTestBase {
     // Create the directories for the styles.
     $directory = $scheme . '://styles/' . $this->style->id();
     $status = \Drupal::service('file_system')->prepareDirectory($directory, FileSystemInterface::CREATE_DIRECTORY);
-    $this->assertNotIdentical(FALSE, $status, 'Created the directory for the generated images for the test style.');
+    $this->assertNotFalse($status, 'Created the directory for the generated images for the test style.');
 
     // Override the language to build the URL for the correct language.
     if ($langcode) {
@@ -160,7 +160,7 @@ class ImageStylesPathAndUrlTest extends BrowserTestBase {
     // Let the image_module_test module know about this file, so it can claim
     // ownership in hook_file_download().
     \Drupal::state()->set('image.test_file_download', $original_uri);
-    $this->assertNotIdentical(FALSE, $original_uri, 'Created the generated image file.');
+    $this->assertNotFalse($original_uri, 'Created the generated image file.');
 
     // Get the URL of a file that has not been generated and try to create it.
     $generated_uri = $this->style->buildUri($original_uri);
@@ -207,19 +207,19 @@ class ImageStylesPathAndUrlTest extends BrowserTestBase {
     // assertRaw can't be used with string containing non UTF-8 chars.
     $this->assertNotEmpty(file_get_contents($generated_uri), 'URL returns expected file.');
     $image = $this->container->get('image.factory')->get($generated_uri);
-    $this->assertEqual($this->drupalGetHeader('Content-Type'), $image->getMimeType(), 'Expected Content-Type was reported.');
-    $this->assertEqual($this->drupalGetHeader('Content-Length'), $image->getFileSize(), 'Expected Content-Length was reported.');
+    $this->assertSession()->responseHeaderEquals('Content-Type', $image->getMimeType());
+    $this->assertSession()->responseHeaderEquals('Content-Length', (string) $image->getFileSize());
 
     // Check that we did not download the original file.
     $original_image = $this->container->get('image.factory')
       ->get($original_uri);
-    $this->assertNotEqual($this->drupalGetHeader('Content-Length'), $original_image->getFileSize());
+    $this->assertSession()->responseHeaderNotEquals('Content-Length', (string) $original_image->getFileSize());
 
     if ($scheme == 'private') {
-      $this->assertEqual($this->drupalGetHeader('Expires'), 'Sun, 19 Nov 1978 05:00:00 GMT', 'Expires header was sent.');
+      $this->assertSession()->responseHeaderEquals('Expires', 'Sun, 19 Nov 1978 05:00:00 GMT');
       // Check that Cache-Control header contains 'no-cache' to prevent caching.
       $this->assertSession()->responseHeaderContains('Cache-Control', 'no-cache');
-      $this->assertEqual($this->drupalGetHeader('X-Image-Owned-By'), 'image_module_test', 'Expected custom header has been added.');
+      $this->assertSession()->responseHeaderEquals('X-Image-Owned-By', 'image_module_test');
 
       // Make sure that a second request to the already existing derivative
       // works too.
@@ -227,10 +227,10 @@ class ImageStylesPathAndUrlTest extends BrowserTestBase {
       $this->assertSession()->statusCodeEquals(200);
 
       // Check that the second request also returned the generated image.
-      $this->assertEqual($this->drupalGetHeader('Content-Length'), $image->getFileSize());
+      $this->assertSession()->responseHeaderEquals('Content-Length', (string) $image->getFileSize());
 
       // Check that we did not download the original file.
-      $this->assertNotEqual($this->drupalGetHeader('Content-Length'), $original_image->getFileSize());
+      $this->assertSession()->responseHeaderNotEquals('Content-Length', (string) $original_image->getFileSize());
 
       // Make sure that access is denied for existing style files if we do not
       // have access.
@@ -262,8 +262,8 @@ class ImageStylesPathAndUrlTest extends BrowserTestBase {
       }
     }
     else {
-      $this->assertEqual($this->drupalGetHeader('Expires'), 'Sun, 19 Nov 1978 05:00:00 GMT', 'Expires header was sent.');
-      $this->assertStringNotContainsString('no-cache', $this->drupalGetHeader('Cache-Control'), 'Cache-Control header contains \'no-cache\' to prevent caching.');
+      $this->assertSession()->responseHeaderEquals('Expires', 'Sun, 19 Nov 1978 05:00:00 GMT');
+      $this->assertSession()->responseHeaderNotContains('Cache-Control', 'no-cache');
 
       if ($clean_url) {
         // Add some extra chars to the token.

@@ -28,7 +28,7 @@ class EntityAccessControlHandlerTest extends EntityLanguageTestBase {
   /**
    * {@inheritdoc}
    */
-  public function setUp() {
+  public function setUp(): void {
     parent::setUp();
 
     $this->installEntitySchema('entity_test_no_uuid');
@@ -78,7 +78,7 @@ class EntityAccessControlHandlerTest extends EntityLanguageTestBase {
       'view label' => TRUE,
     ], $user);
 
-    // Switch to a anonymous user account.
+    // Switch to an anonymous user account.
     $account_switcher = \Drupal::service('account_switcher');
     $account_switcher->switchTo(new AnonymousUserSession());
 
@@ -216,7 +216,7 @@ class EntityAccessControlHandlerTest extends EntityLanguageTestBase {
   }
 
   /**
-   * Ensures the static access cache works correctly in the absence of an UUID.
+   * Ensures the static access cache works correctly in the absence of a UUID.
    *
    * @see entity_test_entity_access()
    */

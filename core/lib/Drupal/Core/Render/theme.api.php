@@ -186,7 +186,7 @@
  *   @code
  *   function THEME_page_attachments_alter(array &$page) {
  *     if ($some_condition) {
- *       $page['#attached']['library'][] = 'mytheme/something';
+ *       $page['#attached']['library'][] = 'my_theme/something';
  *     }
  *   }
  *   @endcode
@@ -199,6 +199,15 @@
  *     $variables['#attached']['library'][] = 'core/modernizr';
  *   }
  *   @endcode
+ *
+ * @section front_matter Front Matter
+ * Twig has been extended in Drupal to provide an easy way to parse front
+ * matter from template files. See \Drupal\Component\FrontMatter\FrontMatter
+ * for more information:
+ * @code
+ * $metadata = \Drupal::service('twig')->getTemplateMetadata('/path/to/template.html.twig');
+ * @endcode
+ * Note: all front matter is stripped from templates prior to rendering.
  *
  * @see hooks
  * @see callbacks
@@ -414,13 +423,16 @@
  * render array contained:
  * @code
  * $build['my_element'] = [
- *   '#attached' => ['placeholders' => ['@foo' => 'replacement']],
- *   '#markup' => ['Something about @foo'],
+ *   '#markup' => 'Something about @foo',
+ *   '#attached' => [
+ *     'placeholders' => [
+ *       '@foo' => ['#markup' => 'replacement'],
+ *     ],
  * ];
  * @endcode
  * then #markup would end up containing 'Something about replacement'.
  *
- * Note that each placeholder value can itself be a render array, which will be
+ * Note that each placeholder value *must* itself be a render array. It will be
  * rendered, and any cache tags generated during rendering will be added to the
  * cache tags for the markup.
  *

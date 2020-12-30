@@ -43,6 +43,7 @@
     <exclude name="Drupal.Commenting.ClassComment.Missing"/>
   </rule>
   <rule ref="Drupal.Commenting.DataTypeNamespace"/>
+  <rule ref="Drupal.Commenting.Deprecated"/>
   <rule ref="Drupal.Commenting.DocComment">
     <!-- Sniff for these errors: SpacingAfterTagGroup, WrongEnd, SpacingBetween,
       ContentAfterOpen, SpacingBeforeShort, TagValueIndent, ShortStartSpace,
@@ -54,9 +55,6 @@
     <exclude name="Drupal.Commenting.DocComment.LongFullStop"/>
     <exclude name="Drupal.Commenting.DocComment.ShortNotCapital"/>
     <exclude name="Drupal.Commenting.DocComment.ShortFullStop"/>
-    <!-- TagsNotGrouped and ParamGroup have false-positives.
-      @see https://www.drupal.org/node/2060925 -->
-    <exclude name="Drupal.Commenting.DocComment.TagsNotGrouped"/>
     <exclude name="Drupal.Commenting.DocComment.ParamGroup"/>
     <exclude name="Drupal.Commenting.DocComment.ShortSingleLine"/>
     <exclude name="Drupal.Commenting.DocComment.MissingShort"/>
@@ -124,7 +122,6 @@
   <rule ref="Drupal.Semantics.FunctionAlias"/>
   <rule ref="Drupal.Semantics.FunctionT">
     <exclude name="Drupal.Semantics.FunctionT.NotLiteralString"/>
-    <exclude name="Drupal.Semantics.FunctionT.ConcatString"/>
   </rule>
   <rule ref="Drupal.Semantics.FunctionWatchdog"/>
   <rule ref="Drupal.Semantics.InstallHooks"/>
@@ -147,6 +144,7 @@
   <!-- Drupal Practice sniffs -->
   <rule ref="DrupalPractice.Commenting.ExpectedException"/>
   <rule ref="DrupalPractice.General.ExceptionT"/>
+  <rule ref="DrupalPractice.InfoFiles.NamespacedDependency"/>
 
   <!-- Generic sniffs -->
   <rule ref="Generic.Arrays.DisallowLongArraySyntax"/>
@@ -160,6 +158,7 @@
       <property name="checkClosures" value="true"/>
     </properties>
   </rule>
+  <rule ref="Drupal.NamingConventions.ValidClassName"/>
   <rule ref="Generic.NamingConventions.ConstructorName"/>
   <rule ref="Generic.NamingConventions.UpperCaseConstantName"/>
   <rule ref="Generic.PHP.DeprecatedFunctions"/>
@@ -228,9 +227,7 @@
     <exclude name="PSR2.Classes.PropertyDeclaration.Underscore"/>
   </rule>
   <rule ref="PSR2.Namespaces.NamespaceDeclaration"/>
-  <rule ref="PSR2.Namespaces.UseDeclaration">
-    <exclude name="PSR2.Namespaces.UseDeclaration.UseAfterNamespace"/>
-  </rule>
+  <rule ref="PSR2.Namespaces.UseDeclaration"/>
 
   <!-- Squiz sniffs -->
   <rule ref="Squiz.Arrays.ArrayBracketSpacing"/>
@@ -291,6 +288,41 @@
   <rule ref="Squiz.ControlStructures.ForLoopDeclaration.SpacingBeforeClose">
     <severity>0</severity>
   </rule>
+  <rule ref="Squiz.ControlStructures.SwitchDeclaration" />
+  <!-- Disable some error messages that we do not want. -->
+  <rule ref="Squiz.ControlStructures.SwitchDeclaration.BreakIndent">
+    <severity>0</severity>
+  </rule>
+  <rule ref="Squiz.ControlStructures.SwitchDeclaration.CaseIndent">
+    <severity>0</severity>
+  </rule>
+  <rule ref="Squiz.ControlStructures.SwitchDeclaration.CloseBraceAlign">
+    <severity>0</severity>
+  </rule>
+  <rule ref="Squiz.ControlStructures.SwitchDeclaration.DefaultIndent">
+    <severity>0</severity>
+  </rule>
+  <rule ref="Squiz.ControlStructures.SwitchDeclaration.DefaultNoBreak">
+    <severity>0</severity>
+  </rule>
+  <rule ref="Squiz.ControlStructures.SwitchDeclaration.EmptyCase">
+    <severity>0</severity>
+  </rule>
+  <rule ref="Squiz.ControlStructures.SwitchDeclaration.EmptyDefault">
+    <severity>0</severity>
+  </rule>
+  <rule ref="Squiz.ControlStructures.SwitchDeclaration.MissingDefault">
+    <severity>0</severity>
+  </rule>
+  <rule ref="Squiz.ControlStructures.SwitchDeclaration.SpacingAfterCase">
+    <severity>0</severity>
+  </rule>
+  <rule ref="Squiz.ControlStructures.SwitchDeclaration.SpacingAfterDefaultBreak">
+    <severity>0</severity>
+  </rule>
+  <rule ref="Squiz.ControlStructures.SwitchDeclaration.SpacingBeforeBreak">
+    <severity>0</severity>
+  </rule>
   <rule ref="Squiz.Functions.MultiLineFunctionDeclaration"/>
   <rule ref="Squiz.Functions.MultiLineFunctionDeclaration.BraceOnSameLine">
     <severity>0</severity>
@@ -317,6 +349,7 @@
     <severity>0</severity>
   </rule>
   <rule ref="Squiz.PHP.LowercasePHPFunctions"/>
+  <rule ref="Squiz.PHP.NonExecutableCode"/>
   <rule ref="Squiz.Strings.ConcatenationSpacing">
     <properties>
       <property name="spacing" value="1"/>

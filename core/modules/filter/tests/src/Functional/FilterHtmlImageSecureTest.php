@@ -24,7 +24,7 @@ class FilterHtmlImageSecureTest extends BrowserTestBase {
    *
    * @var array
    */
-  public static $modules = ['filter', 'node', 'comment'];
+  protected static $modules = ['filter', 'node', 'comment'];
 
   /**
    * {@inheritdoc}
@@ -38,7 +38,7 @@ class FilterHtmlImageSecureTest extends BrowserTestBase {
    */
   protected $webUser;
 
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     // Setup Filtered HTML text format.
@@ -143,7 +143,7 @@ class FilterHtmlImageSecureTest extends BrowserTestBase {
     $edit = [
       'comment_body[0][value]' => implode("\n", $comment),
     ];
-    $this->drupalPostForm('node/' . $this->node->id(), $edit, t('Save'));
+    $this->drupalPostForm('node/' . $this->node->id(), $edit, 'Save');
     foreach ($images as $image => $converted) {
       $found = FALSE;
       foreach ($this->xpath('//img[@testattribute="' . hash('sha256', $image) . '"]') as $element) {

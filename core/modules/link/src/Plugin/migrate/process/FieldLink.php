@@ -60,8 +60,13 @@ class FieldLink extends ProcessPluginBase {
    */
   protected function canonicalizeUri($uri) {
     // If we already have a scheme, we're fine.
-    if (empty($uri) || parse_url($uri, PHP_URL_SCHEME)) {
+    if (parse_url($uri, PHP_URL_SCHEME)) {
       return $uri;
+    }
+
+    // Empty URI and non-links are allowed.
+    if (empty($uri) || in_array($uri, ['<nolink>', '<none>'])) {
+      return 'route:<nolink>';
     }
 
     // Remove the <front> component of the URL.
@@ -74,6 +79,7 @@ class FieldLink extends ProcessPluginBase {
       // and &#x00FF; (except × &#x00D7; and ÷ &#x00F7;) with the addition of
       // &#x0152;, &#x0153; and &#x0178;.
       // @see https://git.drupalcode.org/project/link/blob/7.x-1.5-beta2/link.module#L1382
+      // cSpell:disable-next-line
       $link_ichars = '¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýþÿŒœŸ';
 
       // Pattern specific to internal links.

@@ -18,12 +18,12 @@ class ExceptionHandlingTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['system', 'router_test'];
+  protected static $modules = ['system', 'router_test'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->installEntitySchema('date_format');

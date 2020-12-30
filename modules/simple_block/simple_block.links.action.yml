@@ -1,6 +1,0 @@
-simple_block.form_add:
-  route_name: simple_block.form_add
-  title: 'Add simple block'
-  weight: 1
-  appears_on:
-    - entity.simple_block.collection

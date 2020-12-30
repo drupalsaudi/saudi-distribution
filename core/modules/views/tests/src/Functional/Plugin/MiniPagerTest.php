@@ -25,7 +25,7 @@ class MiniPagerTest extends ViewTestBase {
    *
    * @var array
    */
-  public static $modules = ['node'];
+  protected static $modules = ['node'];
 
   /**
    * {@inheritdoc}
@@ -39,7 +39,7 @@ class MiniPagerTest extends ViewTestBase {
    */
   protected $nodes;
 
-  protected function setUp($import_test_views = TRUE) {
+  protected function setUp($import_test_views = TRUE): void {
     parent::setUp($import_test_views);
 
     $this->drupalCreateContentType(['type' => 'page']);
@@ -80,8 +80,8 @@ class MiniPagerTest extends ViewTestBase {
     $view = Views::getView('test_mini_pager');
     $view->setDisplay('page_4');
     $this->executeView($view);
-    $this->assertIdentical($view->get_total_rows, TRUE, 'The query was set to calculate the total number of rows.');
-    $this->assertEqual(count($this->nodes), $view->total_rows, 'The total row count is equal to the number of nodes.');
+    $this->assertTrue($view->get_total_rows, 'The query was set to calculate the total number of rows.');
+    $this->assertSame(count($this->nodes), (int) $view->total_rows, 'The total row count is equal to the number of nodes.');
 
     $this->drupalGet('test_mini_pager_total', ['query' => ['page' => 1]]);
     $this->assertText('of ' . count($this->nodes), 'The first page shows the total row count.');
@@ -111,7 +111,7 @@ class MiniPagerTest extends ViewTestBase {
     $this->assertNoText('Page 1', 'The current page info shows the only page.');
     $this->assertNoText('test ››', 'The next link does not appear on the page.');
     $result = $this->xpath('//div[contains(@class, "views-row")]');
-    $this->assertEqual(count($result), count($this->nodes), 'All rows appear on the page.');
+    $this->assertSame(count($this->nodes), count($result), 'All rows appear on the page.');
 
     // Remove all items beside 1, so there should be no links shown.
     for ($i = 0; $i < 19; $i++) {

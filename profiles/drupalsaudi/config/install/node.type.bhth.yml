@@ -1,9 +1,0 @@
-langcode: ar
-status: true
-name: بحث
-type: bhth
-description: 'من هنا تستطيعون اضافة الابحاث العلمية'
-help: ''
-new_revision: false
-preview_mode: 1
-display_submitted: false

@@ -2,8 +2,6 @@
 
 namespace Drupal\jsonapi;
 
-use Drupal\Core\Cache\CacheableResponseInterface;
-use Drupal\Core\Cache\CacheableResponseTrait;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -17,14 +15,12 @@ use Symfony\Component\HttpFoundation\Response;
  * @internal JSON:API maintains no PHP API since its API is the HTTP API. This
  *   class may change at any time and this will break any dependencies on it.
  *
- * @see https://www.drupal.org/project/jsonapi/issues/3032787
+ * @see https://www.drupal.org/project/drupal/issues/3032787
  * @see jsonapi.api.php
  *
  * @see \Drupal\rest\ModifiedResourceResponse
  */
-class ResourceResponse extends Response implements CacheableResponseInterface {
-
-  use CacheableResponseTrait;
+class ResourceResponse extends Response {
 
   /**
    * Response data that should be serialized.

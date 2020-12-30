@@ -16,24 +16,10 @@ use Drupal\Core\File\FileSystemInterface;
 class DirectoryTest extends FileTestBase {
 
   /**
-   * Modules to enable.
-   *
-   * @var array
-   */
-  public static $modules = ['system'];
-
-  protected function setUp() {
-    parent::setUp();
-
-    // These additional tables are necessary due to the call to system_cron().
-    $this->installSchema('system', ['key_value_expire']);
-  }
-
-  /**
    * Test local directory handling functions.
    */
   public function testFileCheckLocalDirectoryHandling() {
-    $site_path = $this->container->get('site.path');
+    $site_path = $this->container->getParameter('site.path');
     $directory = $site_path . '/files';
 
     // Check a new recursively created local directory for correct file system
@@ -51,7 +37,7 @@ class DirectoryTest extends FileTestBase {
     $child_path = $parent_path . DIRECTORY_SEPARATOR . $child;
     /** @var \Drupal\Core\File\FileSystemInterface $file_system */
     $file_system = \Drupal::service('file_system');
-    $this->assertTrue($file_system->mkdir($child_path, 0775, TRUE), t('No error reported when creating new local directories.'), 'File');
+    $this->assertTrue($file_system->mkdir($child_path, 0775, TRUE), 'No error reported when creating new local directories.');
 
     // Ensure new directories also exist.
     $this->assertDirectoryExists($parent_path);

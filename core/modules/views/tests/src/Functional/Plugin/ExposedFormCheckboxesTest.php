@@ -27,7 +27,7 @@ class ExposedFormCheckboxesTest extends ViewTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['node', 'views_ui', 'taxonomy'];
+  protected static $modules = ['node', 'views_ui', 'taxonomy'];
 
   /**
    * {@inheritdoc}
@@ -51,7 +51,7 @@ class ExposedFormCheckboxesTest extends ViewTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp($import_test_views = TRUE) {
+  protected function setUp($import_test_views = TRUE): void {
     parent::setUp(FALSE);
 
     // Create a vocabulary and entity reference field so we can test the "is all
@@ -161,7 +161,7 @@ class ExposedFormCheckboxesTest extends ViewTestBase {
 
     // Select one option and ensure we still have results.
     $tid = $this->terms[0]->id();
-    $this->drupalPostForm(NULL, ["tid[$tid]" => $tid], t('Apply'));
+    $this->submitForm(["tid[$tid]" => $tid], 'Apply');
 
     // Ensure only nodes tagged with $tid are displayed.
     $rows = $this->xpath("//div[contains(@class, 'views-row')]");

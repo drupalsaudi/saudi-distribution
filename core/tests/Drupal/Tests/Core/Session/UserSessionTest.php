@@ -15,7 +15,7 @@ use Drupal\user\RoleInterface;
 class UserSessionTest extends UnitTestCase {
 
   /**
-   * The user sessions used in the test
+   * The user sessions used in the test.
    *
    * @var \Drupal\Core\Session\AccountInterface[]
    */
@@ -54,7 +54,7 @@ class UserSessionTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $roles = [];

@@ -4,7 +4,6 @@ namespace Drupal\content_moderation\Plugin\views\filter;
 
 use Drupal\content_moderation\Plugin\views\ModerationStateJoinViewsHandlerTrait;
 use Drupal\Core\Cache\Cache;
-use Drupal\Core\Database\Query\Condition;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -123,6 +122,7 @@ class ModerationStateFilter extends InOperator implements DependentWithRemovalPl
     $this->ensureMyTable();
 
     $entity_type = $this->entityTypeManager->getDefinition($this->getEntityType());
+    $bundle_condition = NULL;
     if ($entity_type->hasKey('bundle')) {
       // Get a list of bundles that are being moderated by the workflows
       // configured in this filter.
@@ -137,7 +137,7 @@ class ModerationStateFilter extends InOperator implements DependentWithRemovalPl
       // If we have a list of moderated bundles, restrict the query to show only
       // entities in those bundles.
       if ($moderated_bundles) {
-        $entity_base_table_alias = $this->table;
+        $entity_base_table_alias = $this->relationship ?: $this->table;
 
         // The bundle field of an entity type is not revisionable so we need to
         // join the base table.
@@ -156,7 +156,8 @@ class ModerationStateFilter extends InOperator implements DependentWithRemovalPl
           $entity_base_table_alias = $this->query->addRelationship($entity_base_table, $join, $entity_revision_base_table);
         }
 
-        $this->query->addWhere($this->options['group'], "$entity_base_table_alias.{$entity_type->getKey('bundle')}", $moderated_bundles, 'IN');
+        $bundle_condition = $this->view->query->getConnection()->condition('AND');
+        $bundle_condition->condition("$entity_base_table_alias.{$entity_type->getKey('bundle')}", $moderated_bundles, 'IN');
       }
       // Otherwise, force the query to return an empty result.
       else {
@@ -174,11 +175,11 @@ class ModerationStateFilter extends InOperator implements DependentWithRemovalPl
 
     // The values are strings composed from the workflow ID and the state ID, so
     // we need to create a complex WHERE condition.
-    $field = new Condition('OR');
+    $field = $this->view->query->getConnection()->condition('OR');
     foreach ((array) $this->value as $value) {
       list($workflow_id, $state_id) = explode('-', $value, 2);
 
-      $and = new Condition('AND');
+      $and = $this->view->query->getConnection()->condition('AND');
       $and
         ->condition("$this->tableAlias.workflow", $workflow_id, '=')
         ->condition("$this->tableAlias.$this->realField", $state_id, $operator);
@@ -186,7 +187,14 @@ class ModerationStateFilter extends InOperator implements DependentWithRemovalPl
       $field->condition($and);
     }
 
-    $this->query->addWhere($this->options['group'], $field);
+    if ($bundle_condition) {
+      // The query must match the bundle AND the workflow/state conditions.
+      $bundle_condition->condition($field);
+      $this->query->addWhere($this->options['group'], $bundle_condition);
+    }
+    else {
+      $this->query->addWhere($this->options['group'], $field);
+    }
   }
 
   /**

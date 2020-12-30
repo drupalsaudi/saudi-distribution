@@ -3,11 +3,10 @@ type: module
 description: 'Allows users to configure the display and form display by arranging fields in several columns.'
 package: Core (Experimental)
 # version: VERSION
-core: 8.x
 dependencies:
   - drupal:layout_discovery
 
-# Information added by Drupal.org packaging script on 2020-07-08
-version: '8.9.2'
+# Information added by Drupal.org packaging script on 2020-12-02
+version: '9.1.0'
 project: 'drupal'
-datestamp: 1594238019
+datestamp: 1606933306

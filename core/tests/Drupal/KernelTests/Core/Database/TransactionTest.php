@@ -5,6 +5,7 @@ namespace Drupal\KernelTests\Core\Database;
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Database\TransactionOutOfOrderException;
 use Drupal\Core\Database\TransactionNoActiveException;
+use PHPUnit\Framework\Error\Warning;
 
 /**
  * Tests the transaction abstraction system.
@@ -101,7 +102,7 @@ class TransactionTest extends DatabaseTestBase {
     $txn = $this->connection->startTransaction();
 
     $depth2 = $this->connection->transactionDepth();
-    $this->assertTrue($depth < $depth2, 'Transaction depth is has increased with new transaction.');
+    $this->assertGreaterThan($depth, $depth2, 'Transaction depth has increased with new transaction.');
 
     // Insert a single row into the testing table.
     $this->connection->insert('test')
@@ -144,48 +145,16 @@ class TransactionTest extends DatabaseTestBase {
    * nothing.
    */
   public function testTransactionRollBackSupported() {
-    // This test won't work right if transactions are not supported.
-    if (!$this->connection->supportsTransactions()) {
-      $this->markTestSkipped("The '{$this->connection->driver()}' database driver does not support transactions.");
-    }
-
     try {
       // Create two nested transactions. Roll back from the inner one.
       $this->transactionOuterLayer('B', TRUE);
 
       // Neither of the rows we inserted in the two transaction layers
       // should be present in the tables post-rollback.
-      $saved_age = $this->connection->query('SELECT age FROM {test} WHERE name = :name', [':name' => 'DavidB'])->fetchField();
+      $saved_age = $this->connection->query('SELECT [age] FROM {test} WHERE [name] = :name', [':name' => 'DavidB'])->fetchField();
       $this->assertNotIdentical($saved_age, '24', 'Cannot retrieve DavidB row after commit.');
-      $saved_age = $this->connection->query('SELECT age FROM {test} WHERE name = :name', [':name' => 'DanielB'])->fetchField();
+      $saved_age = $this->connection->query('SELECT [age] FROM {test} WHERE [name] = :name', [':name' => 'DanielB'])->fetchField();
       $this->assertNotIdentical($saved_age, '19', 'Cannot retrieve DanielB row after commit.');
-    }
-    catch (\Exception $e) {
-      $this->fail($e->getMessage());
-    }
-  }
-
-  /**
-   * Tests transaction rollback on a database that doesn't support transactions.
-   *
-   * If the active driver supports transactions, this test does nothing.
-   */
-  public function testTransactionRollBackNotSupported() {
-    // This test won't work right if transactions are supported.
-    if ($this->connection->supportsTransactions()) {
-      $this->markTestSkipped("The '{$this->connection->driver()}' database driver supports transactions.");
-    }
-
-    try {
-      // Create two nested transactions. Attempt to roll back from the inner one.
-      $this->transactionOuterLayer('B', TRUE);
-
-      // Because our current database claims to not support transactions,
-      // the inserted rows should be present despite the attempt to roll back.
-      $saved_age = $this->connection->query('SELECT age FROM {test} WHERE name = :name', [':name' => 'DavidB'])->fetchField();
-      $this->assertIdentical($saved_age, '24', 'DavidB not rolled back, since transactions are not supported.');
-      $saved_age = $this->connection->query('SELECT age FROM {test} WHERE name = :name', [':name' => 'DanielB'])->fetchField();
-      $this->assertIdentical($saved_age, '19', 'DanielB not rolled back, since transactions are not supported.');
     }
     catch (\Exception $e) {
       $this->fail($e->getMessage());
@@ -204,9 +173,9 @@ class TransactionTest extends DatabaseTestBase {
       $this->transactionOuterLayer('A');
 
       // Because we committed, both of the inserted rows should be present.
-      $saved_age = $this->connection->query('SELECT age FROM {test} WHERE name = :name', [':name' => 'DavidA'])->fetchField();
+      $saved_age = $this->connection->query('SELECT [age] FROM {test} WHERE [name] = :name', [':name' => 'DavidA'])->fetchField();
       $this->assertIdentical($saved_age, '24', 'Can retrieve DavidA row after commit.');
-      $saved_age = $this->connection->query('SELECT age FROM {test} WHERE name = :name', [':name' => 'DanielA'])->fetchField();
+      $saved_age = $this->connection->query('SELECT [age] FROM {test} WHERE [name] = :name', [':name' => 'DanielA'])->fetchField();
       $this->assertIdentical($saved_age, '19', 'Can retrieve DanielA row after commit.');
     }
     catch (\Exception $e) {
@@ -290,18 +259,19 @@ class TransactionTest extends DatabaseTestBase {
       $transaction = $this->connection->startTransaction();
       $this->insertRow('row');
       $this->executeDDLStatement();
-      // Rollback the outer transaction.
+
       try {
+        // Rollback the outer transaction.
         $transaction->rollBack();
-        unset($transaction);
-        // @todo An exception should be triggered here, but is not because
-        // "ROLLBACK" fails silently in MySQL if there is no transaction active.
-        // @see https://www.drupal.org/project/drupal/issues/2736777
-        // $this->fail('Rolling back a transaction containing DDL should fail.');
+        // @see \Drupal\Core\Database\Driver\mysql\Connection::rollBack()
+        if (PHP_VERSION_ID >= 80000) {
+          $this->fail('Rolling back a transaction containing DDL should produce a warning.');
+        }
       }
-      catch (TransactionNoActiveException $e) {
-        $this->pass('Rolling back a transaction containing DDL should fail.');
+      catch (Warning $warning) {
+        $this->assertSame('Rollback attempted when there is no active transaction. This can cause data integrity issues.', $warning->getMessage());
       }
+      unset($transaction);
       $this->assertRowPresent('row');
     }
   }
@@ -355,7 +325,7 @@ class TransactionTest extends DatabaseTestBase {
     if (!isset($message)) {
       $message = new FormattableMarkup('Row %name is present.', ['%name' => $name]);
     }
-    $present = (boolean) $this->connection->query('SELECT 1 FROM {test} WHERE name = :name', [':name' => $name])->fetchField();
+    $present = (boolean) $this->connection->query('SELECT 1 FROM {test} WHERE [name] = :name', [':name' => $name])->fetchField();
     return $this->assertTrue($present, $message);
   }
 
@@ -371,7 +341,7 @@ class TransactionTest extends DatabaseTestBase {
     if (!isset($message)) {
       $message = new FormattableMarkup('Row %name is absent.', ['%name' => $name]);
     }
-    $present = (boolean) $this->connection->query('SELECT 1 FROM {test} WHERE name = :name', [':name' => $name])->fetchField();
+    $present = (boolean) $this->connection->query('SELECT 1 FROM {test} WHERE [name] = :name', [':name' => $name])->fetchField();
     return $this->assertFalse($present, $message);
   }
 
@@ -379,11 +349,6 @@ class TransactionTest extends DatabaseTestBase {
    * Tests transaction stacking, commit, and rollback.
    */
   public function testTransactionStacking() {
-    // This test won't work right if transactions are not supported.
-    if (!$this->connection->supportsTransactions()) {
-      $this->markTestSkipped("The '{$this->connection->driver()}' database driver does not support transactions.");
-    }
-
     // Standard case: pop the inner transaction before the outer transaction.
     $transaction = $this->connection->startTransaction();
     $this->insertRow('outer');
@@ -466,12 +431,12 @@ class TransactionTest extends DatabaseTestBase {
       $this->fail('Rolling back the outer transaction while the inner transaction is active resulted in an exception.');
     }
     catch (TransactionOutOfOrderException $e) {
-      $this->pass('Rolling back the outer transaction while the inner transaction is active resulted in an exception.');
+      // Expected exception; just continue testing.
     }
     $this->assertFalse($this->connection->inTransaction(), 'No more in a transaction after rolling back the outer transaction');
     // Try to commit one inner transaction.
     unset($transaction3);
-    $this->pass('Trying to commit an inner transaction resulted in an exception.');
+
     // Try to rollback one inner transaction.
     try {
       $transaction->rollBack();
@@ -479,7 +444,7 @@ class TransactionTest extends DatabaseTestBase {
       $this->fail('Trying to commit an inner transaction resulted in an exception.');
     }
     catch (TransactionNoActiveException $e) {
-      $this->pass('Trying to commit an inner transaction resulted in an exception.');
+      // Expected exception; just continue testing.
     }
     $this->assertRowAbsent('outer');
     $this->assertRowAbsent('inner');
@@ -495,11 +460,11 @@ class TransactionTest extends DatabaseTestBase {
 
     // Test a failed query using the query() method.
     try {
-      $this->connection->query('SELECT age FROM {test} WHERE name = :name', [':name' => 'David'])->fetchField();
-      $this->fail('Using the query method failed.');
+      $this->connection->query('SELECT [age] FROM {test} WHERE [name] = :name', [':name' => 'David'])->fetchField();
+      $this->fail('Using the query method should have failed.');
     }
     catch (\Exception $e) {
-      $this->pass('Using the query method failed.');
+      // Just continue testing.
     }
 
     // Test a failed select query.
@@ -508,10 +473,10 @@ class TransactionTest extends DatabaseTestBase {
         ->fields('test', ['name'])
         ->execute();
 
-      $this->fail('Select query failed.');
+      $this->fail('Select query should have failed.');
     }
     catch (\Exception $e) {
-      $this->pass('Select query failed.');
+      // Just continue testing.
     }
 
     // Test a failed insert query.
@@ -523,10 +488,10 @@ class TransactionTest extends DatabaseTestBase {
         ])
         ->execute();
 
-      $this->fail('Insert query failed.');
+      $this->fail('Insert query should have failed.');
     }
     catch (\Exception $e) {
-      $this->pass('Insert query failed.');
+      // Just continue testing.
     }
 
     // Test a failed update query.
@@ -536,10 +501,10 @@ class TransactionTest extends DatabaseTestBase {
         ->condition('id', 1)
         ->execute();
 
-      $this->fail('Update query failed.');
+      $this->fail('Update query should have failed.');
     }
     catch (\Exception $e) {
-      $this->pass('Update query failed.');
+      // Just continue testing.
     }
 
     // Test a failed delete query.
@@ -548,10 +513,10 @@ class TransactionTest extends DatabaseTestBase {
         ->condition('id', 1)
         ->execute();
 
-      $this->fail('Delete query failed.');
+      $this->fail('Delete query should have failed.');
     }
     catch (\Exception $e) {
-      $this->pass('Delete query failed.');
+      // Just continue testing.
     }
 
     // Test a failed merge query.
@@ -564,10 +529,10 @@ class TransactionTest extends DatabaseTestBase {
         ])
         ->execute();
 
-      $this->fail('Merge query failed.');
+      $this->fail('Merge query should have failed.');
     }
     catch (\Exception $e) {
-      $this->pass('Merge query failed.');
+      // Just continue testing.
     }
 
     // Test a failed upsert query.
@@ -582,10 +547,10 @@ class TransactionTest extends DatabaseTestBase {
         ])
         ->execute();
 
-      $this->fail('Upset query failed.');
+      $this->fail('Upsert query should have failed.');
     }
     catch (\Exception $e) {
-      $this->pass('Upset query failed.');
+      // Just continue testing.
     }
 
     // Create the missing schema and insert a row.
@@ -600,7 +565,7 @@ class TransactionTest extends DatabaseTestBase {
     // Commit the transaction.
     unset($transaction);
 
-    $saved_age = $this->connection->query('SELECT age FROM {test} WHERE name = :name', [':name' => 'David'])->fetchField();
+    $saved_age = $this->connection->query('SELECT [age] FROM {test} WHERE [name] = :name', [':name' => 'David'])->fetchField();
     $this->assertEqual('24', $saved_age);
   }
 

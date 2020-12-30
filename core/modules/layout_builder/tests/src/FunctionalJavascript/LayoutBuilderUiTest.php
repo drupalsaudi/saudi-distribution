@@ -22,7 +22,7 @@ class LayoutBuilderUiTest extends WebDriverTestBase {
    */
   const FIELD_UI_PREFIX = 'admin/structure/types/manage/bundle_with_section_field';
 
-  public static $modules = [
+  protected static $modules = [
     'layout_builder',
     'block',
     'node',
@@ -39,7 +39,7 @@ class LayoutBuilderUiTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->createContentType(['type' => 'bundle_with_section_field']);
@@ -115,10 +115,10 @@ class LayoutBuilderUiTest extends WebDriverTestBase {
 
     $this->drupalGet($path);
     $page->clickLink('Add section');
-    $assert_session->assertWaitOnAjaxRequest();
+    $assert_session->waitForElementVisible('named', ['link', 'One column']);
     $assert_session->pageTextNotContains('You have unsaved changes.');
     $page->clickLink('One column');
-    $assert_session->assertWaitOnAjaxRequest();
+    $assert_session->waitForElementVisible('named', ['button', 'Add section']);
     $page->pressButton('Add section');
     $assert_session->assertWaitOnAjaxRequest();
     $assert_session->pageTextContainsOnce('You have unsaved changes.');

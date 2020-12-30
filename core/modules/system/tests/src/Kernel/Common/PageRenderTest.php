@@ -16,7 +16,6 @@ class PageRenderTest extends KernelTestBase {
    */
   public function testHookPageAttachmentsExceptions() {
     $this->enableModules(['common_test', 'system']);
-    \Drupal::service('router.builder')->rebuild();
 
     $this->assertPageRenderHookExceptions('common_test', 'hook_page_attachments');
   }
@@ -26,7 +25,6 @@ class PageRenderTest extends KernelTestBase {
    */
   public function testHookPageAlter() {
     $this->enableModules(['common_test', 'system']);
-    \Drupal::service('router.builder')->rebuild();
 
     $this->assertPageRenderHookExceptions('common_test', 'hook_page_attachments_alter');
   }
@@ -59,7 +57,6 @@ class PageRenderTest extends KernelTestBase {
       $this->error($assertion);
     }
     catch (\LogicException $e) {
-      $this->pass($assertion);
       $this->assertEqual($e->getMessage(), 'Only #attached and #cache may be set in ' . $hook . '().');
     }
     \Drupal::state()->set('bc_test.' . $hook . '.descendant_attached', FALSE);
@@ -73,7 +70,6 @@ class PageRenderTest extends KernelTestBase {
       $this->error($assertion);
     }
     catch (\LogicException $e) {
-      $this->pass($assertion);
       $this->assertEqual($e->getMessage(), 'Only #attached and #cache may be set in ' . $hook . '().');
     }
     \Drupal::state()->set($module . '.' . $hook . '.render_array', FALSE);

@@ -11,14 +11,14 @@ use Drupal\Tests\BrowserTestBase;
  */
 class LocaleUpdateDevelopmentReleaseTest extends BrowserTestBase {
 
-  public static $modules = ['locale', 'locale_test_development_release'];
+  protected static $modules = ['locale', 'locale_test_development_release'];
 
   /**
    * {@inheritdoc}
    */
   protected $defaultTheme = 'stark';
 
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
     module_load_include('compare.inc', 'locale');
     $admin_user = $this->drupalCreateUser([
@@ -28,7 +28,7 @@ class LocaleUpdateDevelopmentReleaseTest extends BrowserTestBase {
       'translate interface',
     ]);
     $this->drupalLogin($admin_user);
-    $this->drupalPostForm('admin/config/regional/language/add', ['predefined_langcode' => 'hu'], t('Add language'));
+    $this->drupalPostForm('admin/config/regional/language/add', ['predefined_langcode' => 'hu'], 'Add language');
   }
 
   public function testLocaleUpdateDevelopmentRelease() {

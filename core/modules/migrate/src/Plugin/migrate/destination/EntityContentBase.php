@@ -2,7 +2,6 @@
 
 namespace Drupal\migrate\Plugin\migrate\destination;
 
-use Drupal\Core\DependencyInjection\DeprecatedServicePropertyTrait;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityInterface;
@@ -85,15 +84,10 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   validate: true
  * @endcode
  *
+ * @see \Drupal\migrate\Plugin\migrate\destination\Entity
  * @see \Drupal\migrate\Plugin\migrate\destination\EntityRevision
  */
 class EntityContentBase extends Entity implements HighestIdInterface, MigrateValidatableEntityInterface {
-  use DeprecatedServicePropertyTrait;
-
-  /**
-   * {@inheritdoc}
-   */
-  protected $deprecatedProperties = ['entityManager' => 'entity.manager'];
 
   /**
    * Entity field manager.
@@ -325,8 +319,6 @@ class EntityContentBase extends Entity implements HighestIdInterface, MigrateVal
           $values = $default_value;
         }
         else {
-          // Otherwise, ask the field type to generate a sample value.
-          $field_type = $field_definition->getType();
           /** @var \Drupal\Core\Field\FieldItemInterface $field_type_class */
           $field_type_class = $this->fieldTypeManager
             ->getPluginClass($field_definition->getType());

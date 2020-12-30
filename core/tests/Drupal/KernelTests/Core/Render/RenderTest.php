@@ -16,7 +16,7 @@ class RenderTest extends KernelTestBase {
    *
    * @var array
    */
-  public static $modules = ['system', 'common_test', 'theme_test'];
+  protected static $modules = ['system', 'common_test', 'theme_test'];
 
   /**
    * Tests theme preprocess functions being able to attach assets.
@@ -68,39 +68,8 @@ class RenderTest extends KernelTestBase {
     $build['#attached']['library'][] = 'core/drupal.states';
     $build['#attached']['drupal_process_states'][] = [];
     $renderer = $this->container->get('bare_html_page_renderer');
-    try {
-      $renderer->renderBarePage($build, '', 'maintenance_page');
-      $this->fail("Invalid #attachment 'drupal_process_states' allowed");
-    }
-    catch (\LogicException $e) {
-      $this->pass("Invalid #attachment 'drupal_process_states' not allowed");
-    }
-  }
-
-  /**
-   * Tests the drupal_render_root() deprecation.
-   *
-   * @group legacy
-   * @expectedDeprecation drupal_render_root() is deprecated in drupal:8.0.0 and is removed from drupal:9.0.0. Use \Drupal\Core\Render\RendererInterface::renderRoot() instead. See https://www.drupal.org/node/2912696
-   */
-  public function testRenderRootDeprecation() {
-    \Drupal::state()->set('theme_preprocess_attached_test', TRUE);
-
-    $test_element = [
-      '#theme' => 'common_test_render_element',
-      'foo' => [
-        '#markup' => 'Kittens!',
-      ],
-    ];
-    drupal_render_root($test_element);
-
-    $expected_attached = [
-      'library' => [
-        'test/generic_preprocess',
-        'test/specific_preprocess',
-      ],
-    ];
-    $this->assertEqual($expected_attached, $test_element['#attached'], 'All expected assets from theme preprocess hooks attached.');
+    $this->expectException(\LogicException::class);
+    $renderer->renderBarePage($build, '', 'maintenance_page');
   }
 
 }

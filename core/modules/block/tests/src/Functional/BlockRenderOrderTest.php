@@ -17,14 +17,14 @@ class BlockRenderOrderTest extends BrowserTestBase {
    *
    * @var array
    */
-  public static $modules = ['node', 'block'];
+  protected static $modules = ['node', 'block'];
 
   /**
    * {@inheritdoc}
    */
   protected $defaultTheme = 'stark';
 
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
     // Create a test user.
     $end_user = $this->drupalCreateUser([
@@ -78,8 +78,12 @@ class BlockRenderOrderTest extends BrowserTestBase {
         $position[$id] = strpos($test_content, Html::getClass('block-' . $test_blocks[$id]['id']));
       }
     }
-    $this->assertTrue($position['stark_powered'] < $position['stark_by'], 'Blocks with different weight are rendered in the correct order.');
-    $this->assertTrue($position['stark_drupal'] < $position['stark_by'], 'Blocks with identical weight are rendered in alphabetical order.');
+    // Verify that blocks with different weight are rendered in the correct
+    // order.
+    $this->assertLessThan($position['stark_by'], $position['stark_powered']);
+    // Verify that blocks with identical weight are rendered in alphabetical
+    // order.
+    $this->assertLessThan($position['stark_by'], $position['stark_drupal']);
   }
 
 }

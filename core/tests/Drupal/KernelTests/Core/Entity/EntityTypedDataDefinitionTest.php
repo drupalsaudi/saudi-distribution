@@ -35,10 +35,10 @@ class EntityTypedDataDefinitionTest extends KernelTestBase {
    *
    * @var array
    */
-  public static $modules = ['system', 'filter', 'text', 'node', 'user'];
+  protected static $modules = ['system', 'filter', 'text', 'node', 'user'];
 
-  protected function setUp() {
-    parent::setup();
+  protected function setUp(): void {
+    parent::setUp();
 
     $this->typedDataManager = $this->container->get('typed_data_manager');
   }

@@ -18,7 +18,7 @@ class WorkspaceContentModerationIntegrationTest extends ModerationStateTestBase 
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['node', 'workspaces'];
+  protected static $modules = ['node', 'workspaces'];
 
   /**
    * {@inheritdoc}
@@ -28,7 +28,7 @@ class WorkspaceContentModerationIntegrationTest extends ModerationStateTestBase 
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->drupalLogin($this->rootUser);
@@ -75,7 +75,7 @@ class WorkspaceContentModerationIntegrationTest extends ModerationStateTestBase 
     $this->drupalGet('/node/1/edit');
     $this->assertEquals('Current state Published', $this->cssSelect('#edit-moderation-state-0-current')[0]->getText());
 
-    $this->drupalPostForm(NULL, [
+    $this->submitForm([
       'title[0][value]' => 'First article - draft',
       'moderation_state[0][state]' => 'draft',
     ], 'Save');
@@ -86,7 +86,7 @@ class WorkspaceContentModerationIntegrationTest extends ModerationStateTestBase 
     $this->drupalGet('/node/1/edit');
     $this->assertEquals('Current state Draft', $this->cssSelect('#edit-moderation-state-0-current')[0]->getText());
 
-    $this->drupalPostForm(NULL, [
+    $this->submitForm([
       'title[0][value]' => 'First article - published',
       'moderation_state[0][state]' => 'published',
     ], 'Save');

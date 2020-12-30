@@ -19,7 +19,7 @@ class BlockFormMessagesTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = [
+  protected static $modules = [
     'layout_builder',
     'block',
     'node',
@@ -34,7 +34,7 @@ class BlockFormMessagesTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
     $this->createContentType(['type' => 'bundle_with_section_field']);
   }
@@ -105,7 +105,7 @@ class BlockFormMessagesTest extends WebDriverTestBase {
     /** @var \Behat\Mink\Element\NodeElement[] $top_form_elements */
     $top_form_elements = $page->findAll('css', '#drupal-off-canvas form > *');
     // Ensure the messages are the first top level element of the form.
-    $this->assertTrue(stristr($top_form_elements[0]->getText(), 'Title field is required.') !== FALSE);
+    $this->assertStringContainsString('Title field is required.', $top_form_elements[0]->getText());
     $this->assertGreaterThan(4, count($top_form_elements));
   }
 

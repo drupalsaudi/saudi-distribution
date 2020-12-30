@@ -130,7 +130,7 @@ abstract class GenericCacheBackendUnitTestBase extends KernelTestBase {
   public function testSetGet() {
     $backend = $this->getCacheBackend();
 
-    $this->assertSame(FALSE, $backend->get('test1'), "Backend does not contain data for cache id test1.");
+    $this->assertFalse($backend->get('test1'), "Backend does not contain data for cache id test1.");
     $with_backslash = ['foo' => '\Drupal\foo\Bar'];
     $backend->set('test1', $with_backslash);
     $cached = $backend->get('test1');
@@ -138,16 +138,18 @@ abstract class GenericCacheBackendUnitTestBase extends KernelTestBase {
     $this->assertSame($with_backslash, $cached->data);
     $this->assertTrue($cached->valid, 'Item is marked as valid.');
     // We need to round because microtime may be rounded up in the backend.
-    $this->assertTrue($cached->created >= REQUEST_TIME && $cached->created <= round(microtime(TRUE), 3), 'Created time is correct.');
+    $this->assertGreaterThanOrEqual(REQUEST_TIME, $cached->created);
+    $this->assertLessThanOrEqual(round(microtime(TRUE), 3), $cached->created);
     $this->assertEqual($cached->expire, Cache::PERMANENT, 'Expire time is correct.');
 
-    $this->assertSame(FALSE, $backend->get('test2'), "Backend does not contain data for cache id test2.");
+    $this->assertFalse($backend->get('test2'), "Backend does not contain data for cache id test2.");
     $backend->set('test2', ['value' => 3], REQUEST_TIME + 3);
     $cached = $backend->get('test2');
     $this->assertIsObject($cached);
     $this->assertSame(['value' => 3], $cached->data);
     $this->assertTrue($cached->valid, 'Item is marked as valid.');
-    $this->assertTrue($cached->created >= REQUEST_TIME && $cached->created <= round(microtime(TRUE), 3), 'Created time is correct.');
+    $this->assertGreaterThanOrEqual(REQUEST_TIME, $cached->created);
+    $this->assertLessThanOrEqual(round(microtime(TRUE), 3), $cached->created);
     $this->assertEqual($cached->expire, REQUEST_TIME + 3, 'Expire time is correct.');
 
     $backend->set('test3', 'foobar', REQUEST_TIME - 3);
@@ -155,27 +157,30 @@ abstract class GenericCacheBackendUnitTestBase extends KernelTestBase {
     $cached = $backend->get('test3', TRUE);
     $this->assertIsObject($cached);
     $this->assertFalse($cached->valid, 'Item is marked as valid.');
-    $this->assertTrue($cached->created >= REQUEST_TIME && $cached->created <= round(microtime(TRUE), 3), 'Created time is correct.');
+    $this->assertGreaterThanOrEqual(REQUEST_TIME, $cached->created);
+    $this->assertLessThanOrEqual(round(microtime(TRUE), 3), $cached->created);
     $this->assertEqual($cached->expire, REQUEST_TIME - 3, 'Expire time is correct.');
 
-    $this->assertSame(FALSE, $backend->get('test4'), "Backend does not contain data for cache id test4.");
+    $this->assertFalse($backend->get('test4'), "Backend does not contain data for cache id test4.");
     $with_eof = ['foo' => "\nEOF\ndata"];
     $backend->set('test4', $with_eof);
     $cached = $backend->get('test4');
     $this->assertIsObject($cached);
     $this->assertSame($with_eof, $cached->data);
     $this->assertTrue($cached->valid, 'Item is marked as valid.');
-    $this->assertTrue($cached->created >= REQUEST_TIME && $cached->created <= round(microtime(TRUE), 3), 'Created time is correct.');
+    $this->assertGreaterThanOrEqual(REQUEST_TIME, $cached->created);
+    $this->assertLessThanOrEqual(round(microtime(TRUE), 3), $cached->created);
     $this->assertEqual($cached->expire, Cache::PERMANENT, 'Expire time is correct.');
 
-    $this->assertSame(FALSE, $backend->get('test5'), "Backend does not contain data for cache id test5.");
+    $this->assertFalse($backend->get('test5'), "Backend does not contain data for cache id test5.");
     $with_eof_and_semicolon = ['foo' => "\nEOF;\ndata"];
     $backend->set('test5', $with_eof_and_semicolon);
     $cached = $backend->get('test5');
     $this->assertIsObject($cached);
     $this->assertSame($with_eof_and_semicolon, $cached->data);
     $this->assertTrue($cached->valid, 'Item is marked as valid.');
-    $this->assertTrue($cached->created >= REQUEST_TIME && $cached->created <= round(microtime(TRUE), 3), 'Created time is correct.');
+    $this->assertGreaterThanOrEqual(REQUEST_TIME, $cached->created);
+    $this->assertLessThanOrEqual(round(microtime(TRUE), 3), $cached->created);
     $this->assertEqual($cached->expire, Cache::PERMANENT, 'Expire time is correct.');
 
     $with_variable = ['foo' => '$bar'];
@@ -229,26 +234,26 @@ abstract class GenericCacheBackendUnitTestBase extends KernelTestBase {
   public function testDelete() {
     $backend = $this->getCacheBackend();
 
-    $this->assertSame(FALSE, $backend->get('test1'), "Backend does not contain data for cache id test1.");
+    $this->assertFalse($backend->get('test1'), "Backend does not contain data for cache id test1.");
     $backend->set('test1', 7);
     $this->assertIsObject($backend->get('test1'));
 
-    $this->assertSame(FALSE, $backend->get('test2'), "Backend does not contain data for cache id test2.");
+    $this->assertFalse($backend->get('test2'), "Backend does not contain data for cache id test2.");
     $backend->set('test2', 3);
     $this->assertIsObject($backend->get('test2'));
 
     $backend->delete('test1');
-    $this->assertSame(FALSE, $backend->get('test1'), "Backend does not contain data for cache id test1 after deletion.");
+    $this->assertFalse($backend->get('test1'), "Backend does not contain data for cache id test1 after deletion.");
 
     $this->assertIsObject($backend->get('test2'));
 
     $backend->delete('test2');
-    $this->assertSame(FALSE, $backend->get('test2'), "Backend does not contain data for cache id test2 after deletion.");
+    $this->assertFalse($backend->get('test2'), "Backend does not contain data for cache id test2 after deletion.");
 
     $long_cid = str_repeat('a', 300);
     $backend->set($long_cid, 'test');
     $backend->delete($long_cid);
-    $this->assertSame(FALSE, $backend->get($long_cid), "Backend does not contain data for long cache id after deletion.");
+    $this->assertFalse($backend->get($long_cid), "Backend does not contain data for long cache id after deletion.");
   }
 
   /**
@@ -311,13 +316,14 @@ abstract class GenericCacheBackendUnitTestBase extends KernelTestBase {
     $cids = $reference;
     $ret = $backend->getMultiple($cids);
     // Test return - ensure it contains existing cache ids.
-    $this->assert(isset($ret['test2']), "Existing cache id test2 is set.");
-    $this->assert(isset($ret['test3']), "Existing cache id test3 is set.");
-    $this->assert(isset($ret['test6']), "Existing cache id test6 is set.");
-    $this->assert(isset($ret['test7']), "Existing cache id test7 is set.");
+    $this->assertArrayHasKey('test2', $ret, "Existing cache id test2 is set.");
+    $this->assertArrayHasKey('test3', $ret, "Existing cache id test3 is set.");
+    $this->assertArrayHasKey('test6', $ret, "Existing cache id test6 is set.");
+    $this->assertArrayHasKey('test7', $ret, "Existing cache id test7 is set.");
     // Test return - ensure that objects has expected properties.
     $this->assertTrue($ret['test2']->valid, 'Item is marked as valid.');
-    $this->assertTrue($ret['test2']->created >= REQUEST_TIME && $ret['test2']->created <= round(microtime(TRUE), 3), 'Created time is correct.');
+    $this->assertGreaterThanOrEqual(REQUEST_TIME, $ret['test2']->created);
+    $this->assertLessThanOrEqual(round(microtime(TRUE), 3), $ret['test2']->created);
     $this->assertEqual($ret['test2']->expire, Cache::PERMANENT, 'Expire time is correct.');
     // Test return - ensure it does not contain nonexistent cache ids.
     $this->assertFalse(isset($ret['test19']), "Nonexistent cache id test19 is not set.");
@@ -345,9 +351,9 @@ abstract class GenericCacheBackendUnitTestBase extends KernelTestBase {
     $cids = $reference;
     $ret = $backend->getMultiple($cids);
     // Test return - ensure it contains existing cache ids.
-    $this->assert(isset($ret['test2']), "Existing cache id test2 is set");
-    $this->assert(isset($ret['test7']), "Existing cache id test7 is set");
-    $this->assert(isset($ret['test19']), "Added cache id test19 is set");
+    $this->assertArrayHasKey('test2', $ret, "Existing cache id test2 is set");
+    $this->assertArrayHasKey('test7', $ret, "Existing cache id test7 is set");
+    $this->assertArrayHasKey('test19', $ret, "Added cache id test19 is set");
     // Test return - ensure it does not contain nonexistent cache ids.
     $this->assertFalse(isset($ret['test3']), "Deleted cache id test3 is not set");
     $this->assertFalse(isset($ret['test6']), "Deleted cache id test6 is not set");
@@ -395,7 +401,8 @@ abstract class GenericCacheBackendUnitTestBase extends KernelTestBase {
 
     $this->assertEqual($cached['cid_1']->data, $items['cid_1']['data'], 'Over-written cache item set correctly.');
     $this->assertTrue($cached['cid_1']->valid, 'Item is marked as valid.');
-    $this->assertTrue($cached['cid_1']->created >= REQUEST_TIME && $cached['cid_1']->created <= round(microtime(TRUE), 3), 'Created time is correct.');
+    $this->assertGreaterThanOrEqual(REQUEST_TIME, $cached['cid_1']->created);
+    $this->assertLessThanOrEqual(round(microtime(TRUE), 3), $cached['cid_1']->created);
     $this->assertEqual($cached['cid_1']->expire, CacheBackendInterface::CACHE_PERMANENT, 'Cache expiration defaults to permanent.');
 
     $this->assertEqual($cached['cid_2']->data, $items['cid_2']['data'], 'New cache item set correctly.');
@@ -455,19 +462,19 @@ abstract class GenericCacheBackendUnitTestBase extends KernelTestBase {
     ]);
 
     // Test if expected keys have been deleted.
-    $this->assertSame(FALSE, $backend->get('test1'), "Cache id test1 deleted.");
-    $this->assertSame(FALSE, $backend->get('test3'), "Cache id test3 deleted.");
-    $this->assertSame(FALSE, $backend->get('test5'), "Cache id test5 deleted.");
-    $this->assertSame(FALSE, $backend->get('test7'), "Cache id test7 deleted.");
+    $this->assertFalse($backend->get('test1'), "Cache id test1 deleted.");
+    $this->assertFalse($backend->get('test3'), "Cache id test3 deleted.");
+    $this->assertFalse($backend->get('test5'), "Cache id test5 deleted.");
+    $this->assertFalse($backend->get('test7'), "Cache id test7 deleted.");
 
     // Test if expected keys exist.
-    $this->assertNotIdentical(FALSE, $backend->get('test2'), "Cache id test2 exists.");
-    $this->assertNotIdentical(FALSE, $backend->get('test4'), "Cache id test4 exists.");
-    $this->assertNotIdentical(FALSE, $backend->get('test6'), "Cache id test6 exists.");
+    $this->assertNotFalse($backend->get('test2'), "Cache id test2 exists.");
+    $this->assertNotFalse($backend->get('test4'), "Cache id test4 exists.");
+    $this->assertNotFalse($backend->get('test6'), "Cache id test6 exists.");
 
     // Test if that expected keys do not exist.
-    $this->assertSame(FALSE, $backend->get('test19'), "Cache id test19 does not exist.");
-    $this->assertSame(FALSE, $backend->get('test21'), "Cache id test21 does not exist.");
+    $this->assertFalse($backend->get('test19'), "Cache id test19 does not exist.");
+    $this->assertFalse($backend->get('test21'), "Cache id test21 does not exist.");
 
     // Calling deleteMultiple() with an empty array should not cause an error.
     $this->assertNull($backend->deleteMultiple([]));
@@ -534,31 +541,41 @@ abstract class GenericCacheBackendUnitTestBase extends KernelTestBase {
     // Create two cache entries with the same tag and tag value.
     $backend->set('test_cid_invalidate1', $this->defaultValue, Cache::PERMANENT, ['test_tag:2']);
     $backend->set('test_cid_invalidate2', $this->defaultValue, Cache::PERMANENT, ['test_tag:2']);
-    $this->assertTrue($backend->get('test_cid_invalidate1') && $backend->get('test_cid_invalidate2'), 'Two cache items were created.');
+    $this->assertSame($this->defaultValue, $backend->get('test_cid_invalidate1')->data);
+    $this->assertSame($this->defaultValue, $backend->get('test_cid_invalidate2')->data);
 
     // Invalidate test_tag of value 1. This should invalidate both entries.
     Cache::invalidateTags(['test_tag:2']);
     $this->assertFalse($backend->get('test_cid_invalidate1') || $backend->get('test_cid_invalidate2'), 'Two cache items invalidated after invalidating a cache tag.');
-    $this->assertTrue($backend->get('test_cid_invalidate1', TRUE) && $backend->get('test_cid_invalidate2', TRUE), 'Cache items not deleted after invalidating a cache tag.');
+    // Verify that cache items have not been deleted after invalidation.
+    $this->assertSame($this->defaultValue, $backend->get('test_cid_invalidate1', TRUE)->data);
+    $this->assertSame($this->defaultValue, $backend->get('test_cid_invalidate2', TRUE)->data);
 
     // Create two cache entries with the same tag and an array tag value.
     $backend->set('test_cid_invalidate1', $this->defaultValue, Cache::PERMANENT, ['test_tag:1']);
     $backend->set('test_cid_invalidate2', $this->defaultValue, Cache::PERMANENT, ['test_tag:1']);
-    $this->assertTrue($backend->get('test_cid_invalidate1') && $backend->get('test_cid_invalidate2'), 'Two cache items were created.');
+    $this->assertSame($this->defaultValue, $backend->get('test_cid_invalidate1')->data);
+    $this->assertSame($this->defaultValue, $backend->get('test_cid_invalidate2')->data);
 
     // Invalidate test_tag of value 1. This should invalidate both entries.
     Cache::invalidateTags(['test_tag:1']);
     $this->assertFalse($backend->get('test_cid_invalidate1') || $backend->get('test_cid_invalidate2'), 'Two caches removed after invalidating a cache tag.');
-    $this->assertTrue($backend->get('test_cid_invalidate1', TRUE) && $backend->get('test_cid_invalidate2', TRUE), 'Cache items not deleted after invalidating a cache tag.');
+    // Verify that cache items have not been deleted after invalidation.
+    $this->assertSame($this->defaultValue, $backend->get('test_cid_invalidate1', TRUE)->data);
+    $this->assertSame($this->defaultValue, $backend->get('test_cid_invalidate2', TRUE)->data);
 
     // Create three cache entries with a mix of tags and tag values.
     $backend->set('test_cid_invalidate1', $this->defaultValue, Cache::PERMANENT, ['test_tag:1']);
     $backend->set('test_cid_invalidate2', $this->defaultValue, Cache::PERMANENT, ['test_tag:2']);
     $backend->set('test_cid_invalidate3', $this->defaultValue, Cache::PERMANENT, ['test_tag_foo:3']);
-    $this->assertTrue($backend->get('test_cid_invalidate1') && $backend->get('test_cid_invalidate2') && $backend->get('test_cid_invalidate3'), 'Three cached items were created.');
+    $this->assertSame($this->defaultValue, $backend->get('test_cid_invalidate1')->data);
+    $this->assertSame($this->defaultValue, $backend->get('test_cid_invalidate2')->data);
+    $this->assertSame($this->defaultValue, $backend->get('test_cid_invalidate3')->data);
     Cache::invalidateTags(['test_tag_foo:3']);
-    $this->assertTrue($backend->get('test_cid_invalidate1') && $backend->get('test_cid_invalidate2'), 'Cache items not matching the tag were not invalidated.');
-    $this->assertFalse($backend->get('test_cid_invalidated3'), 'Cached item matching the tag was removed.');
+    // Verify that cache items not matching the tag were not invalidated.
+    $this->assertSame($this->defaultValue, $backend->get('test_cid_invalidate1')->data);
+    $this->assertSame($this->defaultValue, $backend->get('test_cid_invalidate2')->data);
+    $this->assertFalse($backend->get('test_cid_invalidate3'), 'Cached item matching the tag was removed.');
 
     // Create cache entry in multiple bins. Two cache entries
     // (test_cid_invalidate1 and test_cid_invalidate2) still exist from previous

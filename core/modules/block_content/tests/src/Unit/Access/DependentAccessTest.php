@@ -34,7 +34,7 @@ class DependentAccessTest extends UnitTestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
     $this->account = $this->prophesize(AccountInterface::class)->reveal();
     $this->forbidden = $this->createAccessibleDouble(AccessResult::forbidden('Because I said so'));
@@ -134,7 +134,7 @@ class DependentAccessTest extends UnitTestCase {
   }
 
   /**
-   * Dataprovider for all test methods.
+   * Data provider for all test methods.
    *
    * Provides test cases for calling setAccessDependency() or
    * mergeAccessDependency() first. A call to either should behave the same on a

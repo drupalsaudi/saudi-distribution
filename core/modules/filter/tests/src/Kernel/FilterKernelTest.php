@@ -23,14 +23,14 @@ class FilterKernelTest extends KernelTestBase {
    *
    * @var array
    */
-  public static $modules = ['system', 'filter'];
+  protected static $modules = ['system', 'filter'];
 
   /**
    * @var \Drupal\filter\Plugin\FilterInterface[]
    */
   protected $filters;
 
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
     $this->installConfig(['system']);
 
@@ -323,6 +323,7 @@ class FilterKernelTest extends KernelTestBase {
     // Since the line break filter naturally needs plenty of newlines in test
     // strings and expectations, we're using "\n" instead of regular newlines
     // here.
+    // cSpell:disable
     $tests = [
       // Single line breaks should be changed to <br /> tags, while paragraphs
       // separated with double line breaks should be enclosed with <p></p> tags.
@@ -381,6 +382,7 @@ class FilterKernelTest extends KernelTestBase {
         '<p><drupal-media data-caption=" " data-entity-type="media" data-entity-uuid="dbb16f97-cd11-4357-acde-cd09e19e312b"></drupal-media></p>' => FALSE,
       ],
     ];
+    // cSpell:enable
     $this->assertFilteredString($filter, $tests);
 
     // Very long string hitting PCRE limits.
@@ -404,8 +406,8 @@ class FilterKernelTest extends KernelTestBase {
    * @todo It is possible to add script, iframe etc. to allowed tags, but this
    *   makes HTML filter completely ineffective.
    *
-   * @todo Class, id, name and xmlns should be added to disallowed attributes,
-   *   or better a whitelist approach should be used for that too.
+   * @todo Class, id, name and xmlns should be added to the list of forbidden
+   *   attributes, or, better yet, use an allowed attribute list.
    */
   public function testHtmlFilter() {
     // Get FilterHtml object.
@@ -460,11 +462,11 @@ class FilterKernelTest extends KernelTestBase {
     $f = (string) $filter->process('<br />', Language::LANGCODE_NOT_SPECIFIED);
     $this->assertNormalized($f, '<br />', 'HTML filter should allow self-closing line breaks.');
 
-    // All attributes of whitelisted tags are stripped by default.
+    // All attributes of allowed tags are stripped by default.
     $f = (string) $filter->process('<a kitten="cute" llama="awesome">link</a>', Language::LANGCODE_NOT_SPECIFIED);
     $this->assertNormalized($f, '<a>link</a>', 'HTML filter should remove attributes that are not explicitly allowed.');
 
-    // Now whitelist the "llama" attribute on <a>.
+    // Now allow the "llama" attribute on <a>.
     $filter->setConfiguration([
       'settings' => [
         'allowed_html' => '<a href llama> <em> <strong> <cite> <blockquote> <code> <ul> <ol> <li> <dl> <dt> <dd> <br>',
@@ -475,7 +477,7 @@ class FilterKernelTest extends KernelTestBase {
     $f = (string) $filter->process('<a kitten="cute" llama="awesome">link</a>', Language::LANGCODE_NOT_SPECIFIED);
     $this->assertNormalized($f, '<a llama="awesome">link</a>', 'HTML filter keeps explicitly allowed attributes, and removes attributes that are not explicitly allowed.');
 
-    // Restrict the whitelisted "llama" attribute on <a> to only allow the value
+    // Restrict the allowed "llama" attribute on <a> to only allow the value
     // "majestical", or "epic".
     $filter->setConfiguration([
       'settings' => [
@@ -560,7 +562,7 @@ class FilterKernelTest extends KernelTestBase {
     // - absolute, mail, partial
     // - characters/encoding, surrounding markup, security
 
-    // Create a email that is too long.
+    // Create an email that is too long.
     $long_email = str_repeat('a', 254) . '@example.com';
     $too_long_email = str_repeat('b', 255) . '@example.com';
     $email_with_plus_sign = 'one+two@example.com';
@@ -860,7 +862,7 @@ www.example.com with a newline in comments -->
    * Asserts multiple filter output expectations for multiple input strings.
    *
    * @param FilterInterface $filter
-   *   A input filter object.
+   *   An input filter object.
    * @param array $tests
    *   An associative array, whereas each key is an arbitrary input string and
    *   each value is again an associative array whose keys are filter output
@@ -1023,8 +1025,10 @@ www.example.com with a newline in comments -->
     $f = Html::normalize('<p>test\n</p>\n');
     $this->assertEqual($f, '<p>test\n</p>\n', 'HTML corrector -- New-lines are accepted and kept as-is.');
 
+    // cSpell:disable
     $f = Html::normalize('<p>دروبال');
     $this->assertEqual($f, '<p>دروبال</p>', 'HTML corrector -- Encoding is correctly kept.');
+    // cSpell:enable
 
     $f = Html::normalize('<script>alert("test")</script>');
     $this->assertEqual($f, '<script>

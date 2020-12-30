@@ -27,7 +27,7 @@ class UpdateLobTest extends DatabaseTestBase {
       ->fields(['blob1' => $data])
       ->execute();
 
-    $r = $this->connection->query('SELECT * FROM {test_one_blob} WHERE id = :id', [':id' => $id])->fetchAssoc();
+    $r = $this->connection->query('SELECT * FROM {test_one_blob} WHERE [id] = :id', [':id' => $id])->fetchAssoc();
     $this->assertTrue($r['blob1'] === $data, new FormattableMarkup('Can update a blob: id @id, @data.', ['@id' => $id, '@data' => serialize($r)]));
   }
 
@@ -47,8 +47,9 @@ class UpdateLobTest extends DatabaseTestBase {
       ->fields(['blob1' => 'and so', 'blob2' => 'is this'])
       ->execute();
 
-    $r = $this->connection->query('SELECT * FROM {test_two_blobs} WHERE id = :id', [':id' => $id])->fetchAssoc();
-    $this->assertTrue($r['blob1'] === 'and so' && $r['blob2'] === 'is this', 'Can update multiple blobs per row.');
+    $r = $this->connection->query('SELECT * FROM {test_two_blobs} WHERE [id] = :id', [':id' => $id])->fetchAssoc();
+    $this->assertSame('and so', $r['blob1']);
+    $this->assertSame('is this', $r['blob2']);
   }
 
 }

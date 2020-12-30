@@ -33,7 +33,7 @@ class MenuTreeStorageTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->treeStorage = new MenuTreeStorage($this->container->get('database'), $this->container->get('cache.menu'), $this->container->get('cache_tags.invalidator'), 'menu_tree');
@@ -214,7 +214,7 @@ class MenuTreeStorageTest extends KernelTestBase {
       $this->fail('Exception was not thrown');
     }
     catch (PluginException $e) {
-      $this->pass($e->getMessage());
+      // Expected exception; just continue testing.
     }
     // The opposite move should work, and change the has_children flag.
     $this->moveMenuLink('footerA', 'test1');
@@ -354,7 +354,6 @@ class MenuTreeStorageTest extends KernelTestBase {
       }
       catch (\InvalidArgumentException $e) {
         $this->assertRegExp('/^An invalid property name, .+ was specified. Allowed property names are:/', $e->getMessage(), 'Found expected exception message.');
-        $this->pass($message);
       }
     }
     $this->addMenuLink('test_link.1', '', 'test', [], 'menu1');
@@ -426,8 +425,8 @@ class MenuTreeStorageTest extends KernelTestBase {
     $query->condition('id', $parents, 'IN');
     $found_parents = $query->execute()->fetchAllKeyed(0, 1);
 
-    $this->assertEqual(count($parents), count($found_parents), 'Found expected number of parents');
-    $this->assertEqual($raw['depth'], count($found_parents), 'Number of parents is the same as the depth');
+    $this->assertSame(count($parents), count($found_parents), 'Found expected number of parents');
+    $this->assertCount($raw['depth'], $found_parents, 'Number of parents is the same as the depth');
 
     $materialized_path = $this->treeStorage->getRootPathIds($id);
     $this->assertEqual(array_values($materialized_path), array_values($parents), 'Parents match the materialized path');
@@ -443,11 +442,8 @@ class MenuTreeStorageTest extends KernelTestBase {
     if ($parents) {
       $this->assertEqual($raw['parent'], end($parents), 'Ensure that the parent field is set properly');
     }
-    $found_children = array_keys($this->treeStorage->loadAllChildren($id));
-    // We need both these checks since the 2nd will pass if there are extra
-    // IDs loaded in $found_children.
-    $this->assertEqual(count($children), count($found_children), "Found expected number of children for $id");
-    $this->assertEqual(array_intersect($children, $found_children), $children, 'Child IDs match');
+    // Verify that the child IDs match.
+    $this->assertEqualsCanonicalizing($children, array_keys($this->treeStorage->loadAllChildren($id)));
   }
 
 }

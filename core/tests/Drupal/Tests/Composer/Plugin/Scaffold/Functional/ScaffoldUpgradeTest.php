@@ -6,7 +6,6 @@ use Composer\Util\Filesystem;
 use Drupal\Tests\Composer\Plugin\Scaffold\AssertUtilsTrait;
 use Drupal\Tests\Composer\Plugin\Scaffold\ExecTrait;
 use Drupal\Tests\Composer\Plugin\Scaffold\Fixtures;
-use Drupal\Tests\PhpunitCompatibilityTrait;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -26,7 +25,6 @@ class ScaffoldUpgradeTest extends TestCase {
 
   use AssertUtilsTrait;
   use ExecTrait;
-  use PhpunitCompatibilityTrait;
 
   /**
    * The Fixtures object.
@@ -38,7 +36,7 @@ class ScaffoldUpgradeTest extends TestCase {
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     $this->fixtures = new Fixtures();
     $this->fixtures->createIsolatedComposerCacheDir();
   }

@@ -17,7 +17,7 @@ class BookJavascriptTest extends WebDriverTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['book'];
+  protected static $modules = ['book'];
 
   /**
    * {@inheritdoc}
@@ -160,6 +160,28 @@ class BookJavascriptTest extends WebDriverTestBase {
       return "'$item'";
     }, $items));
     $this->assertSame($items, array_values($strings), "Found strings, ordered as: $ordered.");
+  }
+
+  /**
+   * Tests book outline AJAX request.
+   */
+  public function testBookAddOutline() {
+    $this->drupalLogin($this->drupalCreateUser(['create book content', 'create new books', 'add content to books']));
+    $this->drupalGet('node/add/book');
+    $assert_session = $this->assertSession();
+    $session = $this->getSession();
+    $page = $session->getPage();
+
+    $page->find('css', '#edit-book')->click();
+    $book_select = $page->findField("book[bid]");
+    $book_select->setValue('new');
+    $assert_session->waitForText('This will be the top-level page in this book.');
+    $assert_session->pageTextContains('This will be the top-level page in this book.');
+    $assert_session->pageTextNotContains('No book selected.');
+    $book_select->setValue(0);
+    $assert_session->waitForText('No book selected.');
+    $assert_session->pageTextContains('No book selected.');
+    $assert_session->pageTextNotContains('This will be the top-level page in this book.');
   }
 
 }

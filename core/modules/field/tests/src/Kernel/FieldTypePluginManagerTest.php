@@ -6,7 +6,6 @@ use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Extension\ExtensionDiscovery;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\entity_test\Entity\EntityTest;
-use Drupal\Tests\DeprecatedModulesTestTrait;
 
 /**
  * Tests the field type manager.
@@ -14,8 +13,6 @@ use Drupal\Tests\DeprecatedModulesTestTrait;
  * @group field
  */
 class FieldTypePluginManagerTest extends FieldKernelTestBase {
-
-  use DeprecatedModulesTestTrait;
 
   /**
    * Tests the default settings convenience methods.
@@ -101,6 +98,9 @@ class FieldTypePluginManagerTest extends FieldKernelTestBase {
     foreach ($field_type_manager->getDefinitions() as $plugin_id => $definition) {
       $class = $definition['class'];
       $property = $class::mainPropertyName();
+      if ($property === NULL) {
+        continue;
+      }
       $storage_definition = BaseFieldDefinition::create($plugin_id);
       $property_definitions = $class::propertyDefinitions($storage_definition);
       $properties = implode(', ', array_keys($property_definitions));

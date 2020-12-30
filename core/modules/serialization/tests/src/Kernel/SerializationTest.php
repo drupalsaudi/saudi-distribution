@@ -17,7 +17,7 @@ class SerializationTest extends KernelTestBase {
    *
    * @var array
    */
-  public static $modules = ['serialization', 'serialization_test'];
+  protected static $modules = ['serialization', 'serialization_test'];
 
   /**
    * The serializer service to test.
@@ -26,7 +26,7 @@ class SerializationTest extends KernelTestBase {
    */
   protected $serializer;
 
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
     $this->serializer = $this->container->get('serializer');
   }
@@ -48,7 +48,7 @@ class SerializationTest extends KernelTestBase {
       $this->fail('The serializer was expected to throw an exception for an unsupported format, but did not.');
     }
     catch (UnexpectedValueException $e) {
-      $this->pass('The serializer threw an exception for an unsupported format.');
+      // Expected exception; just continue testing.
     }
   }
 

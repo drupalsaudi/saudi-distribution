@@ -2,10 +2,20 @@ name: 'Test legacy theme'
 type: theme
 description: 'Test theme to test deprecated functionality.'
 # version: VERSION
-core: 8.x
+package: Testing
 base theme: test_theme
 
-# Information added by Drupal.org packaging script on 2020-07-08
-version: '8.9.2'
+libraries-override:
+  theme_test/deprecated_library:
+    css:
+      base:
+        css/foo.css: css/bar.css
+
+libraries-extend:
+  theme_test/another_deprecated_library:
+    - test_legacy_theme/library
+
+# Information added by Drupal.org packaging script on 2020-12-02
+version: '9.1.0'
 project: 'drupal'
-datestamp: 1594238019
+datestamp: 1606933306

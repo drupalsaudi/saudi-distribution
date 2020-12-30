@@ -1,0 +1,9 @@
+name: Test Missing Base Theme
+type: theme
+description: A theme to test missing base theme.
+# version: VERSION
+
+# Information added by Drupal.org packaging script on 2020-12-02
+version: '9.1.0'
+project: 'drupal'
+datestamp: 1606933306
