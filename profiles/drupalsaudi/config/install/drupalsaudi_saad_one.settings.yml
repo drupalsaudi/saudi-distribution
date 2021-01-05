@@ -1,12 +1,12 @@
 features:
-  node_user_picture: 1
-  comment_user_picture: 1
-  comment_user_verification: 1
-  favicon: 1
+  node_user_picture: true
+  comment_user_picture: true
+  comment_user_verification: true
+  favicon: true
 logo:
-  use_default: 1
+  use_default: true
 favicon:
-  use_default: 1
+  use_default: true
 bootstrap_barrio_library: production
 bootstrap_barrio_fluid_container: 0
 bootstrap_barrio_region_clean_top_header: 0
@@ -76,7 +76,7 @@ bootstrap_barrio_sidebar_first_width: '2'
 bootstrap_barrio_sidebar_first_offset: '0'
 bootstrap_barrio_sidebar_second_width: '2'
 bootstrap_barrio_sidebar_second_offset: '0'
-bootstrap_barrio_button: 0
+bootstrap_barrio_button: 1
 bootstrap_barrio_button_size: ''
 bootstrap_barrio_button_outline: 0
 bootstrap_barrio_navbar_container: 0
@@ -104,6 +104,11 @@ bootstrap_barrio_google_fonts: ''
 bootstrap_barrio_bootstrap_icons: 0
 bootstrap_barrio_icons: ''
 bootstrap_barrio_system_messages: ''
-bootstrap_barrio_table_style: ''
-bootstrap_barrio_table_hover: 0
-bootstrap_barrio_table_head: ''
+bootstrap_barrio_table_style: table-striped
+bootstrap_barrio_table_hover: 1
+bootstrap_barrio_table_head: thead-dark
+langcode: ar
+bootstrap_barrio_image_fluid: 0
+bootstrap_barrio_navbar_flyout: 0
+bootstrap_barrio_navbar_slide: 0
+bootstrap_barrio_tabs_style: ''
