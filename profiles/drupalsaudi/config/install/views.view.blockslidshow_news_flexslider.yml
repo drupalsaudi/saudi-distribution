@@ -4,7 +4,7 @@ dependencies:
   config:
     - field.storage.node.field_image
     - image.style.slayd
-    - node.type.article
+    - node.type.content_slide_show
   module:
     - flexslider_views
     - image
@@ -220,7 +220,7 @@ display:
           table: node_field_data
           field: type
           value:
-            article: article
+            content_slide_show: content_slide_show
           entity_type: node
           entity_field: type
           plugin_id: bundle
