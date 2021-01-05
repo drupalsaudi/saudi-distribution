@@ -195,4 +195,167 @@ function drupalsaudi_install() {
       'parent' => 'system.menu.main',
     ]);
     $linksupportsa->save();
+
+    // Populate the almrkz-ala-lamy.
+    $linkalmrkz = MenuLinkContent::create([
+      'title' => t('خبر اعلامي'),
+      'weight' => 7,
+      'link' => ['uri' => 'internal:/'],
+      'menu_name' => 'almrkz-ala-lamy',
+      'parent' => 'system.menu.almrkz-ala-lamy',
+    ]);
+    $linkalmrkz->save();
+
+    $linkalmrkz1 = MenuLinkContent::create([
+      'title' => t('خبر اعلامي'),
+      'weight' => 7,
+      'link' => ['uri' => 'internal:/'],
+      'menu_name' => 'almrkz-ala-lamy',
+      'parent' => 'system.menu.almrkz-ala-lamy',
+    ]);
+    $linkalmrkz1->save();
+
+    $linkalmrkz2 = MenuLinkContent::create([
+      'title' => t('خبر اعلامي'),
+      'weight' => 7,
+      'link' => ['uri' => 'internal:/'],
+      'menu_name' => 'almrkz-ala-lamy',
+      'parent' => 'system.menu.almrkz-ala-lamy',
+    ]);
+    $linkalmrkz2->save();
+
+    $linkalmrkz3 = MenuLinkContent::create([
+      'title' => t('خبر اعلامي'),
+      'weight' => 7,
+      'link' => ['uri' => 'internal:/'],
+      'menu_name' => 'almrkz-ala-lamy',
+      'parent' => 'system.menu.almrkz-ala-lamy',
+    ]);
+    $linkalmrkz3->save();
+
+    // Populate the rwabt-thmk.
+    $linkrwabtthmk = MenuLinkContent::create([
+      'title' => t('وزارة الداخلية'),
+      'weight' => 7,
+      'link' => ['uri' => 'internal:/',],
+      'menu_name' => 'rwabt-thmk',
+      'parent' => 'system.menu.rwabt-thmk',
+    ]);
+    $linkrwabtthmk->save();
+
+    $linkrwabtthmk1 = MenuLinkContent::create([
+      'title' => t('وزارة الصحة'),
+      'weight' => 7,
+      'link' => ['uri' => 'internal:/',],
+      'menu_name' => 'rwabt-thmk',
+      'parent' => 'system.menu.rwabt-thmk',
+    ]);
+    $linkrwabtthmk1->save();
+
+    $linkrwabtthmk2 = MenuLinkContent::create([
+      'title' => t('وزارة التعليم'),
+      'weight' => 7,
+      'link' => ['uri' => 'internal:/',],
+      'menu_name' => 'rwabt-thmk',
+      'parent' => 'system.menu.rwabt-thmk',
+    ]);
+    $linkrwabtthmk2->save();
+
+    $linkrwabtthmk3 = MenuLinkContent::create([
+      'title' => t('وزارة العدل'),
+      'weight' => 7,
+      'link' => ['uri' => 'internal:/',],
+      'menu_name' => 'rwabt-thmk',
+      'parent' => 'system.menu.rwabt-thmk',
+    ]);
+    $linkrwabtthmk3->save();
+
+    // Populate the twasl-m-na.
+    $linktwaslmna = MenuLinkContent::create([
+      'title' => t('تويتر'),
+      'weight' => 7,
+      'link' => [
+        'uri' => 'internal:/',
+        'options' => [
+          'fa_icon' => 'fa-twitter-square',
+          'fa_icon_prefix' => 'fa',
+          'fa_icon_tag' => 'i',
+          'fa_icon_appearance' => 'before',
+          'attributes' => [
+            'class' => [
+              ''
+            ]
+          ],
+        ],
+      ],
+      'menu_name' => 'twasl-m-na',
+      'parent' => 'system.menu.twasl-m-na',
+    ]);
+    $linktwaslmna->save();
+
+    $linktwaslmna1 = MenuLinkContent::create([
+      'title' => t('انستقرام'),
+      'weight' => 7,
+      'link' => [
+        'uri' => 'internal:/',
+        'options' => [
+          'fa_icon' => 'fab fa-instagram-square',
+          'fa_icon_prefix' => 'fa',
+          'fa_icon_tag' => 'i',
+          'fa_icon_appearance' => 'before',
+          'attributes' => [
+            'class' => [
+              ''
+            ]
+          ],
+        ],
+      ],
+      'menu_name' => 'twasl-m-na',
+      'parent' => 'system.menu.twasl-m-na',
+    ]);
+    $linktwaslmna1->save();
+
+    $linktwaslmna2 = MenuLinkContent::create([
+      'title' => t('يوتيوب'),
+      'weight' => 7,
+      'link' => [
+        'uri' => 'internal:/',
+        'options' => [
+          'fa_icon' => 'fa-youtube-square',
+          'fa_icon_prefix' => 'fa',
+          'fa_icon_tag' => 'i',
+          'fa_icon_appearance' => 'before',
+          'attributes' => [
+            'class' => [
+              ''
+            ]
+          ],
+        ],
+      ],
+      'menu_name' => 'twasl-m-na',
+      'parent' => 'system.menu.twasl-m-na',
+    ]);
+    $linktwaslmna2->save();
+
+    $linktwaslmna3 = MenuLinkContent::create([
+      'title' => t('البريد الاكتروني'),
+      'weight' => 7,
+      'link' => [
+        'uri' => 'internal:/',
+        'options' => [
+          'fa_icon' => 'fa-envelope',
+          'fa_icon_prefix' => 'fa',
+          'fa_icon_tag' => 'i',
+          'fa_icon_appearance' => 'before',
+          'attributes' => [
+            'class' => [
+              ''
+            ]
+          ],
+        ],
+      ],
+      'menu_name' => 'twasl-m-na',
+      'parent' => 'system.menu.twasl-m-na',
+    ]);
+    $linktwaslmna3->save();
   }
