@@ -10,7 +10,7 @@ third_party_settings:
     parent: 'main:'
 name: 'عضو مجلس الاداره'
 type: _dw_mjls_aladarh
-description: ''
+description: 'لاضافة معلومات عن اعضاء مجلس ادارة الجمعية استخدموا هذا النوع من المحتوى.'
 help: ''
 new_revision: true
 preview_mode: 1
