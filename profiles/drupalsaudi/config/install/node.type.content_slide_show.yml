@@ -8,9 +8,9 @@ third_party_settings:
     available_menus:
       - main
     parent: 'main:'
-name: 'عرض الشرائج ( سلايد شو )'
+name: 'عرض الشرائح ( سلايد شو )'
 type: content_slide_show
-description: ''
+description: 'من هنا تستطيعون اضافة السلايد شو شرائح حتى تعرض بداخل الصندوق الخاص بها في الصفحة الرئيسية'
 help: ''
 new_revision: false
 preview_mode: 1

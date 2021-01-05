@@ -10,7 +10,7 @@ third_party_settings:
     parent: 'main:'
 name: 'الفعالية والمناسبة'
 type: alf_alyt_walmnasbt
-description: ''
+description: 'من هنا تستطيعون اضافة فعالية ومناسبة للجمعية مع التاريخ والصور الخاصه بها .'
 help: ''
 new_revision: true
 preview_mode: 1
