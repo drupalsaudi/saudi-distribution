@@ -8,7 +8,6 @@ dependencies:
     - field.field.node._dw_mjls_aladarh.field_msmy_wzyft_al_dw
     - node.type._dw_mjls_aladarh
   module:
-    - ds
     - user
 third_party_settings:
   ds:

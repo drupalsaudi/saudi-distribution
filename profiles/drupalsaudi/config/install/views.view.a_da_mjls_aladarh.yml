@@ -8,7 +8,6 @@ dependencies:
     - image.style.medium
     - node.type._dw_mjls_aladarh
   module:
-    - ds
     - image
     - node
     - options
@@ -1185,19 +1184,10 @@ display:
           row_class: ''
           default_row_class: false
       row:
-        type: 'ds_entity:node'
+        type: 'entity:node'
         options:
           relationship: none
           view_mode: board_of_directors
-          alternating_fieldset:
-            alternating: false
-            allpages: false
-          grouping_fieldset:
-            group: false
-            group_field: node__field_msmy_wzyft_al_dw|field_msmy_wzyft_al_dw_value
-            group_field_function: ''
-          advanced_fieldset:
-            advanced: true
     cache_metadata:
       max-age: -1
       contexts:

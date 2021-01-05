@@ -1,0 +1,61 @@
+animate_any.animate_any_form:
+ path: 'admin/config/animate_any'
+ defaults:
+   _title: 'Animate any configuration'
+   _form: '\Drupal\animate_any\Form\AnimateAnyForm'
+ options:
+    _admin_route: TRUE
+    _weight: 1
+ requirements:
+   _permission: 'animate_any access_animate'
+
+animate_any.animate_list:
+ path: 'admin/config/animate_any/list'
+ defaults:
+   _title: 'Animation list'
+   _type: MENU_LOCAL_TASK,
+   _controller: '\Drupal\animate_any\Controller\AnimateListController::animate_list'
+ requirements:
+   _permission: 'animate_any access_animate'
+
+animate_any.animate_edit_form:
+ path: 'admin/config/animate_any/edit/{element}'
+ defaults:
+   _title: 'Edit animate form'
+   _form: '\Drupal\animate_any\Form\AnimateEditForm'
+   options:
+    _admin_route: TRUE
+ requirements:
+   _permission: 'animate_any access_animate'
+
+animate_any.animate_delete_form:
+ path: 'admin/config/animate_any/delete/{id}'
+ defaults:
+   _title: 'Confirm delete'
+   _form: '\Drupal\animate_any\Form\AnimateDeleteForm'
+   options:
+   _admin_route: TRUE
+ requirements:
+   _permission: 'animate_any access_animate'
+
+animate_any.animate_import:
+  path: 'admin/config/animate_any/import'
+  defaults:
+    _title: 'Import configurations to database'
+    _type: MENU_LOCAL_TASK,
+    _form: '\Drupal\animate_any\Form\ConfigImportForm'
+    options:
+    _admin_route: TRUE
+  requirements:
+    _permission: 'animate_any access_animate'
+
+animate_any.animate_export:
+  path: 'admin/config/animate_any/export'
+  defaults:
+    _title: 'Export configurations From database'
+    _type: MENU_LOCAL_TASK,
+    _form: '\Drupal\animate_any\Form\ConfigExportForm'
+    options:
+    _admin_route: TRUE
+  requirements:
+    _permission: 'animate_any access_animate'

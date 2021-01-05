@@ -52,7 +52,9 @@ install:
   - fontawesome
   - fontawesome_menu_icons
   - views_bootstrap
-  - ds
+  - layout_discovery
+  - layout_builder
+  - animate_any
 themes:
   - bootstrap_barrio
   - drupalsaudi_saad_one
