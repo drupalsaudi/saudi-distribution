@@ -481,7 +481,8 @@ color: #1fd849;
 }
 
 
-.link-edit-summary {
+.link-edit-summary,
+.tabledrag-toggle-weight {
 border-radius: 5px;
 border: 2px solid #319c49;
 background: #2f9e48;
