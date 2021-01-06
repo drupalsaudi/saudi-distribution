@@ -490,3 +490,22 @@ margin: 2px 7px;
 color: #fff !important;
 padding: 2px 13px 6px;
 }
+
+
+[dir="rtl"] .vertical-tabs {
+  flex-direction: unset !important;
+  margin-left: 0;
+  margin-right: 0;
+}
+[dir="rtl"] .vertical-tabs {
+  margin-right: 15em !important;
+  margin-left: 0;
+}
+[dir="rtl"] .vertical-tabs__menu {
+  margin: -1px;
+}
+[dir="rtl"] .vertical-tabs__menu {
+  float: right;
+  margin-right: -15em !important;
+  margin-left: 0;
+}
