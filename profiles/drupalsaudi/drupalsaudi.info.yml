@@ -55,6 +55,7 @@ install:
   - layout_discovery
   - layout_builder
   - animate_any
+  - yaml_content
 themes:
   - bootstrap_barrio
   - drupalsaudi_saad_one
