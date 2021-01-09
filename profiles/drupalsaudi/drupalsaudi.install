@@ -160,7 +160,7 @@ function drupalsaudi_install() {
       'title' => t('اتصل بنا'),
       'weight' => 6,
       'link' => [
-        'uri' => 'internal:/',
+        'uri' => 'internal:/contact/feedback',
         'options' => [
           'fa_icon' => 'fa-phone-alt',
           'fa_icon_prefix' => 'fa',
