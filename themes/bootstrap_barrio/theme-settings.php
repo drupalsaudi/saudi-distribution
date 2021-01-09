@@ -45,6 +45,40 @@ function bootstrap_barrio_form_system_theme_settings_alter(&$form, FormStateInte
       ['@bootstrap_library_link' => Link::fromTextAndUrl('Bootstrap Library Settings', Url::fromRoute('bootstrap_library.admin'))->toString()]),
     ];
   }
+  else {
+    $form['bootstrap_barrio_source'] = [
+      '#type' => 'select',
+      '#title' => t('Load library'),
+      '#default_value' => theme_get_setting('bootstrap_barrio_source'),
+      '#options' => [
+        'bootstrap_barrio/bootstrap' => t('Local'),
+        'bootstrap_barrio/bootstrap_cdn' => t('CDN'),
+        'bootstrap_barrio/bootswatch_cerulean' => t('Bootswatch Cerulean'),
+        'bootstrap_barrio/bootswatch_cosmo' => t('Bootswatch Cosmo'),
+        'bootstrap_barrio/bootswatch_cyborg' => t('Bootswatch Cyborg'),
+        'bootstrap_barrio/bootswatch_darkly' => t('Bootswatch Darkly'),
+        'bootstrap_barrio/bootswatch_flaty' => t('Bootswatch Flatly'),
+        'bootstrap_barrio/bootswatch_journal' => t('Bootswatch Journal'),
+        'bootstrap_barrio/bootswatch_litera' => t('Bootswatch Litera'),
+        'bootstrap_barrio/bootswatch_lumen' => t('Bootswatch Lumen'),
+        'bootstrap_barrio/bootswatch_lux' => t('Bootswatch Lux'),
+        'bootstrap_barrio/bootswatch_materia' => t('Bootswatch Materia'),
+        'bootstrap_barrio/bootswatch_minty' => t('Bootswatch Minty'),
+        'bootstrap_barrio/bootswatch_pulse' => t('Bootswatch Pulse'),
+        'bootstrap_barrio/bootswatch_sandstone' => t('Bootswatch Sandstone'),
+        'bootstrap_barrio/bootswatch_simplex' => t('Bootswatch Simplex'),
+        'bootstrap_barrio/bootswatch_sketchy' => t('Bootswatch Sketchy'),
+        'bootstrap_barrio/bootswatch_slate' => t('Bootswatch Slate'),
+        'bootstrap_barrio/bootswatch_solar' => t('Bootswatch Solar'),
+        'bootstrap_barrio/bootswatch_spacelab' => t('Bootswatch Spacelab'),
+        'bootstrap_barrio/bootswatch_superhero' => t('Bootswatch Superhero'),
+        'bootstrap_barrio/bootswatch_united' => t('Bootswatch United'),
+        'bootstrap_barrio/bootswatch_yeti' => t('Bootswatch Yeti'),
+      ],
+      '#empty_option' => t('None'),
+      '#empty_value' => false,
+    ];
+  }
 
   // Vertical tabs.
   $form['bootstrap'] = [
@@ -260,10 +294,24 @@ function bootstrap_barrio_form_system_theme_settings_alter(&$form, FormStateInte
     ]),
   ];
 
+  // Images.
+  $form['components']['images'] = [
+    '#type' => 'details',
+    '#title' => t('Images'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  ];
+  $form['components']['images']['bootstrap_barrio_image_fluid'] = [
+    '#type' => 'checkbox',
+    '#title' => t('Apply img-fluid style to all content images'),
+    '#default_value' => theme_get_setting('bootstrap_barrio_image_fluid'),
+    '#description' => t('Adds a img-fluid style to all ".content img" elements'),
+  ];
+
   // Navbar.
   $form['components']['navbar'] = [
     '#type' => 'details',
-    '#title' => t('Navbar'),
+    '#title' => t('Navbar structure'),
     '#collapsible' => TRUE,
     '#collapsed' => TRUE,
   ];
@@ -279,10 +327,12 @@ function bootstrap_barrio_form_system_theme_settings_alter(&$form, FormStateInte
     '#description' => t('Select size for navbar to collapse.'),
     '#default_value' => theme_get_setting('bootstrap_barrio_navbar_toggle'),
     '#options' => [
+      'navbar-toggleable-xl' => t('Extra Large'),
       'navbar-toggleable-lg' => t('Large'),
       'navbar-toggleable-md' => t('Medium'),
       'navbar-toggleable-sm' => t('Small'),
       'navbar-toggleable-xs' => t('Extra small'),
+      'navbar-toggleable-all' => t('All screens'),
     ],
   ];
   $form['components']['navbar']['bootstrap_barrio_navbar_top_navbar'] = [
@@ -370,6 +420,44 @@ function bootstrap_barrio_form_system_theme_settings_alter(&$form, FormStateInte
     '#default_value' => theme_get_setting('bootstrap_barrio_navbar_class'),
     '#size' => 40,
     '#maxlength' => 40,
+  ];
+
+  // Navbar behaviour.
+  $form['components']['navbar_behaviour'] = [
+    '#type' => 'details',
+    '#title' => t('Navbar behaviour'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  ];
+  $form['components']['navbar_behaviour']['bootstrap_barrio_navbar_flyout'] = [
+    '#type' => 'checkbox',
+    '#title' => t('Flyout style main menu'),
+    '#default_value' => theme_get_setting('bootstrap_barrio_navbar_flyout'),
+  ];
+  $form['components']['navbar_behaviour']['bootstrap_barrio_navbar_slide'] = [
+    '#type' => 'checkbox',
+    '#title' => t('Sliding navbar'),
+    '#description' => t('Collapsed navbar will slide left to right'),
+    '#default_value' => theme_get_setting('bootstrap_barrio_navbar_slide'),
+  ];
+
+  // Tabs.
+  $form['components']['tabs'] = [
+    '#type' => 'details',
+    '#title' => t('Tabs (local tasks)'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  ];
+
+  $form['components']['tabs']['bootstrap_barrio_tabs_style'] = [
+    '#type' => 'select',
+    '#title' => t('Tabs style'),
+    '#default_value' => theme_get_setting('bootstrap_barrio_tabs_style'),
+    '#options' => [
+      'full' => t('Full width blocks'),
+      'pills' => t('Pills'),
+    ],
+    '#empty_option' => t('Default'),
   ];
 
   // Messages.

@@ -1,7 +1,7 @@
 global-styling:
   version: VERSION
   js:
-    js/global.js: {}
+    js/barrio.js: {}
     js/affix.js: {}
   css:
     component:
@@ -94,6 +94,12 @@ form:
     component:
       css/components/form.css: {}
 
+image_fluid:
+  version: VERSION
+  css:
+    component:
+      css/components/img-fluid.css: {}
+
 indented:
   version: VERSION
   css:
@@ -109,11 +115,23 @@ maintenance_page:
     - system/maintenance
     - bootstrap_barrio/global-styling
 
+navigation:
+  version: VERSION
+  css:
+    theme:
+      css/components/navigation.css: {}
+
 node:
   version: VERSION
   css:
     component:
       css/components/node.css: { weight: -10 }
+
+slide_nav:
+  version: VERSION
+  css:
+    theme:
+      css/components/slide-nav.css: {}
 
 sidebar_collapse:
   version: VERSION
@@ -128,6 +146,12 @@ tabs:
   css:
     component:
       css/components/tabs.css: {}
+
+tabs_full:
+  version: VERSION
+  css:
+    component:
+      css/components/tabs-full.css: {}
 
 toast:
   version: VERSION
@@ -306,3 +330,145 @@ mdb:
 views.ajax:
   js:
     js/modules/views/ajax_view.js: {}
+
+# Bootstrap
+
+bootstrap:
+  js:
+    /libraries/popper.js/dist/umd/popper.min.js: {}
+    /libraries/bootstrap/dist/js/bootstrap.min.js: {}
+  css:
+    component:
+      /libraries/bootstrap/dist/css/bootstrap.min.css: {}
+bootstrap_cdn:
+  js:
+    //cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js: {}
+    //stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js: {}
+  css:
+    component:
+      //stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css: {}
+boostrap_js:
+  js:
+    //cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js: {}
+    //stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js: {}
+
+# Bootswatch
+
+bootswatch_cosmo:
+  css:
+    component:
+      //stackpath.bootstrapcdn.com/bootswatch/4.5.2/cosmo/bootstrap.min.css: {}
+  dependencies:
+    - bootstrap_barrio/bootstrap_js
+bootswatch_cyborg:
+  css:
+    component:
+      //stackpath.bootstrapcdn.com/bootswatch/4.5.2/cyborg/bootstrap.min.css: {}
+bootswatch_darkly:
+  css:
+    component:
+      //stackpath.bootstrapcdn.com/bootswatch/4.5.2/darkly/bootstrap.min.css: {}
+  dependencies:
+    - bootstrap_barrio/bootstrap_js
+bootswatch_flatly:
+  css:
+    component:
+      //stackpath.bootstrapcdn.com/bootswatch/4.5.2/flatly/bootstrap.min.css: {}
+  dependencies:
+    - bootstrap_barrio/bootstrap_js
+bootswatch_journal:
+  css:
+    component:
+      //stackpath.bootstrapcdn.com/bootswatch/4.5.2/journal/bootstrap.min.css: {}
+  dependencies:
+    - bootstrap_barrio/bootstrap_js
+bootswatch_litera:
+  css:
+    component:
+      //stackpath.bootstrapcdn.com/bootswatch/4.5.2/litera/bootstrap.min.css: {}
+  dependencies:
+    - bootstrap_barrio/bootstrap_js
+bootswatch_lumen:
+  css:
+    component:
+      //stackpath.bootstrapcdn.com/bootswatch/4.5.2/lumen/bootstrap.min.css: {}
+  dependencies:
+    - bootstrap_barrio/bootstrap_js
+bootswatch_lux:
+  css:
+    component:
+      //stackpath.bootstrapcdn.com/bootswatch/4.5.2/lux/bootstrap.min.css: {}
+  dependencies:
+    - bootstrap_barrio/bootstrap_js
+bootswatch_materia:
+  css:
+    component:
+      //stackpath.bootstrapcdn.com/bootswatch/4.5.2/materia/bootstrap.min.css: {}
+  dependencies:
+    - bootstrap_barrio/bootstrap_js
+bootswatch_minty:
+  css:
+    component:
+      //stackpath.bootstrapcdn.com/bootswatch/4.5.2/minty/bootstrap.min.css: {}
+  dependencies:
+    - bootstrap_barrio/bootstrap_js
+bootswatch_pulse:
+  css:
+    component:
+      //stackpath.bootstrapcdn.com/bootswatch/4.5.2/pulse/bootstrap.min.css: {}
+  dependencies:
+    - bootstrap_barrio/bootstrap_js
+bootswatch_sandstone:
+  css:
+    component:
+      //stackpath.bootstrapcdn.com/bootswatch/4.5.2/sandstone/bootstrap.min.css: {}
+  dependencies:
+    - bootstrap_barrio/bootstrap_js
+bootswatch_simplex:
+  css:
+    component:
+      //stackpath.bootstrapcdn.com/bootswatch/4.5.2/simplex/bootstrap.min.css: {}
+  dependencies:
+    - bootstrap_barrio/bootstrap_js
+bootswatch_sketchy:
+  css:
+    component:
+      //stackpath.bootstrapcdn.com/bootswatch/4.5.2/sketchy/bootstrap.min.css: {}
+  dependencies:
+    - bootstrap_barrio/bootstrap_js
+bootswatch_slate:
+  css:
+    component:
+      //stackpath.bootstrapcdn.com/bootswatch/4.5.2/slate/bootstrap.min.css: {}
+  dependencies:
+    - bootstrap_barrio/bootstrap_js
+bootswatch_solar:
+  css:
+    component:
+      //stackpath.bootstrapcdn.com/bootswatch/4.5.2/solar/bootstrap.min.css: {}
+  dependencies:
+    - bootstrap_barrio/bootstrap_js
+bootswatch_spacelab:
+  css:
+    component:
+      //stackpath.bootstrapcdn.com/bootswatch/4.5.2/spacelab/bootstrap.min.css: {}
+  dependencies:
+    - bootstrap_barrio/bootstrap_js
+bootswatch_superhero:
+  css:
+    component:
+      //stackpath.bootstrapcdn.com/bootswatch/4.5.2/superhero/bootstrap.min.css: {}
+  dependencies:
+    - bootstrap_barrio/bootstrap_js
+bootswatch_united:
+  css:
+    component:
+      //stackpath.bootstrapcdn.com/bootswatch/4.5.2/united/bootstrap.min.css: {}
+  dependencies:
+    - bootstrap_barrio/bootstrap_js
+bootswatch_yeti:
+  css:
+    component:
+      //stackpath.bootstrapcdn.com/bootswatch/4.5.2/yeti/bootstrap.min.css: {}
+  dependencies:
+    - bootstrap_barrio/bootstrap_js

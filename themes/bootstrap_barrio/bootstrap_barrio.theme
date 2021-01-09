@@ -123,6 +123,33 @@ function bootstrap_barrio_preprocess_page(&$variables) {
 
     }
   }
+  else {
+    $source = theme_get_setting('bootstrap_barrio_source');
+    if ($source) {
+      $variables['#attached']['library'][] = $source;
+    }
+  }
+
+  $img_fluid = theme_get_setting('bootstrap_barrio_image_fluid');
+  if ($img_fluid) {
+    $variables['#attached']['library'][] = 'bootstrap_barrio/image_fluid';
+  }
+
+  $flyout = theme_get_setting('bootstrap_barrio_navbar_flyout');
+  if ($flyout) {
+    $variables['#attached']['library'][] = 'bootstrap_barrio/navigation';
+  }
+
+  $slide = theme_get_setting('bootstrap_barrio_navbar_slide');
+  if ($slide) {
+    $variables['#attached']['library'][] = 'bootstrap_barrio/slide_nav';
+  }
+
+  switch (theme_get_setting('bootstrap_barrio_tabs_style')) {
+    case 'full':
+      $variables['#attached']['library'][] = 'bootstrap_barrio/tabs_full';
+      break;
+  }
 
   $fonts = theme_get_setting('bootstrap_barrio_google_fonts');
   if ($fonts) {
@@ -243,6 +270,10 @@ function bootstrap_barrio_preprocess_page(&$variables) {
 
   // Define navigation toggle size.
   switch (theme_get_setting('bootstrap_barrio_navbar_toggle')) {
+    case 'navbar-toggleable-xl':
+      $variables['navbar_attributes']['class'][] = 'navbar-expand-xl';
+      break;
+
     case 'navbar-toggleable-lg':
       $variables['navbar_attributes']['class'][] = 'navbar-expand-lg';
       break;
@@ -257,6 +288,10 @@ function bootstrap_barrio_preprocess_page(&$variables) {
 
     case 'navbar-toggleable-xs':
       $variables['navbar_attributes']['class'][] = 'navbar-expand-xs';
+      break;
+
+    case 'navbar-toggleable-all':
+      $variables['navbar_attributes']['class'][] = '';
       break;
 
     default:
@@ -438,6 +473,20 @@ function bootstrap_barrio_preprocess_menu_local_task(&$variables) {
   $options = $url->getOptions();
   $url->setOptions($options + $link['localized_options']);
   $variables['item'] = Link::fromTextAndUrl($link['title'], $url);
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for menu-local-tasks.html.twig.
+ */
+function bootstrap_barrio_preprocess_menu_local_tasks(&$variables) {
+  switch (theme_get_setting('bootstrap_barrio_tabs_style')) {
+    case 'pills':
+      $variables['nav_style'] = 'nav-pills';
+      break;
+    default:
+      $variables['nav_style'] = 'nav-tabs';
+      break;
+  }
 }
 
 /**

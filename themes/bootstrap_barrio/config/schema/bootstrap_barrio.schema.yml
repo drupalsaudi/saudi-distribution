@@ -10,6 +10,9 @@ bootstrap_barrio.settings:
     bootstrap_barrio_library:
       type: text
       label: 'Load library'
+    bootstrap_barrio_source:
+      type: string
+      label: 'Load library'
 
     # Container.
     # ----------------------------
@@ -205,6 +208,12 @@ bootstrap_barrio.settings:
     bootstrap_barrio_navbar_top_navbar:
       type: integer
       label: 'Navbar top is navbar'
+    bootstrap_barrio_navbar_top_class:
+      type: text
+      label: 'Class for navbar top'
+    bootstrap_barrio_navbar_class:
+      type: text
+      label: 'Class for navbar'
     bootstrap_barrio_navbar_top_position:
       type: text
       label: 'Navbar top position'
@@ -223,6 +232,12 @@ bootstrap_barrio.settings:
     bootstrap_barrio_navbar_background:
       type: text
       label: 'Navbar background color'
+    bootstrap_barrio_navbar_flyout:
+      type: boolean
+      label: 'Flyout style main menu'
+    bootstrap_barrio_navbar_slide:
+      type: boolean
+      label: 'Sliding navbar'
 
     # Messages.
     # ----------------------------
@@ -298,3 +313,15 @@ bootstrap_barrio.settings:
     bootstrap_barrio_table_head:
       type: text
       label: 'Table header color scheme'
+
+    # Image fluid.
+    # ----------------------------
+    bootstrap_barrio_image_fluid:
+      type: boolean
+      label: 'Apply img-fluid style to all content images'
+
+    # Tabs.
+    # ----------------------------
+    bootstrap_barrio_tabs_style:
+      type: string
+      label: 'Tabs style'

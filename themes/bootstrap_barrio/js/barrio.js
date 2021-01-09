@@ -12,10 +12,10 @@
 
       var position = $(window).scrollTop();
         $(window).scroll(function () {
-        if ($(this).scrollTop() > 50){
+        if ($(this).scrollTop() > 50) {
           $('body').addClass("scrolled");
         }
-        else{
+        else {
           $('body').removeClass("scrolled");
         }
         var scroll = $(window).scrollTop();
@@ -29,6 +29,11 @@
         position = scroll;
       });
 
+      $('.dropdown-item a.dropdown-toggle').on("click", function(e) {
+        $(this).next('ul').toggle();
+        e.stopPropagation();
+        e.preventDefault();
+      });
     }
   };
 
