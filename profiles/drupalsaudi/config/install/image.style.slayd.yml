@@ -5,6 +5,7 @@ name: slayd
 label: سلايد
 effects:
   19797560-5b10-4053-ba94-551f36e67243:
+    uuid: 19797560-5b10-4053-ba94-551f36e67243
     id: image_resize
     weight: 1
     data:
