@@ -37,7 +37,7 @@ $info = [
         'buttonhover' => '#0256b1',
         'titleslogan' => '#fffeff',
         'text' => '#3b3b3b',
-        'link' => '#0071b3',
+        'link' => '#2f9e48',
       ],
     ],
     'firehouse' => [

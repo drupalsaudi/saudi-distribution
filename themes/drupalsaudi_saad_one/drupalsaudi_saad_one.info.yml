@@ -4,6 +4,7 @@ description: 'Basic drupalsaudi saad one.'
 core: 8.x
 core_version_requirement: ^8 || ^9
 base theme: bootstrap_barrio
+logo: logo.png
 
 libraries:
   - drupalsaudi_saad_one/bootstrap_cdn
