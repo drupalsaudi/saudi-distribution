@@ -46,7 +46,6 @@ install:
   - image_captcha
   - multiple_registration
   - menu_link_attributes
-  - bootstrap_library
   - flexslider
   - flexslider_views
   - fontawesome
