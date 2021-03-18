@@ -1,0 +1,23 @@
+name: 'FlexSlider Example'
+description: 'Provide FlexSlider Example content type and related configuration. Used for generating example FlexSlider implementations'
+type: module
+core: 8.x
+core_version_requirement: ^8 || ^9
+package: FlexSlider
+dependencies:
+  - drupal:field
+  - drupal:file
+  - flexslider:flexslider
+  - flexslider:flexslider_fields
+  - flexslider:flexslider_views
+  - drupal:image
+  - drupal:node
+  - drupal:path
+  - drupal:system
+  - drupal:user
+  - drupal:views
+
+# Information added by Drupal.org packaging script on 2020-08-08
+version: '8.x-2.0'
+project: 'flexslider'
+datestamp: 1596904948

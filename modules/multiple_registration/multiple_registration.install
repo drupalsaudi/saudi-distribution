@@ -1,0 +1,94 @@
+<?php
+
+/**
+ * @file
+ * multiple_registration.install
+ *
+ * Contains module installation instructions.
+ */
+
+use Drupal\multiple_registration\AvailableUserRolesService;
+use Drupal\Core\Database\Database;
+
+/**
+ * Implements hook_schema().
+ */
+function multiple_registration_schema() {
+  $schema['multiple_registration'] = [
+    'description' => 'Stores the correspondent rid for each user.',
+    'fields' => [
+      'uid' => [
+        'description' => 'The User ID.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'rid' => [
+        'description' => 'The identifier of the multiple_registration page definition.',
+        'type' => 'varchar',
+        'length' => 128,
+        'not null' => TRUE,
+        'default' => '',
+      ],
+    ],
+    'foreign keys' => [
+      'uid' => ['users' => 'uid'],
+    ],
+  ];
+
+  return $schema;
+}
+
+/**
+ * Update config variables to enable both Edit and Register form configs.
+ */
+function multiple_registration_update_8201() {
+  $configFactory = \Drupal::configFactory();
+  $entityTypeManager = \Drupal::entityTypeManager();
+  $availableUserRolesService = new AvailableUserRolesService($entityTypeManager, $configFactory);
+
+  $roles = $availableUserRolesService->getAvailableRoles();
+  $config = $configFactory->getEditable('multiple_registration.create_registration_page_form_config');
+
+  foreach ($roles as $rid => $role_name) {
+    // Get original value.
+    $original = $config->get('multiple_registration_form_mode_' . $rid);
+
+    // Set the new variables.
+    $config->set('multiple_registration_form_mode_edit_' . $rid, $original);
+    $config->set('multiple_registration_form_mode_register_' . $rid, $original);
+  }
+
+  $config->save();
+}
+
+/**
+ * Create database schema to store the correspondent rid for each user.
+ */
+function multiple_registration_update_8202() {
+  $spec = [
+    'description' => 'Stores the correspondent rid for each user.',
+    'fields' => [
+      'uid' => [
+        'description' => 'The User ID.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'rid' => [
+        'description' => 'The identifier of the multiple_registration page definition.',
+        'type' => 'varchar',
+        'length' => 128,
+        'not null' => TRUE,
+        'default' => '',
+      ],
+    ],
+    'foreign keys' => [
+      'uid' => ['users' => 'uid'],
+    ],
+  ];
+  $schema = Database::getConnection()->schema();
+  $schema->createTable('multiple_registration', $spec);
+}

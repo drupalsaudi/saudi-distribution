@@ -1,0 +1,9 @@
+# Arabic translation of Drupalsaudi distribution.
+#
+
+msgid 'Read more<span class="visually-hidden"> about @title</span>'
+msgstr 'اقرأ المزيد<span class="visually-hidden"> حول @title</span>'
+msgid "Submitted by @author_name on @date"
+msgstr "أضيفت بواسطة @author_name بتاريخ @date"
+msgid 'Read more<span class="visually-hidden"> about @title</span>'
+msgstr 'اقرأ المزيد<span class="visually-hidden"> حول @title</span>'

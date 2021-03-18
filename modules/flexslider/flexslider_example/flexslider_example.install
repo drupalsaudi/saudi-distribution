@@ -1,0 +1,100 @@
+<?php
+
+/**
+ * @file
+ * Install tasks for flexslider_example.
+ */
+
+use Drupal\node\Entity\Node;
+use Drupal\Core\File\FileSystemInterface;
+use Drupal\node\NodeInterface;
+
+/**
+ * Implements hook_install().
+ */
+function flexslider_example_install() {
+  // Generate content for examples.
+  flexslider_example_generate_content();
+}
+
+/**
+ * Implements hook_uninstall().
+ *
+ * Deletes all content and configuration installed by this module.
+ */
+function flexslider_example_uninstall() {
+  // Collect all of the example nodes and delete them.
+  $storage_handler = \Drupal::entityTypeManager()->getStorage('node');
+  $nodes = $storage_handler->loadByProperties(['type' => 'flexslider_example']);
+
+  // Ensure we have some nodes before deleting.
+  if (!empty($nodes)) {
+    $storage_handler->delete($nodes);
+    \Drupal::logger('flexslider')->info(t('Deleted @count flexslider_example nodes', ['@count' => count($nodes)]), []);
+  }
+
+  // Remove Flexslider node type.
+  $content_type = \Drupal::entityTypeManager()->getStorage('node_type')->load('flexslider_example');
+  if (!empty($content_type)) {
+    $content_type->delete();
+  }
+
+  // Now delete all of the configuration installed by this module.
+  $dir = drupal_get_path('module', 'flexslider_example') . '/config/install';
+  $files = \Drupal::service('file_system')->scanDirectory($dir, '/.*/');
+  foreach ($files as $file) {
+    \Drupal::configFactory()->getEditable($file->name)->delete();
+  }
+  \Drupal::logger('flexslider')->info(t('Deleted flexslider example configuration'), []);
+
+}
+
+/**
+ * Generate the sample content.
+ */
+function flexslider_example_generate_content() {
+
+  $dir = drupal_get_path('module', 'flexslider') . '/assets/images';
+  $images = \Drupal::service('file_system')->scanDirectory($dir, '/flexslider-sample/');
+
+  foreach ($images as $image) {
+
+    $filename = $image->filename;
+
+    $file_temp = file_get_contents($image->uri);
+    $file_temp = file_save_data($file_temp, 'public://' . $filename, FileSystemInterface::EXISTS_RENAME);
+
+    // Create node object with attached file.
+    $node = Node::create([
+      'type'  => 'flexslider_example',
+      'title'  => ucfirst(str_replace('-', ' ', $image->name)),
+      'promote' => NodeInterface::NOT_PROMOTED,
+      'created' => \Drupal::time()->getRequestTime(),
+      'changed' => \Drupal::time()->getRequestTime(),
+      'uid' => 1,
+      'field_flexslider_example_image' => [
+        'target_id' => $file_temp->id(),
+      ],
+    ]);
+
+    try {
+      $result = $node->save();
+      if ($result == SAVED_NEW) {
+        $saved = 'Created';
+      }
+      elseif ($result == SAVED_UPDATED) {
+        $saved = 'Updated';
+      }
+      else {
+        throw new Exception(t('Unknown value [@result] was returned', ['@result' => $result]));
+      }
+
+      \Drupal::logger('flexslider')->info(t('@saved flexslider_example node @nid', ['@saved' => $saved, '@nid' => $node->id()]), []);
+
+    }
+    catch (Exception $e) {
+      \Drupal::logger('flexslider')->error(t('Node create failure: @msg', ['@msg' => $e->getMessage()]), []);
+    }
+
+  }
+}

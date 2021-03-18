@@ -1,0 +1,43 @@
+id: 'default'
+label: 'Default'
+options:
+  animation: 'fade'
+  animationSpeed: 600
+  direction: 'horizontal'
+  slideshow: TRUE
+  easing:  'swing'
+  smoothHeight: FALSE
+  reverse: FALSE
+  slideshowSpeed: 7000
+  animationLoop: TRUE
+  randomize: FALSE
+  startAt: 0
+  itemWidth: 0
+  itemMargin: 0
+  minItems: 0
+  maxItems: 0
+  move: 0
+  directionNav: TRUE
+  controlNav: '1'
+  thumbCaptions: FALSE
+  thumbCaptionsBoth: FALSE
+  keyboard: TRUE
+  multipleKeyboard: FALSE
+  mousewheel: FALSE
+  touch: TRUE
+  prevText: 'Previous'
+  nextText: 'Next'
+  namespace: 'flex-'
+  selector: '.slides > li'
+  sync: ''
+  asNavFor: ''
+  initDelay: 0
+  useCSS: TRUE
+  video: FALSE
+  pausePlay: FALSE
+  pauseText: 'Pause'
+  playText: 'Play'
+  pauseOnAction: TRUE
+  pauseOnHover: FALSE
+  controlsContainer: '.flex-control-nav-container'
+  manualControls: ''

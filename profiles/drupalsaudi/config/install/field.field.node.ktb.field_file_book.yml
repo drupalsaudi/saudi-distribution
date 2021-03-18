@@ -1,0 +1,26 @@
+langcode: ar
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_file_book
+    - node.type.ktb
+  module:
+    - file
+id: node.ktb.field_file_book
+field_name: field_file_book
+entity_type: node
+bundle: ktb
+label: 'رفع الكتب'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  file_directory: 'book-file/[date:custom:Y]-[date:custom:m]'
+  file_extensions: 'txt docx doc pdf'
+  max_filesize: ''
+  description_field: true
+  handler: 'default:file'
+  handler_settings: {  }
+field_type: file

@@ -1,0 +1,11 @@
+drupalsaudi.front_page:
+  title: 'Home'
+  route_name: '<front>'
+  menu_name: main
+  options:
+    fa_icon: 'fa-home'
+    fa_icon_prefix: fa
+    fa_icon_tag: i
+    fa_icon_appearance: before
+
+

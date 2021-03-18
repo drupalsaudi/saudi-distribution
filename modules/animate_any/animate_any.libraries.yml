@@ -1,0 +1,11 @@
+animate:
+  version: 1.x
+  css:
+    layout:
+     /libraries/animate_any/animate.css: {}
+  js:
+    js/form.js: {}
+    js/animate_any.js: {}
+  dependencies:
+   - core/jquery
+   - core/drupal 

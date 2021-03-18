@@ -1,0 +1,7 @@
+langcode: en
+status: true
+id: foo
+title: 'The foo block'
+content:
+  value: 'Just a simple block...'
+  format: plain_text

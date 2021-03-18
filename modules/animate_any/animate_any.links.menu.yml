@@ -1,0 +1,15 @@
+animate_any.animate_any_form:
+    title: 'Animate Any settings'
+    description: Admin settings for add animations to your website sections.
+    menu_name: animate_any
+    route_name: animate_any.animate_any_form
+    parent: system.admin_config_media
+    weight: 1
+    
+animate_any.animate_list:
+    title: 'List'
+    description: Display animate list of added animations to website sections.
+    menu_name: animate_any
+    route_name: animate_any.animate_list
+    parent: system.admin_config_animate_any
+    

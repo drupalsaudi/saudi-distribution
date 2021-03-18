@@ -1,0 +1,28 @@
+# Library definitions for flexslider module.
+# The path to the actual FlexSlider library assets are defined in
+# hook_library_alter_info.
+
+flexslider:
+  remote: http://flexslider.woothemes.com
+  license:
+    name: GNU-GPL-2.0-or-later
+    url: https://github.com/woothemes/FlexSlider/blob/master/LICENSE.md
+    gpl-compatible: true
+  js:
+    /libraries/flexslider/jquery.flexslider-min.js: { minified: true }
+  css:
+    component:
+      /libraries/flexslider/flexslider.css: {}
+
+integration:
+  js:
+    assets/js/flexslider.load.js: {}
+  css:
+    theme:
+      assets/css/flexslider_img.css: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/drupalSettings
+    - core/jquery.once
+    - flexslider/flexslider

@@ -1,0 +1,10 @@
+entity.flexslider.collection:
+  title: 'List'
+  route_name: entity.flexslider.collection
+  base_route: entity.flexslider.collection
+
+flexslider.form_settings:
+  title: 'Advanced settings'
+  route_name: flexslider.form_settings
+  base_route: entity.flexslider.collection
+  weight: 2

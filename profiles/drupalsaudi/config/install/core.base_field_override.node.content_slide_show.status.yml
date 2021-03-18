@@ -1,0 +1,21 @@
+langcode: ar
+status: true
+dependencies:
+  config:
+    - node.type.content_slide_show
+id: node.content_slide_show.status
+field_name: status
+entity_type: node
+bundle: content_slide_show
+label: منشور
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: في
+  off_label: إيقاف
+field_type: boolean

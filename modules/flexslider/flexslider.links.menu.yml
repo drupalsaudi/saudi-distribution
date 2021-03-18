@@ -1,0 +1,7 @@
+# Flexslider optionset menu items definition
+entity.flexslider.collection:
+  title: 'FlexSlider'
+  description: 'Configure optionsets and advanced settings.'
+  route_name: entity.flexslider.collection
+  parent: system.admin_config_media
+  weight: 99

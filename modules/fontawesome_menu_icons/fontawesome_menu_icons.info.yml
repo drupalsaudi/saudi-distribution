@@ -1,0 +1,16 @@
+name: FontAwesome Menu Icons
+type: module
+description: FontAwesome Menu Icons.
+core: 8.x
+core_version_requirement: ^8 || ^9
+package: Menu
+dependencies:
+  - fontawesome:fontawesome
+  - drupal:menu_ui
+library_dependencies:
+  - fontawesome-iconpicker
+
+# Information added by Drupal.org packaging script on 2020-10-04
+version: '8.x-1.9'
+project: 'fontawesome_menu_icons'
+datestamp: 1601802967

@@ -1,0 +1,26 @@
+langcode: ar
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_mlfat_albhth
+    - node.type.bhth
+  module:
+    - file
+id: node.bhth.field_mlfat_albhth
+field_name: field_mlfat_albhth
+entity_type: node
+bundle: bhth
+label: 'ملفات البحث'
+description: 'من هنا تستطيعون رفع اكثر من ملف للبحث مع الانتباه الى لواحق الملفات المتاحه '
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  file_directory: '[date:custom:Y]-[date:custom:m]'
+  file_extensions: 'txt docx doc pdf'
+  max_filesize: ''
+  description_field: true
+  handler: 'default:file'
+  handler_settings: {  }
+field_type: file
