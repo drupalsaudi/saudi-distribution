@@ -1,0 +1,77 @@
+<?php
+
+/**
+ * @file
+ * Update functions for the Menu Link Attributes module.
+ */
+
+use Drupal\menu_link_content\Entity\MenuLinkContent;
+
+/**
+ * Update malformed "class" attribute on menu link attributes.
+ */
+function menu_link_attributes_update_8001(&$sandbox) {
+  if (!isset($sandbox['total'])) {
+    $menu_link_content_ids = \Drupal::entityQuery('menu_link_content')->execute();
+    $sandbox['total'] = count($menu_link_content_ids);
+    $sandbox['current'] = 0;
+    $sandbox['updated'] = 0;
+
+    if (empty($sandbox['total'])) {
+      $sandbox['#finished'] = 1;
+      return;
+    }
+  }
+
+  $items_per_batch = 25;
+  $menu_link_content_ids = \Drupal::entityQuery('menu_link_content')
+    ->range($sandbox['current'], $items_per_batch)
+    ->execute();
+
+  if (empty($menu_link_content_ids)) {
+    $sandbox['#finished'] = 1;
+    return;
+  }
+
+  foreach ($menu_link_content_ids as $id) {
+    $menu_link_entity = MenuLinkContent::load($id);
+    $update_needed = FALSE;
+
+    if ($menu_link_entity->link->isEmpty()) {
+      continue;
+    }
+
+    $menu_link_url = $menu_link_entity->link->getValue();
+    foreach (['attributes', 'container_attributes'] as $attr_group) {
+      if (isset($menu_link_url[0]['options'][$attr_group]['class'])) {
+        $class = $menu_link_url[0]['options'][$attr_group]['class'];
+
+        if (!is_array($class)) {
+          $menu_link_url[0]['options'][$attr_group]['class'] = [$class];
+          $update_needed = TRUE;
+        }
+      }
+    }
+
+    if ($update_needed) {
+      $menu_link_entity->link->setValue($menu_link_url);
+      $menu_link_entity->save();
+      $sandbox['updated']++;
+    }
+
+    $sandbox['current']++;
+  }
+
+  if ($sandbox['current'] >= $sandbox['total']) {
+    $sandbox['#finished'] = 1;
+  }
+  else {
+    $sandbox['#finished'] = ($sandbox['current'] / $sandbox['total']);
+  }
+
+  if ($sandbox['#finished']) {
+    if ($sandbox['updated']) {
+      return \Drupal::translation()->formatPlural($sandbox['updated'], 'Updated one menu item due to malformed <code>class</code> attribute.', 'Updated @count menu items due to malformed <code>class</code> attribute.', ['@count' => $sandbox['updated']]);
+    }
+  }
+}
