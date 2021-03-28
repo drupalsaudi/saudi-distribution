@@ -3,7 +3,7 @@
 namespace Drupal\fontawesome\Commands;
 
 use Drush\Commands\DrushCommands;
-use Drupal\Core\Asset\LibraryDiscovery;
+use Drupal\Core\Asset\LibraryDiscoveryInterface;
 use Drupal\Core\File\FileSystem;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Archiver\ArchiverManager;
@@ -16,14 +16,14 @@ class FontawesomeCommands extends DrushCommands {
   /**
    * Library discovery service.
    *
-   * @var \Drupal\Core\Asset\LibraryDiscovery
+   * @var \Drupal\Core\Asset\LibraryDiscoveryInterface
    */
   protected $libraryDiscovery;
 
   /**
-   * File system service.
+   * File system interface.
    *
-   * @var \Drupal\Core\File\FileSystem
+   * @var \Drupal\Core\File\FileSystemInterface
    */
   protected $fileSystem;
 
@@ -37,7 +37,7 @@ class FontawesomeCommands extends DrushCommands {
   /**
    * {@inheritdoc}
    */
-  public function __construct(LibraryDiscovery $library_discovery, FileSystem $file_system, ArchiverManager $archiver_manager) {
+  public function __construct(LibraryDiscoveryInterface $library_discovery, FileSystemInterface $file_system, ArchiverManager $archiver_manager) {
     parent::__construct();
 
     $this->libraryDiscovery = $library_discovery;

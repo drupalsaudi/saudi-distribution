@@ -22,8 +22,16 @@ function fontawesome_requirements($phase) {
     // Load the configuration settings.
     $configuration_settings = \Drupal::config('fontawesome.settings');
 
+    // Check if we are loading assets.
+    if (!$configuration_settings->get('load_assets')) {
+      $requirements['fontawesome']['severity'] = REQUIREMENT_OK;
+      $requirements['fontawesome']['value'] = t('Library being loaded manually');
+      $requirements['fontawesome']['description'] = t('The Font Awesome module is configured not to load the Font Awesome library. If this is an error, please see the @adminPage and the Font Awesome module README file for more details.', [
+        '@adminPage' => Link::createFromRoute(t('admin page'), 'fontawesome.admin_settings')->toString(),
+      ]);
+    }
     // Check if Font Awesome is installed.
-    if (fontawesome_check_installed()) {
+    elseif (fontawesome_check_installed()) {
       // Get the version.
       if ($configuration_settings->get('method') == 'webfonts') {
         $version = t('Webfonts with CSS');
@@ -75,7 +83,7 @@ function fontawesome_requirements($phase) {
     else {
       $requirements['fontawesome']['severity'] = REQUIREMENT_ERROR;
       $requirements['fontawesome']['value'] = t('Not installed');
-      $requirements['fontawesome']['description'] = t('The Font Awesome 5 library could not be found. Please verify Font Awesome 5 is installed correctly or that the CDN has been activated and properly configured. Please see the @adminPage and the Font Awesome module README file for more details.', [
+      $requirements['fontawesome']['description'] = t('The Font Awesome 5 library could not be found. If you want this module to handle loading your FontAwesome assets, please verify Font Awesome 5 is installed correctly or that the CDN has been activated and properly configured. Please see the @adminPage and the Font Awesome module README file for more details.', [
         '@adminPage' => Link::createFromRoute(t('admin page'), 'fontawesome.admin_settings')->toString(),
       ]);
     }
@@ -101,4 +109,14 @@ function fontawesome_uninstall() {
     $fa_icon_bundle = isset($cache->data['fontawesome']) ? $cache->data['fontawesome'] : [];
     $fa_icon_bundle['path'] = isset($fa_icon_bundle['path']) ? $fa_icon_bundle['path'] : 'fontawesome';
   }
+}
+
+/**
+ * Add new config for explicitly allowing module to load FontAwesome assets.
+ */
+function fontawesome_update_8001() {
+  $config_factory = \Drupal::configFactory();
+  $config = $config_factory->getEditable('fontawesome.settings');
+  $config->set('load_assets', TRUE);
+  $config->save(TRUE);
 }

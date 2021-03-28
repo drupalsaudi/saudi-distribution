@@ -13,6 +13,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Url;
 use Drupal\Core\Link;
 use Drupal\Core\Config\ConfigFactory;
+use Drupal\fontawesome\FontAwesomeManagerInterface;
 
 /**
  * Provides a Font Awesome icon dialog for text editors.
@@ -26,10 +27,18 @@ class EditorIconDialog extends FormBase {
   protected $configFactory;
 
   /**
+   * Drupal Font Awesome manager service.
+   *
+   * @var \Drupal\fontawesome\FontAwesomeManagerInterface
+   */
+  protected $fontAwesomeManager;
+
+  /**
    * {@inheritdoc}
    */
-  public function __construct(ConfigFactory $config_factory) {
+  public function __construct(ConfigFactory $config_factory, FontAwesomeManagerInterface $font_awesome_manager) {
     $this->configFactory = $config_factory;
+    $this->fontAwesomeManager = $font_awesome_manager;
   }
 
   /**
@@ -37,7 +46,8 @@ class EditorIconDialog extends FormBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('config.factory')
+      $container->get('config.factory'),
+      $container->get('fontawesome.font_awesome_manager')
     );
   }
 
@@ -370,7 +380,7 @@ class EditorIconDialog extends FormBase {
     }
 
     // Load the icon data so we can check for a valid icon.
-    $iconData = fontawesome_extract_icon_metadata($value);
+    $iconData = \Drupal::service('fontawesome.font_awesome_manager')->getIconMetadata($value);
 
     if (!isset($iconData['name'])) {
       $form_state->setError($element, t("Invalid icon name %value. Please see @iconLink for correct icon names.", [
@@ -422,8 +432,8 @@ class EditorIconDialog extends FormBase {
         unset($item['settings']['power_transforms']['flip-v']);
       }
       // Determine the icon style - brands don't allow style.
-      $metadata = fontawesome_extract_icon_metadata($item['icon_name']);
-      $item['style'] = fontawesome_determine_prefix($metadata['styles'], $item['settings']['style']);
+      $metadata = $this->fontAwesomeManager->getIconMetadata($item['icon_name']);
+      $item['style'] = $this->fontAwesomeManager->determinePrefix($metadata['styles'], $item['settings']['style']);
       unset($item['settings']['style']);
 
       // Remove blank data.

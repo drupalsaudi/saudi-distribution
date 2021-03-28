@@ -8,7 +8,7 @@ dependencies:
   - fontawesome:fontawesome
   - drupal:svg_image
 
-# Information added by Drupal.org packaging script on 2020-07-02
-version: '8.x-2.17'
+# Information added by Drupal.org packaging script on 2021-03-03
+version: '8.x-2.18'
 project: 'fontawesome'
-datestamp: 1593708091
+datestamp: 1614784480
