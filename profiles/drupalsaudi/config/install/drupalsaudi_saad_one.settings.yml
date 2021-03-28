@@ -7,7 +7,6 @@ logo:
   use_default: true
 favicon:
   use_default: true
-bootstrap_barrio_library: production
 bootstrap_barrio_fluid_container: 0
 bootstrap_barrio_region_clean_top_header: 0
 bootstrap_barrio_region_class_top_header: row
