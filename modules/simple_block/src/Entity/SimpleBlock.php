@@ -69,7 +69,10 @@ class SimpleBlock extends ConfigEntityBase implements SimpleBlockInterface {
    * {@inheritdoc}
    */
   public function getContent() {
-    return $this->content;
+    return $this->content ?: [
+      'value' => '',
+      'format' => filter_default_format(),
+    ];
   }
 
   /**

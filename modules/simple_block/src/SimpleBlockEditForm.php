@@ -64,17 +64,14 @@ class SimpleBlockEditForm extends EntityForm implements ContainerInjectionInterf
    * {@inheritdoc}
    */
   public function save(array $form, FormStateInterface $form_state) {
-    $simple_block = $this->entity;
-    $is_new = $simple_block->isNew();
-    $status = $simple_block->save();
-    if ($status && $is_new) {
-      \Drupal::messenger()->addMessage($this->t('Block %id has been added.', ['%id' => $simple_block->id()]));
+    $status = parent::save($form, $form_state);
+    $messenger = $this->messenger();
+    $arguments = ['%id' => $this->getEntity()->id()];
+    if ($status === SAVED_NEW) {
+      $messenger->addStatus($this->t('Block %id has been added.', $arguments));
     }
-    elseif ($status) {
-      \Drupal::messenger()->addMessage($this->t('Block %id has been updated.', ['%id' => $simple_block->id()]));
-    }
-    else {
-      \Drupal::messenger()->addMessage($this->t('Block %id was not saved.', ['%id' => $simple_block->id()]), 'warning');
+    elseif ($status === SAVED_UPDATED) {
+      $messenger->addStatus($this->t('Block %id has been updated.', $arguments));
     }
   }
 
