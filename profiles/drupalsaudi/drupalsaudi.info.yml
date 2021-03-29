@@ -57,6 +57,7 @@ install:
   - yaml_content
   - panelbutton
   - colorbutton
+  - ckeditor_font
 themes:
   - bootstrap_barrio
   - drupalsaudi_saad_one

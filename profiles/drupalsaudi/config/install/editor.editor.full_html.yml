@@ -41,10 +41,11 @@ settings:
         -
           name: 'Block Formatting'
           items:
-            - Styles
             - Format
             - TextColor
             - BGColor
+            - Font
+            - FontSize
         -
           name: Tools
           items:
@@ -56,6 +57,9 @@ settings:
       language_list: un
     stylescombo:
       styles: ''
+    font:
+      font_names: ''
+      font_sizes: ''
     colorbutton:
       colors: ''
 image_upload:
