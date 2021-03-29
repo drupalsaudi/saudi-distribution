@@ -55,6 +55,8 @@ install:
   - layout_builder
   - animate_any
   - yaml_content
+  - panelbutton
+  - colorbutton
 themes:
   - bootstrap_barrio
   - drupalsaudi_saad_one

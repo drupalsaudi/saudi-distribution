@@ -1,4 +1,4 @@
-langcode: en
+langcode: ar
 status: true
 dependencies:
   config:
@@ -41,20 +41,28 @@ settings:
         -
           name: 'Block Formatting'
           items:
+            - Styles
             - Format
+            - TextColor
+            - BGColor
         -
           name: Tools
           items:
             - ShowBlocks
+            - DrupalFontAwesome
             - Source
   plugins:
+    language:
+      language_list: un
     stylescombo:
       styles: ''
+    colorbutton:
+      colors: ''
 image_upload:
   status: true
   scheme: public
   directory: inline-images
   max_size: ''
   max_dimensions:
-    width: 0
-    height: 0
+    width: null
+    height: null
