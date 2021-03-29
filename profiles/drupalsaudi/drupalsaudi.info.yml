@@ -58,6 +58,8 @@ install:
   - panelbutton
   - colorbutton
   - ckeditor_font
+  - anchor_link
+  - fakeobjects
 themes:
   - bootstrap_barrio
   - drupalsaudi_saad_one

@@ -1,0 +1,31 @@
+<?php
+
+/**
+ * @file
+ * Contains anchor_link.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function anchor_link_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the entity_link module.
+    case 'help.page.anchor_link':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('This plugin module adds the better link dialog and anchor related features to CKEditor in Drupal 8') . '</p>';
+      $output .= '<p><ul>';
+      $output .= '  <li>Dialog to insert links and anchors with some properties.</li>';
+      $output .= '  <li>Context menu option to edit or remove links and anchors.</li>';
+      $output .= '  <li>Ability to insert a link with the URL using multiple protocols, including an external file if a file manager is integrated.</li>';
+      $output .= '</ul></p>';
+      $output .= '<p><a href="https://ckeditor.com/cke4/addon/link">https://ckeditor.com/cke4/addon/link</a></p>';
+      $output .= '<p><a href="https://ckeditor.com/cke4/addon/fakeobjects">https://ckeditor.com/cke4/addon/fakeobjects</a></p>';
+      return $output;
+
+    default:
+  }
+}

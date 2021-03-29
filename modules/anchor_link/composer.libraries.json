@@ -1,0 +1,48 @@
+{
+    "name": "drupal/anchor_link",
+    "description": "This plugin module adds the better link dialog and anchor related features to CKEditor in Drupal 8.",
+    "type": "drupal-module",
+    "license": "GPL-2.0-or-later",
+    "minimum-stability": "dev",
+    "authors": [
+        {
+            "name": "Vardot",
+            "homepage": "https://www.drupal.org/vardot",
+            "role": "Maintainer"
+        }
+    ],
+    "support": {
+        "issues": "https://www.drupal.org/project/issues/anchor_link",
+        "source": "http://cgit.drupalcode.org/anchor_link"
+    },
+    "require": {
+        "ckeditor/link": "*",
+        "ckeditor/fakeobjects": "*"
+    },
+    "repositories": [
+        {
+            "type": "package",
+            "package": {
+                "name": "ckeditor/link",
+                "version": "4.16.0",
+                "type": "drupal-library",
+                "dist": {
+                    "url": "https://download.ckeditor.com/link/releases/link_4.16.0.zip",
+                    "type": "zip"
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "ckeditor/fakeobjects",
+                "version": "4.16.0",
+                "type": "drupal-library",
+                "dist": {
+                    "url": "https://download.ckeditor.com/fakeobjects/releases/fakeobjects_4.16.0.zip",
+                    "type": "zip"
+                }
+            }
+        }
+    ]
+}
