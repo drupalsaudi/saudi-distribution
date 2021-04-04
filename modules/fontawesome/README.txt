@@ -93,12 +93,15 @@ tags can be found here:
   or
   https://developer.mozilla.org/en-US/docs/Web/SVG/Element
 
+TROUBLESHOOTING
+---------------
+If the Font Awesome module is installed but icons are not showing, try the
+following steps:
+1. Flush the Drupal cache
+2. Check the status report for issues on the libary being loaded.
+3. If you have chosen to load the library manually ("Load Font Awesome libary?"
+  is disabled), confirm that your manual library is loaded properly.
 
 CREDITS
 -------
-* Rob Loach (RobLoach) http://robloach.net
-* Inder Singh (inders) http://indersingh.com | https://www.drupal.org/u/inders
-* Mark Carver https://www.drupal.org/u/mark-carver
-* Brian Gilbert https://drupal.org/u/realityloop
 * Daniel Moberly https://drupal.org/u/danielmoberly
-* Truls S. Yggeseth https://drupal.org/u/truls1502

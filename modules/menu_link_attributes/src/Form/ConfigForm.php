@@ -6,13 +6,48 @@ use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Component\Serialization\Exception\InvalidDataTypeException;
 use Drupal\Component\Serialization\Yaml;
+use Drupal\Core\Config\ConfigFactoryInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Class ConfigForm.
  *
+ * The configuration form of Menu Link Attributes.
+ *
  * @package Drupal\menu_link_attributes\Form
  */
 class ConfigForm extends ConfigFormBase {
+
+  /**
+   * The module handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
+   * Constructs a ConfigForm object.
+   *
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The factory for configuration objects.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   The handle of module objects.
+   */
+  public function __construct(ConfigFactoryInterface $config_factory, ModuleHandlerInterface $module_handler) {
+    $this->setConfigFactory($config_factory);
+    $this->moduleHandler = $module_handler;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('config.factory'),
+      $container->get('module_handler')
+    );
+  }
 
   /**
    * {@inheritdoc}
@@ -39,7 +74,7 @@ class ConfigForm extends ConfigFormBase {
     $conf = ['attributes' => $attributes];
     $config_text = Yaml::encode($conf);
 
-    if (!\Drupal::moduleHandler()->moduleExists('yaml_editor')) {
+    if (!$this->moduleHandler->moduleExists('yaml_editor')) {
       $message = $this->t('It is recommended to install the <a href="@yaml-editor">YAML Editor</a> module for easier editing.', [
         '@yaml-editor' => 'https://www.drupal.org/project/yaml_editor',
       ]);
@@ -47,17 +82,17 @@ class ConfigForm extends ConfigFormBase {
       $this->messenger()->addWarning($message);
     }
 
-    $form['config'] = array(
+    $form['config'] = [
       '#type' => 'textarea',
       '#title' => $this->t('Configuration'),
       '#description' => $this->t('Available attributes can be defined in YAML syntax.'),
       '#default_value' => $config_text,
       '#rows' => 15,
       '#attributes' => ['data-yaml-editor' => 'true'],
-    );
+    ];
 
     // Use module's YAML config file for example structure.
-    $module_path = \Drupal::moduleHandler()->getModule('menu_link_attributes')->getPath();
+    $module_path = $this->moduleHandler->getModule('menu_link_attributes')->getPath();
     $yml_text = file_get_contents($module_path . '/config/install/menu_link_attributes.config.yml');
 
     $form['example'] = [

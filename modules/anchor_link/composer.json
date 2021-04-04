@@ -1,0 +1,34 @@
+{
+  "name": "drupal/anchor_link",
+  "description": "This plugin module adds the better link dialog and anchor related features to CKEditor in Drupal 8.",
+  "type": "drupal-module",
+  "homepage": "https://www.drupal.org/project/anchor_link",
+  "license": "GPL-2.0-or-later",
+  "minimum-stability": "dev",
+  "authors": [
+    {
+      "name": "Vardot",
+      "homepage": "https://www.drupal.org/vardot",
+      "role": "Maintainer"
+    }
+  ],
+  "support": {
+    "issues": "https://www.drupal.org/project/issues/anchor_link",
+    "source": "http://cgit.drupalcode.org/anchor_link"
+  },
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://packages.drupal.org/8"
+    }
+  ],
+  "require": {
+    "drupal/core": "*",
+    "drupal/fakeobjects": "^1.0"
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-8.x-2.x": "8.2.x-dev"
+    }
+  }
+}

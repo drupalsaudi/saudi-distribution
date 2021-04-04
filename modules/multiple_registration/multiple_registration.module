@@ -137,19 +137,27 @@ function multiple_registration_preprocess_user(array &$variables) {
   foreach ($fields as $field_name => $field_data) {
     /* @var Drupal\Core\Field\FieldItemList $field_data */
     $field_definition = $field_data->getFieldDefinition();
-    if (\property_exists($field_definition, 'third_party_settings')) {
-      /* @var Drupal\field\Entity\FieldConfig $field_definition */
-      $third_party_settings = $field_definition->get('third_party_settings');
-      if (\array_key_exists('multiple_registration', $third_party_settings)) {
-        $allowed_roles = $third_party_settings['multiple_registration']['user_additional_register_form'];
-        $found_roles = array_intersect($user_roles, $allowed_roles);
-        if (empty($found_roles)) {
-          if ($field_name !== 'user_picture') {
-            unset($variables['elements'][$field_name], $variables['content'][$field_name]);
-          }
-        }
-      }
+    if (!property_exists($field_definition, 'third_party_settings')) {
+      continue;
     }
+
+    /* @var Drupal\field\Entity\FieldConfig $field_definition */
+    $third_party_settings = $field_definition->get('third_party_settings');
+    if (!array_key_exists('multiple_registration', $third_party_settings)) {
+      continue;
+    }
+
+    $allowed_roles = $third_party_settings['multiple_registration']['user_additional_register_form'];
+    $allowed_roles_unique_values = array_values(array_unique($allowed_roles));
+    if ($allowed_roles_unique_values[0] === 0 && count($allowed_roles_unique_values) === 1) {
+      continue;
+    }
+
+    $found_roles = array_intersect($user_roles, $allowed_roles);
+    if (!empty($found_roles) || $field_name === 'user_picture') {
+      continue;
+    }
+    unset($variables['elements'][$field_name], $variables['content'][$field_name]);
   }
 }
 
@@ -182,16 +190,12 @@ function multiple_registration_form_alter(&$form, FormStateInterface $form_state
       $field_definitions = \Drupal::service('entity_field.manager')->getFieldDefinitions('user', 'user');
       foreach ($field_definitions as $field_name => $field_definition) {
         if (isset($form[$field_name]) && $field_definition instanceof ThirdPartySettingsInterface) {
-          $field_roles = $field_definition->getThirdPartySetting('multiple_registration', 'user_additional_register_form');
-          $field_roles_required = $field_definition->getThirdPartySetting('multiple_registration', 'user_additional_register_form_required');
+          $field_roles = $field_definition->getThirdPartySetting('multiple_registration', 'user_additional_register_form') ?? [];
+          $field_roles_required = $field_definition->getThirdPartySetting('multiple_registration', 'user_additional_register_form_required') ?? [];
           if (!empty($field_roles)) {
             // If something was selected.
-            if (!(max($field_roles) === 0)) {
-              $form[$field_name]['#access'] = MultipleRegistrationController::checkFieldAccess($field_roles);
-            }
-            if (is_array($field_roles_required) && !(max($field_roles_required) === 0)) {
-              $form[$field_name]['widget']['#required'] = MultipleRegistrationController::checkFieldAccess($field_roles_required);
-            }
+            $form[$field_name]['#access'] = MultipleRegistrationController::checkFieldAccess($field_roles);
+            $form[$field_name]['widget']['#required'] = MultipleRegistrationController::checkFieldAccess($field_roles_required);
           }
         }
       }

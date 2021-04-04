@@ -1,0 +1,13 @@
+name: Panel Button
+type: module
+description: "Adds the Panel Button plugin to CKEditor. This plugin is a utility plugin that is required by certain user-facing CKEditor plugins."
+package: CKEditor
+core: 8.x
+core_version_requirement: ^8 || ^9
+dependencies:
+  - drupal:ckeditor
+
+# Information added by Drupal.org packaging script on 2020-06-19
+version: '8.x-1.3'
+project: 'panelbutton'
+datestamp: 1592593015

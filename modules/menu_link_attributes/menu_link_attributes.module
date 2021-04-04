@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @file
+ * Core file of the Menu Link Attributes module.
+ */
+
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Url;
@@ -92,13 +97,20 @@ function menu_link_attributes_form_menu_link_content_form_alter(array &$form, Fo
       '#type' => $type,
       '#title' => $info['label'],
       '#description' => $info['description'],
-      '#default_value' => isset($menu_link_options[$attributes_key][$attribute_formatted]) ? $menu_link_options[$attributes_key][$attribute_formatted] : '',
+      '#default_value' => isset($menu_link_options[$attributes_key][$attribute_formatted]) ?
+        $menu_link_options[$attributes_key][$attribute_formatted] :
+        (isset($info['default_value']) ? $info['default_value'] : ''),
     ];
 
     // Fill options if select list.
     if ($type == 'select') {
       $form['options']['attributes'][$attribute]['#empty_option'] = t('- Select -');
       $form['options']['attributes'][$attribute]['#options'] = $info['options'];
+    }
+
+    // Fill options if type is "managed_file".
+    if ($type === 'managed_file' && !empty($info['upload_location'])) {
+      $form['options']['attributes'][$attribute]['#upload_location'] = $info['upload_location'];
     }
 
     // Add "autofocus" attribute for first attribute input field
@@ -120,15 +132,19 @@ function menu_link_attributes_menu_link_content_form_submit($form, FormStateInte
   $form_object = $form_state->getFormObject();
   $menu_link = $form_object->getEntity();
 
-  if (!$menu_link->link) {
+  if (!$menu_link->link || $menu_link->link->isEmpty()) {
     return;
   }
-
 
   $menu_link_options = $menu_link->link->first()->options ?: [];
   $menu_link_attributes = ['attributes' => $form_state->getValue('attributes')];
 
-  foreach ($menu_link_attributes['attributes'] as $attribute_name => $attribute_value) {
+  foreach ($menu_link_attributes['attributes'] as $attribute_name => &$attribute_value) {
+    // Make "class" attributes an array.
+    if (in_array($attribute_name, ['class', 'container_class']) && !is_array($attribute_value)) {
+      $attribute_value = [(string) $attribute_value];
+    }
+
     $is_container_attribute = menu_link_attributes_is_container_attribute($attribute_name);
 
     if ($is_container_attribute) {
@@ -139,8 +155,16 @@ function menu_link_attributes_menu_link_content_form_submit($form, FormStateInte
     }
   }
 
-  foreach ($menu_link_attributes as $attribute_group => $attributes) {
-    $menu_link_attributes[$attribute_group] = array_filter($attributes);
+  // Remove empty attribute values.
+  foreach ($menu_link_attributes as $attribute_group => $grouped_attributes) {
+    foreach ($grouped_attributes as $group_attribute_name => $group_attribute_value) {
+      if (is_array($group_attribute_value)) {
+        $menu_link_attributes[$attribute_group][$group_attribute_name] = array_filter($group_attribute_value);
+      }
+      elseif (mb_strlen($group_attribute_value) === 0) {
+        unset($menu_link_attributes[$attribute_group][$group_attribute_name]);
+      }
+    }
   }
 
   $menu_link_attributes = array_filter($menu_link_attributes);
@@ -155,13 +179,18 @@ function menu_link_attributes_menu_link_content_form_submit($form, FormStateInte
 /**
  * Preserve menu link attributes on form submit,
  * for users that don't have permissions to edit attributes.
+ *
+ * @param array $form
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *
+ * @throws \Drupal\Core\Entity\EntityStorageException
  */
 function menu_link_attributes_menu_link_content_form_preserve($form, FormStateInterface $form_state) {
   /** @var \Drupal\menu_link_content\Form\MenuLinkContentForm $form_object */
   $form_object = $form_state->getFormObject();
   $menu_link = $form_object->getEntity();
 
-  if (!$menu_link->link) {
+  if (!$menu_link->link || $menu_link->link->isEmpty()) {
     return;
   }
 
@@ -220,4 +249,3 @@ function _menu_link_attributes_preprocess_menu_items(&$items) {
     }
   }
 }
-

@@ -7,7 +7,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Component\Utility\UrlHelper;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\Asset\LibraryDiscovery;
+use Drupal\Core\Asset\LibraryDiscoveryInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Url;
 
@@ -19,14 +19,14 @@ class SettingsForm extends ConfigFormBase {
   /**
    * Drupal LibraryDiscovery service container.
    *
-   * @var \Drupal\Core\Asset\LibraryDiscovery
+   * @var \Drupal\Core\Asset\LibraryDiscoveryInterface
    */
   protected $libraryDiscovery;
 
   /**
    * {@inheritdoc}
    */
-  public function __construct(ConfigFactoryInterface $config_factory, LibraryDiscovery $library_discovery) {
+  public function __construct(ConfigFactoryInterface $config_factory, LibraryDiscoveryInterface $library_discovery) {
     parent::__construct($config_factory);
 
     $this->libraryDiscovery = $library_discovery;
@@ -101,6 +101,13 @@ class SettingsForm extends ConfigFormBase {
       '#default_value' => $fontawesome_config->get('allow_pseudo_elements'),
     ];
 
+    $form['load_assets'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Load Font Awesome library?'),
+      '#default_value' => $fontawesome_config->get('load_assets'),
+      '#description' => $this->t("If enabled, this module will attempt to load the Font Awesome library for you. To prevent loading twice, leave this option disabled if you're including the assets manually or through another module or theme."),
+    ];
+
     $form['external'] = [
       '#type' => 'details',
       '#open' => TRUE,
@@ -109,6 +116,11 @@ class SettingsForm extends ConfigFormBase {
         ':remoteurl' => $fontawesome_library['remote'],
         '%installpath' => '/libraries',
       ]),
+      '#states' => [
+        'visible' => [
+          ':input[name="load_assets"]' => ['checked' => TRUE],
+        ],
+      ],
       'use_cdn' => [
         '#type' => 'checkbox',
         '#title' => $this->t('Use external file (CDN) / local file?'),
@@ -158,6 +170,11 @@ class SettingsForm extends ConfigFormBase {
         '#description' => $this->t('Checking this box will cause the Font Awesome library to load the file containing the solid icon declarations (<i>solid.js/solid.css</i>)'),
         '#default_value' => is_null($fontawesome_config->get('use_solid_file')) === TRUE ? TRUE : $fontawesome_config->get('use_solid_file'),
       ],
+      '#states' => [
+        'visible' => [
+          ':input[name="load_assets"]' => ['checked' => TRUE],
+        ],
+      ],
       'use_regular_file' => [
         '#type' => 'checkbox',
         '#title' => $this->t('Load regular icons'),
@@ -191,6 +208,11 @@ class SettingsForm extends ConfigFormBase {
       '#description' => $this->t('Version 5 of Font Awesome has some changes which require modifications to the way you declare many of your icons. The settings below are designed to ease that transition. See @upgradingLink for more information.', [
         '@upgradingLink' => Link::fromTextAndUrl($this->t('the Font Awesome guide to upgrading version 4 to version 5'), Url::fromUri('https://fontawesome.com/how-to-use/on-the-web/setup/upgrading-from-version-4'))->toString(),
       ]),
+      '#states' => [
+        'visible' => [
+          ':input[name="load_assets"]' => ['checked' => TRUE],
+        ],
+      ],
       'use_shim' => [
         '#type' => 'checkbox',
         '#title' => $this->t('Use version 4 shim file?'),
@@ -266,6 +288,7 @@ class SettingsForm extends ConfigFormBase {
     $this->config('fontawesome.settings')
       ->set('tag', $values['tag'])
       ->set('method', $values['method'])
+      ->set('load_assets', $values['load_assets'])
       ->set('use_cdn', $values['use_cdn'])
       ->set('external_svg_location', (string) $values['external_svg_location'])
       ->set('external_svg_integrity', (string) $values['external_svg_integrity'])

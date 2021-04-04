@@ -8,6 +8,9 @@ fontawesome.settings:
     method:
       type: string
       label: 'Method used for delivering Font Awesome'
+    load_assets:
+      type: boolean
+      label: 'Let module handle loading FontAwesome assets'
     use_cdn:
       type: boolean
       label: 'Use CDN to serve Font Awesome'
@@ -41,3 +44,11 @@ fontawesome.settings:
     external_svg_integrity:
       type: string
       label: 'Integrity value of the external CDN for Font Awesome'
+
+field.formatter.settings.fontawesome_icon_formatter:
+  type: mapping
+  label: 'Font Awesome Icon formatter settings'
+  mapping:
+    layers:
+      type: boolean
+      label: 'Display multi-value fields as layers?'

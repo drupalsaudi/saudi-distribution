@@ -1,4 +1,4 @@
-langcode: en
+langcode: ar
 status: true
 dependencies:
   config:
@@ -24,8 +24,9 @@ settings:
         -
           name: Linking
           items:
-            - DrupalLink
-            - DrupalUnlink
+            - Link
+            - Unlink
+            - Anchor
         -
           name: Lists
           items:
@@ -42,19 +43,31 @@ settings:
           name: 'Block Formatting'
           items:
             - Format
+            - TextColor
+            - BGColor
+            - Font
+            - FontSize
         -
           name: Tools
           items:
             - ShowBlocks
+            - DrupalFontAwesome
             - Source
   plugins:
+    language:
+      language_list: un
     stylescombo:
       styles: ''
+    font:
+      font_names: ''
+      font_sizes: ''
+    colorbutton:
+      colors: ''
 image_upload:
   status: true
   scheme: public
   directory: inline-images
   max_size: ''
   max_dimensions:
-    width: 0
-    height: 0
+    width: null
+    height: null

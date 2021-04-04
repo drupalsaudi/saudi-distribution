@@ -7,7 +7,6 @@
 
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Link;
-use Symfony\Component\Yaml\Yaml;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\TypedData\Plugin\DataType\ItemList;
@@ -198,6 +197,11 @@ function fontawesome_check_installed() {
   // Load the configuration settings.
   $configuration_settings = \Drupal::config('fontawesome.settings');
 
+  // If this module is not configured to load the fontawesome assets, exit.
+  if (!$configuration_settings->get('load_assets')) {
+    return TRUE;
+  }
+
   // Throw error if library file not found.
   if ($configuration_settings->get('use_cdn')) {
     return !empty($configuration_settings->get('external_svg_location'));
@@ -224,6 +228,11 @@ function fontawesome_check_installed() {
 function fontawesome_page_attachments(array &$page) {
   // Load the configuration settings.
   $configuration_settings = \Drupal::config('fontawesome.settings');
+
+  // Don't include fontawesome if the user has opted out of loading it.
+  if (!$configuration_settings->get('load_assets')) {
+    return TRUE;
+  }
 
   // Throw error if library file not found.
   if (!fontawesome_check_installed()) {
@@ -270,27 +279,6 @@ function fontawesome_page_attachments(array &$page) {
   if ($configuration_settings->get('use_shim')) {
     $page['#attached']['library'][] = 'fontawesome/fontawesome.' . $configuration_settings->get('method') . '.shim';
   }
-}
-
-/**
- * Helper function returns the prefix for an icon based on icon type.
- *
- * @param array $styles
- *   An array of valid styles for the icon.
- * @param string $default
- *   The value to assign here if it's not a brand icon.
- *
- * @return string
- *   A valid prefix for this icon.
- */
-function fontawesome_determine_prefix(array $styles, $default = 'fas') {
-  // Determine the icon style - brands behave differently.
-  foreach ($styles as $style) {
-    if ($style == 'brands') {
-      return 'fab';
-    }
-  }
-  return $default;
 }
 
 /**
@@ -412,97 +400,9 @@ function fontawesome_icon_bundles() {
     'settings' => [
       'tag' => 'i',
     ],
-    'icons' => fontawesome_extract_icons(),
+    'icons' => \Drupal::service('fontawesome.font_awesome_manager')->getIcons(),
   ];
   return $bundles;
-}
-
-/**
- * Loads the Font Awesome metadata file.
- *
- * @return string
- *   The filepath of the metadata file.
- */
-function fontawesome_get_metadata_filepath() {
-  // Attempt to load the icons from the local library's metadata if possible.
-  $metadataFile = \Drupal::service('file_system')->realpath(DRUPAL_ROOT . '/libraries/fontawesome/metadata/icons.yml');
-  // If we can't load the local file, use the included module icons file.
-  if (!file_exists($metadataFile)) {
-    $metadataFile = drupal_get_path('module', 'fontawesome') . '/metadata/icons.yml';
-  }
-  return $metadataFile;
-}
-
-/**
- * Provides a list of all available Font Awesome icons from metadata.
- *
- * @return array
- *   Array containing icons.
- */
-function fontawesome_extract_icons() {
-  // Check for cached icons.
-  if (!$icons = \Drupal::cache('data')->get('fontawesome.iconlist')) {
-
-    // Parse the metadata file and use it to generate the icon list.
-    $icons = [];
-    foreach (Yaml::parse(file_get_contents(fontawesome_get_metadata_filepath())) as $name => $icon) {
-      // Determine the icon type - brands behave differently.
-      $type = 'solid';
-      foreach ($icon['styles'] as $style) {
-        if ($style == 'brands') {
-          $type = 'brands';
-          break;
-        }
-      }
-      $icons[$name] = [
-        'name' => $name,
-        'type' => $type,
-        'label' => $icon['label'],
-        'styles' => $icon['styles'],
-      ];
-    }
-
-    // Cache the icons array.
-    \Drupal::cache('data')->set('fontawesome.iconlist', $icons, strtotime('+1 week'), ['fontawesome', 'iconlist']);
-  }
-  else {
-    $icons = $icons->data;
-  }
-
-  return (array) $icons;
-}
-
-/**
- * Extract metadata for a specific icon.
- *
- * @param string $findIcon
- *   The icon for which we want metadata.
- *
- * @return array|bool
- *   Array containing icons.
- */
-function fontawesome_extract_icon_metadata($findIcon) {
-  // Parse the metadata file and use it to generate the icon list.
-  foreach (Yaml::parse(file_get_contents(fontawesome_get_metadata_filepath())) as $name => $icon) {
-    if ($name == $findIcon) {
-      // Determine the icon type - brands behave differently.
-      $type = 'solid';
-      foreach ($icon['styles'] as $style) {
-        if ($style == 'brands') {
-          $type = 'brands';
-          break;
-        }
-      }
-      return [
-        'name' => $name,
-        'type' => $type,
-        'label' => $icon['label'],
-        'styles' => $icon['styles'],
-      ];
-    }
-  }
-
-  return FALSE;
 }
 
 /**
@@ -553,7 +453,7 @@ function fontawesome_editor_js_settings_alter(array &$settings) {
     // SVG mode requires loading javascript.
     $fontawesome_library = \Drupal::service('library.discovery')->getLibraryByName('fontawesome', 'fontawesome.svg');
     if (!$configuration_settings->get('use_cdn')) {
-      $fontawesome_library['js'][0]['data'] = '/' . $fontawesome_library['js'][0]['data'];
+      $fontawesome_library['js'][0]['data'] = base_path() . $fontawesome_library['js'][0]['data'];
     }
     $settings['editor']['fontawesome']['fontawesomeLibraries']['primary'] = $fontawesome_library['js'][0]['data'];
 
@@ -561,7 +461,7 @@ function fontawesome_editor_js_settings_alter(array &$settings) {
     if ($configuration_settings->get('use_shim')) {
       $fontawesome_library = \Drupal::service('library.discovery')->getLibraryByName('fontawesome', 'fontawesome.svg.shim');
       if (!$configuration_settings->get('use_cdn')) {
-        $fontawesome_library['js'][0]['data'] = '/' . $fontawesome_library['js'][0]['data'];
+        $fontawesome_library['js'][0]['data'] = base_path() . $fontawesome_library['js'][0]['data'];
       }
       $settings['editor']['fontawesome']['fontawesomeLibraries']['shim'] = $fontawesome_library['js'][0]['data'];
     }

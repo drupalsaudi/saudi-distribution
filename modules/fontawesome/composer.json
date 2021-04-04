@@ -5,6 +5,10 @@
     "license": "GPL-2.0-or-later",
     "homepage": "https://www.drupal.org/project/fontawesome",
     "minimum-stability": "dev",
+    "support": {
+        "issues": "https://drupal.org/project/issues/fontawesome",
+        "source": "https://git.drupalcode.org/project/fontawesome"
+    },
     "extra": {
         "drush": {
             "services": {

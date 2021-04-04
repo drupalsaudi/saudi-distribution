@@ -46,7 +46,6 @@ install:
   - image_captcha
   - multiple_registration
   - menu_link_attributes
-  - bootstrap_library
   - flexslider
   - flexslider_views
   - fontawesome
@@ -56,6 +55,11 @@ install:
   - layout_builder
   - animate_any
   - yaml_content
+  - panelbutton
+  - colorbutton
+  - ckeditor_font
+  - anchor_link
+  - fakeobjects
 themes:
   - bootstrap_barrio
   - drupalsaudi_saad_one

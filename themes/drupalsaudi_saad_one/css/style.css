@@ -455,7 +455,9 @@ display: inline-grid !important;
 
 #block-drupalsaudi-saad-one-page-title h1 {
 color: #07731f;
-text-shadow: 1px 1px 1px #000, 3px 3px 5px #07731f;
+text-align: center;
+font-family: sst, Arial, sans-serif;
+margin-bottom: 50px;
 }
 dl.node-type-list {
 margin-top: 20px;
@@ -508,4 +510,15 @@ padding: 2px 13px 6px;
   float: right;
   margin-right: -15em !important;
   margin-left: 0;
+}
+
+.board-of-directors {
+	margin: 0 auto;
+	text-align: center;
+}
+.board-of-directors img {
+  border-radius:50% !important ;
+}
+.inner-page-block {
+	margin-bottom: 20px;
 }

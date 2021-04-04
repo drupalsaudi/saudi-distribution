@@ -1,5 +1,6 @@
 tag: 'i'
 method: 'svg'
+load_assets: true
 use_cdn: true
 external_svg_location: 'https://use.fontawesome.com/releases/v5.13.1/js/all.js'
 use_shim: true

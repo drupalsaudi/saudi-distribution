@@ -40,7 +40,7 @@ class FontAwesomeIconMedia extends MediaSourceBase {
       ->first();
 
     // If the source field is not required, it may be empty.
-    if (!$icon->isEmpty()) {
+    if (!$icon) {
       return parent::getMetadata($media, $attribute_name);
     }
     switch ($attribute_name) {
@@ -61,7 +61,7 @@ class FontAwesomeIconMedia extends MediaSourceBase {
    * Gets the thumbnail image URI based on an icon entity.
    *
    * @param \Drupal\fontawesome\Plugin\Field\FieldType\FontAwesomeIcon $icon
-   *   A Font Awesome Iocn entity.
+   *   A Font Awesome Icon entity.
    *
    * @return string
    *   File URI of the thumbnail image or NULL if there is no specific icon.
