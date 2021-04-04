@@ -18,8 +18,7 @@ class SimpleBlockListBuilder extends ConfigEntityListBuilder {
   public function buildHeader() {
     return [
       'id' => $this->t('ID'),
-      'block' => $this->t('Block description'),
-
+      'block' => $this->t('Block title'),
     ] + parent::buildHeader();
   }
 
