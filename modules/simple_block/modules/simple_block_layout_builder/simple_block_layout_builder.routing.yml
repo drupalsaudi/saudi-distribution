@@ -1,0 +1,16 @@
+simple_block_layout_builder.edit_block:
+  path: '/layout_builder/simple-block/{section_storage_type}/{section_storage}/{delta}/{region}/{uuid}/{simple_block}'
+  defaults:
+    _entity_form: simple_block.layout_builder
+    _title: 'Configure block'
+    simple_block: null
+    uuid: null
+  requirements:
+    _layout_builder_access: 'view'
+  options:
+    _admin_route: TRUE
+    parameters:
+      section_storage:
+        layout_builder_tempstore: TRUE
+      simple_block:
+        type: entity:simple_block

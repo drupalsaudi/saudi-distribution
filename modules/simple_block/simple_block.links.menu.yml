@@ -1,0 +1,5 @@
+entity.simple_block.collection:
+  title: 'Simple Blocks'
+  description: "Create and manage Simple Blocks."
+  route_name: entity.simple_block.collection
+  parent: block.admin_display
