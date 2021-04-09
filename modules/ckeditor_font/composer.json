@@ -13,7 +13,7 @@
 		"source": "http://cgit.drupalcode.org/ckeditor_font"
 	},
 	"require": {
-		"drupal-ckeditor-libraries-group/font": "4.13.1",
+		"drupal-ckeditor-libraries-group/font": "^4.13.1",
 		"drupal/core": "^8 || ^9"
 	}
 }

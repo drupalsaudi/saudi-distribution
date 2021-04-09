@@ -35,7 +35,7 @@ REQUIREMENTS
 
 This module requires no modules outside of Drupal core.
 
-This module requirees the CKEditor font plugin (http://ckeditor.com/addon/font).
+This module requires the CKEditor font plugin (http://ckeditor.com/addon/font).
 
 
 INSTALLATION
@@ -52,11 +52,8 @@ Local installation (non-composer):
 Composer installation:
 
     1. CKEditor Font Size and Family's composer.json will automatically install
-       the library into `base_path()/libraries/font`. To enable this (1.x-dev),
+       the library into `base_path()/libraries/font`. To add the library,
        type `composer require drupal/ckeditor_font` at your Drupal project root.
-
-       For more information, please see:
-       https://www.drupal.org/project/ckeditor_font/issues/3104018
 
 
 CONFIGURATION

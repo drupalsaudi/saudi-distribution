@@ -7,7 +7,7 @@ package: CKEditor
 dependencies:
   - drupal:ckeditor
 
-# Information added by Drupal.org packaging script on 2020-05-22
-version: '8.x-1.1'
+# Information added by Drupal.org packaging script on 2021-04-05
+version: '8.x-1.2'
 project: 'ckeditor_font'
-datestamp: 1590157420
+datestamp: 1617651506

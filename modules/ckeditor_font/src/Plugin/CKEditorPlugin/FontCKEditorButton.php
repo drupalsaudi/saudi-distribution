@@ -38,7 +38,7 @@ class FontCKEditorButton extends CKEditorPluginBase implements CKEditorPluginCon
         'image' => $modulePath . '/icons/font.png',
       ),
       'FontSize' => array(
-        'label' => $this->t('Font ckeditor button'),
+        'label' => $this->t('Font Size'),
         'image' => $modulePath . '/icons/fontsize.png',
       ),
     );

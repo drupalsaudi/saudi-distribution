@@ -453,9 +453,9 @@ top: 35% !important;
 display: inline-grid !important;
 }
 
-#block-drupalsaudi-saad-one-page-title h1 {
+#block-drupalsaudi-saad-one-page-title h1,
+.title-page-aladarh {
 color: #07731f;
-text-align: center;
 font-family: sst, Arial, sans-serif;
 margin-bottom: 50px;
 }
