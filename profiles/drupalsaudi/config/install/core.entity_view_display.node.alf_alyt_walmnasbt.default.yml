@@ -5,7 +5,9 @@ dependencies:
     - field.field.node.alf_alyt_walmnasbt.body
     - field.field.node.alf_alyt_walmnasbt.field_asm_almhadr
     - field.field.node.alf_alyt_walmnasbt.field_image
+    - field.field.node.alf_alyt_walmnasbt.field_rabt_khrytt_almwq_
     - field.field.node.alf_alyt_walmnasbt.field_tarykh_w_wqt_almnasbt
+    - image.style.large
     - node.type.alf_alyt_walmnasbt
   module:
     - image
@@ -33,9 +35,9 @@ content:
     region: content
   field_image:
     weight: 1
-    label: above
+    label: hidden
     settings:
-      image_style: ''
+      image_style: large
       image_link: ''
     third_party_settings: {  }
     type: image
@@ -56,4 +58,5 @@ content:
     settings: {  }
     third_party_settings: {  }
 hidden:
+  field_rabt_khrytt_almwq_: true
   langcode: true
