@@ -522,3 +522,15 @@ padding: 2px 13px 6px;
 .inner-page-block {
 	margin-bottom: 20px;
 }
+
+.field--name-field-msmy-wzyft-al-dw {
+	font-weight: 600;
+	font-size: 1.3em;
+	color: #207934;
+	border-bottom: 1px solid #ccc;
+	padding-bottom: 12px;
+}
+.field--name-body {
+	clear: unset;
+	color: #575656;
+}
