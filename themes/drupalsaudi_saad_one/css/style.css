@@ -530,7 +530,14 @@ padding: 2px 13px 6px;
 	border-bottom: 1px solid #ccc;
 	padding-bottom: 12px;
 }
-.field--name-body {
+.node--type--dw-mjls-aladarh .field--name-body {
 	clear: unset;
 	color: #575656;
+}
+.node--type-article .field--name-field-image {
+	float: unset !important;
+}
+.node--type-article .field--name-field-image img {
+	display: block;
+	margin: 0 auto;
 }
