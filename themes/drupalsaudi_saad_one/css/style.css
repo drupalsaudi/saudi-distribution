@@ -530,9 +530,10 @@ padding: 2px 13px 6px;
 	border-bottom: 1px solid #ccc;
 	padding-bottom: 12px;
 }
-.node--type--dw-mjls-aladarh .field--name-body {
+.node--type--dw-mjls-aladarh .field--name-body,
+.node--type-almhadr-wmqdm-alf-alyt-walmnasbh .field--name-body {
 	clear: unset;
-	color: #575656;
+	color: #464646;
 }
 .node--type-article .field--name-field-image {
 	float: unset !important;
