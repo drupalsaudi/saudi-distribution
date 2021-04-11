@@ -542,3 +542,9 @@ padding: 2px 13px 6px;
 	display: block;
 	margin: 0 auto;
 }
+.view-almrkz-ala-lamy .field--name-field-image {
+  float: right !important;
+}
+.view-almrkz-ala-lamy .field--name-body {
+  clear: unset;
+}

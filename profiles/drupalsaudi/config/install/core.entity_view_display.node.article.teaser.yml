@@ -23,7 +23,7 @@ content:
     weight: 1
     region: content
     settings:
-      trim_length: 300
+      trim_length: 1000
     third_party_settings: {  }
     label: hidden
   field_image:
