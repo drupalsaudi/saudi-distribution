@@ -88,7 +88,7 @@ function drupalsaudi_install() {
       'title' => t('عن الجمعية'),
       'weight' => 2,
       'link' => [
-        'uri' => 'internal:/',
+        'uri' => 'internal:/about',
         'options' => [
           'attributes' => [
             'class' => [
@@ -134,7 +134,7 @@ function drupalsaudi_install() {
       'title' => t('المركز الاعلامي'),
       'weight' => 4,
       'link' => [
-        'uri' => 'internal:/',
+        'uri' => 'internal:/media-center',
         'options' => [
           'attributes' => [
             'class' => [
@@ -203,7 +203,7 @@ function drupalsaudi_install() {
       'title' => t('دعم الجمعية'),
       'weight' => 7,
       'link' => [
-        'uri' => 'internal:/',
+        'uri' => 'internal:/support',
         'options' => [
           'fa_icon' => 'fa-hands-helping',
           'fa_icon_prefix' => 'fa',

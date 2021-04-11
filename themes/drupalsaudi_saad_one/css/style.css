@@ -453,9 +453,9 @@ top: 35% !important;
 display: inline-grid !important;
 }
 
-#block-drupalsaudi-saad-one-page-title h1 {
+#block-drupalsaudi-saad-one-page-title h1,
+.title-page-aladarh {
 color: #07731f;
-text-align: center;
 font-family: sst, Arial, sans-serif;
 margin-bottom: 50px;
 }
@@ -521,4 +521,30 @@ padding: 2px 13px 6px;
 }
 .inner-page-block {
 	margin-bottom: 20px;
+}
+
+.field--name-field-msmy-wzyft-al-dw {
+	font-weight: 600;
+	font-size: 1.3em;
+	color: #207934;
+	border-bottom: 1px solid #ccc;
+	padding-bottom: 12px;
+}
+.node--type--dw-mjls-aladarh .field--name-body,
+.node--type-almhadr-wmqdm-alf-alyt-walmnasbh .field--name-body {
+	clear: unset;
+	color: #464646;
+}
+.node--type-article .field--name-field-image {
+	float: unset !important;
+}
+.node--type-article .field--name-field-image img {
+	display: block;
+	margin: 0 auto;
+}
+.view-almrkz-ala-lamy .field--name-field-image {
+  float: right !important;
+}
+.view-almrkz-ala-lamy .field--name-body {
+  clear: unset;
 }

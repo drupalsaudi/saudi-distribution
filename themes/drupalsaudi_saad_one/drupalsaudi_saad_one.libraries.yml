@@ -9,11 +9,11 @@ global-styling:
 
 css_style_rtl:
   css:
-    theme:
-      //cdn.rtlcss.com/bootstrap/v4.5.3/css/bootstrap.min.css: {type: external, minified: true}
+    component:
+      'https://cdn.rtlcss.com/bootstrap/v4.5.3/css/bootstrap.min.css': {type: external, attributes: { integrity: sha384-JvExCACAZcHNJEc7156QaHXTnQL3hQBixvj5RV5buE7vgnNEzzskDtx9NQ4p6BJe, crossorigin: anonymous }, minified: true}
       css/custom_rtl.css: { preprocess: false }
   js:
-    //cdn.rtlcss.com/bootstrap/v4.5.3/js/bootstrap.min.js: {type: external, minified: true}
+    'https://cdn.rtlcss.com/bootstrap/v4.5.3/js/bootstrap.min.js': { type: external, attributes: { integrity: sha384-VmD+lKnI0Y4FPvr6hvZRw6xvdt/QZoNHQ4h5k0RL30aGkR9ylHU56BzrE2UoohWK, crossorigin: anonymous }, minified: true }
 
 css_style_ltr:
   css:

@@ -11,7 +11,6 @@ dependencies:
     - image
     - node
     - options
-    - user
 id: a_da_mjls_aladarh
 label: 'اعضاء مجلس الاداره'
 module: views
@@ -356,7 +355,7 @@ display:
           entity_type: node
           entity_field: created
           plugin_id: date
-      title: 'اعضاء مجلس الاداره'
+      title: ''
       header: {  }
       footer: {  }
       empty: {  }
@@ -1155,7 +1154,18 @@ display:
         pager: false
         filters: false
         filter_groups: false
-      header: {  }
+      header:
+        area_text_custom:
+          id: area_text_custom
+          table: views
+          field: area_text_custom
+          relationship: none
+          group_type: group
+          admin_label: ''
+          empty: true
+          tokenize: false
+          content: '<div class="title-page-aladarh"><h1>اعضاء مجلس الاداره</h1></div> '
+          plugin_id: text_custom
       pager:
         type: none
         options:
