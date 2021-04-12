@@ -111,7 +111,7 @@ function drupalsaudi_install() {
       'title' => t('اقسام الجمعية'),
       'weight' => 3,
       'link' => [
-        'uri' => 'internal:/',
+        'uri' => 'internal:/sections',
         'options' => [
           'attributes' => [
             'class' => [
