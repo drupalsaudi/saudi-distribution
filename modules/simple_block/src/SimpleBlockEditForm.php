@@ -2,79 +2,66 @@
 
 namespace Drupal\simple_block;
 
-use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
-use Drupal\simple_block\Entity\SimpleBlock;
+use Drupal\Core\Config\Entity\ConfigEntityStorage;
 use Drupal\Core\Entity\EntityForm;
-use Drupal\Core\Entity\EntityTypeInterface;
-use Drupal\Core\Form\ConfigFormBaseTrait;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\simple_block\Entity\SimpleBlock;
 
 /**
  * Base form for simple block edit forms.
  */
-class SimpleBlockEditForm extends EntityForm implements ContainerInjectionInterface {
-
-  use ConfigFormBaseTrait;
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function getEditableConfigNames() {
-    return ['simple_block.simple_block.' . $this->entity->id()];
-  }
+class SimpleBlockEditForm extends EntityForm {
 
   /**
    * {@inheritdoc}
    */
   public function form(array $form, FormStateInterface $form_state) {
-    $form = parent::form($form, $form_state);
+    $simple_block = $this->getEntity();
 
-    /** @var \Drupal\simple_block\Entity\SimpleBlock $simple_block */
-    $simple_block = $this->entity;
-
-    $form['id'] = [
-      '#type' => 'machine_name',
-      '#default_value' => $simple_block->id(),
-      '#maxlength' => EntityTypeInterface::BUNDLE_MAX_LENGTH,
-      '#machine_name' => [
-        'exists' => SimpleBlock::class . '::load',
-      ],
-      '#disabled' => !$simple_block->isNew(),
-    ];
     $form['title'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Title'),
-      '#maxlength' => 255,
+      '#maxlength' => ConfigEntityStorage::MAX_ID_LENGTH,
       '#default_value' => $simple_block->label(),
-      '#description' => $this->t("The block title."),
+      '#required' => TRUE,
+    ];
+    $form['id'] = [
+      '#type' => 'machine_name',
+      '#default_value' => $simple_block->id(),
+      '#maxlength' => ConfigEntityStorage::MAX_ID_LENGTH,
+      '#machine_name' => [
+        'source' => ['title'],
+        'exists' => SimpleBlock::class . '::load',
+        'label' => t('Internal name'),
+      ],
+      '#disabled' => !$simple_block->isNew(),
+      '#title' => $this->t('Internal name'),
+      '#description' => $this->t('A unique internal name. Can only contain lowercase letters, numbers, and underscores.'),
       '#required' => TRUE,
     ];
     $form['content'] = [
       '#type' => 'text_format',
       '#format' => $simple_block->getContent()['format'],
-      '#title' => $this->t('Block content'),
+      '#title' => $this->t('Content'),
       '#default_value' => $simple_block->getContent()['value'],
-      '#description' => $this->t("The block content."),
       '#required' => TRUE,
     ];
-    return $form;
+
+    return parent::form($form, $form_state);
   }
 
   /**
    * {@inheritdoc}
    */
   public function save(array $form, FormStateInterface $form_state) {
-    $simple_block = $this->entity;
-    $is_new = $simple_block->isNew();
-    $status = $simple_block->save();
-    if ($status && $is_new) {
-      \Drupal::messenger()->addMessage($this->t('Block %id has been added.', ['%id' => $simple_block->id()]));
+    $status = parent::save($form, $form_state);
+    $messenger = $this->messenger();
+    $arguments = ['%id' => $this->getEntity()->id()];
+    if ($status === SAVED_NEW) {
+      $messenger->addStatus($this->t('Block %id has been added.', $arguments));
     }
-    elseif ($status) {
-      \Drupal::messenger()->addMessage($this->t('Block %id has been updated.', ['%id' => $simple_block->id()]));
-    }
-    else {
-      \Drupal::messenger()->addMessage($this->t('Block %id was not saved.', ['%id' => $simple_block->id()]), 'warning');
+    elseif ($status === SAVED_UPDATED) {
+      $messenger->addStatus($this->t('Block %id has been updated.', $arguments));
     }
   }
 
