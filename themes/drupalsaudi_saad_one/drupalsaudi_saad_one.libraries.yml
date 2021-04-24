@@ -6,18 +6,27 @@ global-styling:
     component:
       css/style.css: {}
       css/colors.css: {}
+
+css_style_rtl:
+  css:
+    theme:
+      //cdn.rtlcss.com/bootstrap/v4.5.3/css/bootstrap.min.css: {type: external, minified: true}
+      css/custom_rtl.css: { preprocess: false }
+  js:
+    //cdn.rtlcss.com/bootstrap/v4.5.3/js/bootstrap.min.js: {type: external, minified: true}
+
+css_style_ltr:
+  css:
+    theme:
+      //stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css: {type: external, minified: true}
+      css/custom_ltr.css: { preprocess: false }
+  js:
+      https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js: {type: external, minified: true}
+
 bootstrap:
   js:
     /libraries/popper.js/popper.min.js: {}
-    /libraries/bootstrap/js/bootstrap.min.js: {}
   css:
-    component:
-      /libraries/bootstrap/css/bootstrap.min.css: {}
-bootstrap_cdn:
-  js:
-
-  css:
-    component:
 
 color.preview:
   version: VERSION
@@ -28,3 +37,5 @@ color.preview:
     color/preview.js: {}
   dependencies:
     - color/drupal.color
+
+
