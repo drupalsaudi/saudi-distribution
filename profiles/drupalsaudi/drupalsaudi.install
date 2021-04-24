@@ -83,13 +83,18 @@ function drupalsaudi_install() {
     ));
     $linkmembership->save();
 
-    // Populate the main menu.
+   // Populate the main menu.
     $linkaboutsa = MenuLinkContent::create([
       'title' => t('عن الجمعية'),
       'weight' => 2,
       'link' => [
-        'uri' => 'internal:/',
+        'uri' => 'internal:/about',
         'options' => [
+          'attributes' => [
+            'class' => [
+              'link'
+            ]
+          ],
           'fa_icon' => 'far fa-building',
           'fa_icon_prefix' => 'fa',
           'fa_icon_tag' => 'i',
@@ -106,8 +111,13 @@ function drupalsaudi_install() {
       'title' => t('اقسام الجمعية'),
       'weight' => 3,
       'link' => [
-        'uri' => 'internal:/',
+        'uri' => 'internal:/sections',
         'options' => [
+          'attributes' => [
+            'class' => [
+              'link'
+            ]
+          ],
           'fa_icon' => 'fa-sitemap',
           'fa_icon_prefix' => 'fa',
           'fa_icon_tag' => 'i',
@@ -124,8 +134,13 @@ function drupalsaudi_install() {
       'title' => t('المركز الاعلامي'),
       'weight' => 4,
       'link' => [
-        'uri' => 'internal:/',
+        'uri' => 'internal:/media-center',
         'options' => [
+          'attributes' => [
+            'class' => [
+              'link'
+            ]
+          ],
           'fa_icon' => 'far fa-newspaper',
           'fa_icon_prefix' => 'fa',
           'fa_icon_tag' => 'i',
@@ -144,6 +159,11 @@ function drupalsaudi_install() {
       'link' => [
         'uri' => 'internal:/board-of-directors',
         'options' => [
+          'attributes' => [
+            'class' => [
+              'link'
+            ]
+          ],
           'fa_icon' => 'fa-users',
           'fa_icon_prefix' => 'fa',
           'fa_icon_tag' => 'i',
@@ -162,6 +182,11 @@ function drupalsaudi_install() {
       'link' => [
         'uri' => 'internal:/contact/feedback',
         'options' => [
+          'attributes' => [
+            'class' => [
+              'link'
+            ]
+          ],
           'fa_icon' => 'fa-phone-alt',
           'fa_icon_prefix' => 'fa',
           'fa_icon_tag' => 'i',
@@ -178,7 +203,7 @@ function drupalsaudi_install() {
       'title' => t('دعم الجمعية'),
       'weight' => 7,
       'link' => [
-        'uri' => 'internal:/',
+        'uri' => 'internal:/support',
         'options' => [
           'fa_icon' => 'fa-hands-helping',
           'fa_icon_prefix' => 'fa',
