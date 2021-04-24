@@ -1,0 +1,48 @@
+langcode: ar
+status: true
+dependencies:
+  config:
+    - field.field.node._dw_mjls_aladarh.body
+    - field.field.node._dw_mjls_aladarh.field_image
+    - field.field.node._dw_mjls_aladarh.field_msmy_wzyft_al_dw
+    - node.type._dw_mjls_aladarh
+  module:
+    - image
+    - options
+    - text
+    - user
+id: node._dw_mjls_aladarh.default
+targetEntityType: node
+bundle: _dw_mjls_aladarh
+mode: default
+content:
+  body:
+    label: hidden
+    type: text_default
+    weight: 3
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+  field_image:
+    weight: 1
+    label: hidden
+    settings:
+      image_style: ''
+      image_link: ''
+    third_party_settings: {  }
+    type: image
+    region: content
+  field_msmy_wzyft_al_dw:
+    weight: 2
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+    type: list_default
+    region: content
+  links:
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  langcode: true

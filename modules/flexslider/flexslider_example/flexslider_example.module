@@ -1,0 +1,41 @@
+<?php
+
+/**
+ * @file
+ * Flexslider_example module.
+ */
+
+use Drupal\Core\Menu\MenuTreeParameters;
+use Drupal\Core\Url;
+
+/**
+ * Implements hook_toolbar().
+ */
+function flexslider_example_toolbar() {
+  $items = [];
+
+  // Load the menu.
+  $fs_tree = Drupal::service('toolbar.menu_tree')->load('flexslider-example', new MenuTreeParameters());
+  // Build the menu render array.
+  $fs_menu = Drupal::service('toolbar.menu_tree')->build($fs_tree);
+
+  $items['flexslider_examples'] = [
+    '#type' => 'toolbar_item',
+    'tab' => [
+      '#type' => 'link',
+      '#title' => t('FlexSlider Examples'),
+      '#url' => Url::fromRoute('<front>'),
+      '#attributes' => [
+        'title' => t('FlexSlider examples menu'),
+        'class' => ['toolbar-icon', 'toolbar-icon-menu'],
+      ],
+    ],
+    'tray' => [
+      '#heading' => t('FlexSlider examples menu'),
+      'flexslider_example_menu' => $fs_menu,
+    ],
+    '#weight' => 99,
+  ];
+
+  return $items;
+}

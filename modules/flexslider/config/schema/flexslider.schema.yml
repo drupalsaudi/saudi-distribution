@@ -1,0 +1,150 @@
+flexslider.settings:
+  type: config_object
+  label: 'FlexSlider settings'
+  mapping:
+    flexslider_version:
+      type: string
+    flexslider_debug:
+      type: boolean
+    flexslider_css:
+      type: boolean
+    flexslider_module_css:
+      type: boolean
+
+flexslider.optionset.*:
+  type: config_entity
+  label: 'FlexSlider optionset'
+  mapping:
+    id:
+      type: string
+      label: 'ID'
+    label:
+      type: label
+      label: 'Label'
+    options:
+      type: mapping
+      label: 'Options'
+      mapping:
+        # General options
+        animation:
+          type: string
+          label: 'Animation'
+        animationSpeed:
+          type: integer
+          label: 'Animation'
+        direction:
+          type: string
+          label: 'Slide Direction'
+        slideshow:
+          type: boolean
+          label: 'Slideshow'
+        easing:
+          type: string
+          label: 'Easing'
+        smoothHeight:
+          type: boolean
+          label: 'Smooth Height'
+        reverse:
+          type: boolean
+          label: Reverse
+        slideshowSpeed:
+          type: integer
+          label: 'Animation'
+        animationLoop:
+          type: boolean
+          label: 'Loop Slideshow'
+        randomize:
+          type: boolean
+          label: 'Randomize Slide Order'
+        startAt:
+          type: integer
+          label: 'Starting Slide'
+        itemWidth:
+          type: integer
+          label: 'Item Width'
+        itemMargin:
+          type: integer
+          label: 'Item Margin'
+        minItems:
+          type: integer
+          label: 'Minimum Items'
+        maxItems:
+          type: integer
+          label: 'Maximum Items'
+        move:
+          type: integer
+          label: 'Move'
+        # Navigation options
+        directionNav:
+          type: boolean
+          label: 'Next/Previous Controls'
+        controlNav:
+          type: string
+          label: 'Paging Controls'
+        thumbCaptions:
+          type: boolean
+          label: 'Thumbnail Captions'
+        thumbCaptionsBoth:
+          type: boolean
+          label: 'Thumbnail and Normal Captions'
+        keyboard:
+          type: boolean
+          label: 'Keyboard Navigation'
+        multipleKeyboard:
+          type: boolean
+          label: 'Multiple Keyboard'
+        mousewheel:
+          type: boolean
+          label: 'Mousewheel Navigation'
+        touch:
+          type: boolean
+          label: 'Touch'
+        prevText:
+          type: string
+          label: 'Previous Link Text'
+        nextText:
+          type: string
+          label: 'Next Link Text'
+        # Advanced options
+        namespace:
+          type: string
+          label: 'Namespace'
+        selector:
+          type: string
+          label: 'Selector'
+        sync:
+          type: string
+          label: 'Snych'
+        asNavFor:
+          type: string
+          label: 'Use as navigation'
+        initDelay:
+          type: integer
+          label: 'Initialize Delay'
+        useCSS:
+          type: boolean
+          label: 'Use CSS'
+        video:
+          type: boolean
+          label: 'Video'
+        pausePlay:
+          type: boolean
+          label: 'Add Pause/Play Indicator'
+        pauseText:
+          type: string
+          label: 'Pause State Text'
+        playText:
+          type: string
+          label: 'Play State Text'
+        pauseOnAction:
+          type: boolean
+          label: 'Pause On Controls'
+        pauseOnHover:
+          type: boolean
+          label: 'Pause On Hover'
+        controlsContainer:
+          type: string
+          label: 'Controls container'
+        manualControls:
+          type: string
+          label: 'Manual controls'

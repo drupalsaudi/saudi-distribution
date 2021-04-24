@@ -1,0 +1,8 @@
+langcode: ar
+status: true
+dependencies: {  }
+id: a_da_aljm_yt
+label: 'اعضاء الجمعية'
+weight: 2
+is_admin: null
+permissions: {  }

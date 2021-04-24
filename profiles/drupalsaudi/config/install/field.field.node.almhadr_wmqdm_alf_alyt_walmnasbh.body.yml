@@ -1,0 +1,22 @@
+langcode: ar
+status: true
+dependencies:
+  config:
+    - field.storage.node.body
+    - node.type.almhadr_wmqdm_alf_alyt_walmnasbh
+  module:
+    - text
+id: node.almhadr_wmqdm_alf_alyt_walmnasbh.body
+field_name: body
+entity_type: node
+bundle: almhadr_wmqdm_alf_alyt_walmnasbh
+label: Body
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: true
+  required_summary: false
+field_type: text_with_summary

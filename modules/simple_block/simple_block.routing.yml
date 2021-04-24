@@ -1,0 +1,31 @@
+entity.simple_block.collection:
+  path: '/admin/structure/block/simple-block'
+  defaults:
+    _entity_list: 'simple_block'
+    _title: 'Simple blocks'
+  requirements:
+    _permission: 'administer blocks'
+
+entity.simple_block.edit_form:
+  path: '/admin/structure/block/simple-block/manage/{simple_block}/edit'
+  defaults:
+    _entity_form: 'simple_block.edit'
+    _title: 'Edit simple block'
+  requirements:
+    _entity_access: 'simple_block.update'
+
+simple_block.form_add:
+  path: '/admin/structure/block/simple-block/add'
+  defaults:
+    _entity_form: 'simple_block.add'
+    _title: 'Add simple block'
+  requirements:
+    _permission: 'administer blocks'
+
+entity.simple_block.delete_form:
+  path: '/admin/structure/block/simple-block/manage/{simple_block}/delete'
+  defaults:
+    _entity_form: 'simple_block.delete'
+    _title: 'Delete'
+  requirements:
+    _entity_access: 'simple_block.delete'

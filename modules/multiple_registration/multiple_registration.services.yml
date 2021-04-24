@@ -1,0 +1,15 @@
+services:
+
+  multiple_registration.service:
+    class: Drupal\multiple_registration\AvailableUserRolesService
+    arguments: ['@entity_type.manager','@config.factory']
+
+  multiple_registration.controller_service:
+    class: Drupal\multiple_registration\Controller\MultipleRegistrationController
+    arguments: ['@multiple_registration.service','@config.factory','@path_alias.manager','@current_route_match', '@messenger']
+
+  multiple_registration.route_subscriber:
+    class: Drupal\multiple_registration\Routing\RouteSubscriber
+    arguments: ['@config.factory']
+    tags:
+          - { name: event_subscriber }

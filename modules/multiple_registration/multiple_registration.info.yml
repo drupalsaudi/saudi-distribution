@@ -1,0 +1,13 @@
+name: Multiple Registration
+type: module
+description: Adds ability to create several registration pages
+core_version_requirement: ^8 || ^9
+package: Other
+configure: multiple_registration.multiple_registration_list_index
+dependencies:
+  - drupal:path_alias
+
+# Information added by Drupal.org packaging script on 2021-01-30
+version: '8.x-2.99'
+project: 'multiple_registration'
+datestamp: 1612039777

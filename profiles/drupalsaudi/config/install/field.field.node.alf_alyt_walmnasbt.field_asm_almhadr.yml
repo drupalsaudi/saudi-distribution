@@ -1,0 +1,27 @@
+langcode: ar
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_asm_almhadr
+    - node.type.alf_alyt_walmnasbt
+    - node.type.almhadr_wmqdm_alf_alyt_walmnasbh
+id: node.alf_alyt_walmnasbt.field_asm_almhadr
+field_name: field_asm_almhadr
+entity_type: node
+bundle: alf_alyt_walmnasbt
+label: 'اسم المحاضر'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      almhadr_wmqdm_alf_alyt_walmnasbh: almhadr_wmqdm_alf_alyt_walmnasbh
+    sort:
+      field: _none
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

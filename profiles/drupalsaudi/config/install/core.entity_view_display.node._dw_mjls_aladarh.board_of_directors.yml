@@ -1,0 +1,40 @@
+langcode: ar
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.board_of_directors
+    - field.field.node._dw_mjls_aladarh.body
+    - field.field.node._dw_mjls_aladarh.field_image
+    - field.field.node._dw_mjls_aladarh.field_msmy_wzyft_al_dw
+    - node.type._dw_mjls_aladarh
+  module:
+    - user
+third_party_settings:
+  ds:
+    layout:
+      id: ds_1col
+      library: null
+      disable_css: false
+      entity_classes: all_classes
+      settings:
+        label: ''
+        wrappers:
+          ds_content: div
+        outer_wrapper: div
+        attributes: ''
+        link_attribute: ''
+        link_custom: ''
+        classes:
+          layout_class: {  }
+    regions: {  }
+id: node._dw_mjls_aladarh.board_of_directors
+targetEntityType: node
+bundle: _dw_mjls_aladarh
+mode: board_of_directors
+content: {  }
+hidden:
+  body: true
+  field_image: true
+  field_msmy_wzyft_al_dw: true
+  langcode: true
+  links: true

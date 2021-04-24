@@ -1,0 +1,28 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.flexslider_example.field_flexslider_example_image
+    - field.field.node.flexslider_example.field_flexslider_example_slidesh
+    - node.type.flexslider_example
+  module:
+    - flexslider_fields
+    - user
+id: node.flexslider_example.default
+targetEntityType: node
+bundle: flexslider_example
+mode: default
+content:
+  field_flexslider_example_slidesh:
+    weight: 0
+    label: above
+    settings:
+      optionset: flexslider_default_thumbnail_slider
+      image_style: ''
+      caption: '1'
+      image_link: ''
+    third_party_settings: {  }
+    type: flexslider
+hidden:
+  field_flexslider_example_image: true
+  links: true

@@ -1,0 +1,7 @@
+langcode: ar
+status: true
+dependencies: {  }
+id: alwqt
+label: الوقت
+locked: false
+pattern: 'h:i A'

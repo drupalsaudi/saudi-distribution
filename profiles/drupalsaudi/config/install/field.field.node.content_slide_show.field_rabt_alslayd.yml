@@ -1,0 +1,22 @@
+langcode: ar
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_rabt_alslayd
+    - node.type.content_slide_show
+  module:
+    - link
+id: node.content_slide_show.field_rabt_alslayd
+field_name: field_rabt_alslayd
+entity_type: node
+bundle: content_slide_show
+label: 'رابط السلايد'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  link_type: 17
+  title: 1
+field_type: link

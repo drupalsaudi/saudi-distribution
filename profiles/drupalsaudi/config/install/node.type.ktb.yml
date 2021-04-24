@@ -1,0 +1,9 @@
+langcode: ar
+status: true
+name: كتب
+type: ktb
+description: 'من هنا تستطيعون اضافة الكتب والتحكم بها '
+help: ''
+new_revision: false
+preview_mode: 1
+display_submitted: false

@@ -1,0 +1,23 @@
+{
+  "name": "drupal/flexslider",
+  "description": "FlexSlider 2 integration for Drupal",
+  "type": "drupal-module",
+  "license": "GPL-2.0-or-later",
+  "authors": [
+    {
+      "name": "FlexSlider Module Contributors",
+      "homepage": "https://www.drupal.org/node/1316346/committers",
+      "role": "Contributors"
+    }
+  ],
+  "support": {
+    "issues": "https://drupal.org/project/issues/flexslider",
+    "source": "https://git.drupalcode.org/project/flexslider"
+  },
+  "require": {
+    "drupal/core": "^8.8.0 || ^9.0"
+  },
+  "suggest": {
+    "woothemes/flexslider": "~2.0"
+  }
+}

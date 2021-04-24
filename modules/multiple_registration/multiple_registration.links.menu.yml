@@ -1,0 +1,5 @@
+multiple_registration.multiple_registration_list_index:
+  title: Multiple registrations pages
+  description: 'Multiple registration pages list'
+  parent: user.admin_index
+  route_name: multiple_registration.multiple_registration_list_index

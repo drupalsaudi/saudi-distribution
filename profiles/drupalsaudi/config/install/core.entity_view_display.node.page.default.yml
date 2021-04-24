@@ -1,0 +1,32 @@
+langcode: ar
+status: true
+dependencies:
+  config:
+    - field.field.node.page.body
+    - field.field.node.page.field_akhtr_alayqwnh_almnasbt
+    - field.field.node.page.field_zhwr_almhtwy_fy_alsndwq
+    - node.type.page
+  module:
+    - text
+    - user
+id: node.page.default
+targetEntityType: node
+bundle: page
+mode: default
+content:
+  body:
+    label: hidden
+    type: text_default
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  links:
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  field_akhtr_alayqwnh_almnasbt: true
+  field_zhwr_almhtwy_fy_alsndwq: true
+  langcode: true

@@ -1,0 +1,20 @@
+langcode: ar
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_tarykh_w_wqt_almnasbt
+    - node.type.alf_alyt_walmnasbt
+id: node.alf_alyt_walmnasbt.field_tarykh_w_wqt_almnasbt
+field_name: field_tarykh_w_wqt_almnasbt
+entity_type: node
+bundle: alf_alyt_walmnasbt
+label: 'تاريخ و وقت المناسبة'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 1593220394
+default_value_callback: ''
+settings: {  }
+field_type: timestamp

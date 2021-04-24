@@ -1,0 +1,361 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the drupalsaudi installation profile.
+ */
+
+use Drupal\user\Entity\User;
+use Drupal\shortcut\Entity\Shortcut;
+use Drupal\menu_link_content\Entity\MenuLinkContent;
+
+
+/**
+ * Implements hook_install().
+ *
+ * Perform actions to set up the site for this profile.
+ *
+ * @see system_install()
+ */
+function drupalsaudi_install() {
+  // Assign user 1 the "administrator" role.
+  $user = User::load(1);
+  $user->roles[] = 'administrator';
+  $user->save();
+
+  // We install some menu links, so we have to rebuild the router, to ensure the
+  // menu links are valid.
+  \Drupal::service('router.builder')->rebuildIfNeeded();
+
+  // Populate the default shortcut set.
+  $shortcut = Shortcut::create([
+    'shortcut_set' => 'default',
+    'title' => t('Add content'),
+    'weight' => -20,
+    'link' => ['uri' => 'internal:/node/add'],
+  ]);
+  $shortcut->save();
+
+  $shortcut = Shortcut::create([
+    'shortcut_set' => 'default',
+    'title' => t('All content'),
+    'weight' => -19,
+    'link' => ['uri' => 'internal:/admin/content'],
+  ]);
+  $shortcut->save();
+
+  $drupalsaudishortcut = Shortcut::create([
+    'shortcut_set' => 'default',
+    'title' => t('المساعدة دروبال السعودية'),
+    'weight' => -18,
+    'link' => ['uri' => 'internal:/admin/help/drupal-saudi'],
+  ]);
+  $drupalsaudishortcut->save();
+
+    // Populate the main menu.
+    $linkpagedrupalsaudihelp = MenuLinkContent::create([
+      'title' => t('المساعدة دروبال السعودية'),
+      'weight' => 10,
+      'link' => [
+        'uri' => 'internal:/admin/help/drupal-saudi',
+        'options' => [
+          'attributes' => [
+            'class' => [
+              'helppagedrupalsaudi'
+            ]
+          ],
+        ],
+      ],
+      'menu_name' => 'admin',
+      'parent' => 'system.admin',
+    ]);
+    $linkpagedrupalsaudihelp->save();
+
+    // Populate the main menu.
+    $linkmembership = MenuLinkContent::create(array(
+      'title' => t('تسجيل اعضاء الجمعية'),
+      'weight' => 10,
+      'enabled' => 0,
+      'link' => array('uri' => 'internal:/user/register/a_da_aljm_yt'),
+      'menu_name' => 'main',
+      'parent' => 'system.menu.main',
+
+    ));
+    $linkmembership->save();
+
+    // Populate the main menu.
+    $linkaboutsa = MenuLinkContent::create([
+      'title' => t('عن الجمعية'),
+      'weight' => 2,
+      'link' => [
+        'uri' => 'internal:/',
+        'options' => [
+          'fa_icon' => 'far fa-building',
+          'fa_icon_prefix' => 'fa',
+          'fa_icon_tag' => 'i',
+          'fa_icon_appearance' => 'before',
+        ]
+      ],
+      'menu_name' => 'main',
+      'parent' => 'system.menu.main',
+    ]);
+    $linkaboutsa->save();
+
+    // Populate the main menu.
+    $linkcatsa = MenuLinkContent::create([
+      'title' => t('اقسام الجمعية'),
+      'weight' => 3,
+      'link' => [
+        'uri' => 'internal:/',
+        'options' => [
+          'fa_icon' => 'fa-sitemap',
+          'fa_icon_prefix' => 'fa',
+          'fa_icon_tag' => 'i',
+          'fa_icon_appearance' => 'before',
+        ]
+      ],
+      'menu_name' => 'main',
+      'parent' => 'system.menu.main',
+    ]);
+    $linkcatsa->save();
+
+    // Populate the main menu.
+    $linkcentersa = MenuLinkContent::create([
+      'title' => t('المركز الاعلامي'),
+      'weight' => 4,
+      'link' => [
+        'uri' => 'internal:/',
+        'options' => [
+          'fa_icon' => 'far fa-newspaper',
+          'fa_icon_prefix' => 'fa',
+          'fa_icon_tag' => 'i',
+          'fa_icon_appearance' => 'before',
+        ]
+      ],
+      'menu_name' => 'main',
+      'parent' => 'system.menu.main',
+    ]);
+    $linkcentersa->save();
+
+    // Populate the main menu.
+    $linkimportantsa = MenuLinkContent::create([
+      'title' => t('مجلس الادارة'),
+      'weight' => 5,
+      'link' => [
+        'uri' => 'internal:/board-of-directors',
+        'options' => [
+          'fa_icon' => 'fa-users',
+          'fa_icon_prefix' => 'fa',
+          'fa_icon_tag' => 'i',
+          'fa_icon_appearance' => 'before',
+        ]
+      ],
+      'menu_name' => 'main',
+      'parent' => 'system.menu.main',
+    ]);
+    $linkimportantsa->save();
+
+    // Populate the main menu.
+    $linkcontactsa = MenuLinkContent::create([
+      'title' => t('اتصل بنا'),
+      'weight' => 6,
+      'link' => [
+        'uri' => 'internal:/contact/feedback',
+        'options' => [
+          'fa_icon' => 'fa-phone-alt',
+          'fa_icon_prefix' => 'fa',
+          'fa_icon_tag' => 'i',
+          'fa_icon_appearance' => 'before',
+        ]
+      ],
+      'menu_name' => 'main',
+      'parent' => 'system.menu.main',
+    ]);
+    $linkcontactsa->save();
+
+    // Populate the main menu.
+    $linksupportsa = MenuLinkContent::create([
+      'title' => t('دعم الجمعية'),
+      'weight' => 7,
+      'link' => [
+        'uri' => 'internal:/',
+        'options' => [
+          'fa_icon' => 'fa-hands-helping',
+          'fa_icon_prefix' => 'fa',
+          'fa_icon_tag' => 'i',
+          'fa_icon_appearance' => 'before',
+          'attributes' => [
+            'class' => [
+              'donate-link'
+            ]
+          ],
+        ],
+      ],
+      'menu_name' => 'main',
+      'parent' => 'system.menu.main',
+    ]);
+    $linksupportsa->save();
+
+    // Populate the almrkz-ala-lamy.
+    $linkalmrkz = MenuLinkContent::create([
+      'title' => t('خبر اعلامي'),
+      'weight' => 7,
+      'link' => ['uri' => 'internal:/'],
+      'menu_name' => 'almrkz-ala-lamy',
+      'parent' => 'system.menu.almrkz-ala-lamy',
+    ]);
+    $linkalmrkz->save();
+
+    $linkalmrkz1 = MenuLinkContent::create([
+      'title' => t('خبر اعلامي'),
+      'weight' => 7,
+      'link' => ['uri' => 'internal:/'],
+      'menu_name' => 'almrkz-ala-lamy',
+      'parent' => 'system.menu.almrkz-ala-lamy',
+    ]);
+    $linkalmrkz1->save();
+
+    $linkalmrkz2 = MenuLinkContent::create([
+      'title' => t('خبر اعلامي'),
+      'weight' => 7,
+      'link' => ['uri' => 'internal:/'],
+      'menu_name' => 'almrkz-ala-lamy',
+      'parent' => 'system.menu.almrkz-ala-lamy',
+    ]);
+    $linkalmrkz2->save();
+
+    $linkalmrkz3 = MenuLinkContent::create([
+      'title' => t('خبر اعلامي'),
+      'weight' => 7,
+      'link' => ['uri' => 'internal:/'],
+      'menu_name' => 'almrkz-ala-lamy',
+      'parent' => 'system.menu.almrkz-ala-lamy',
+    ]);
+    $linkalmrkz3->save();
+
+    // Populate the rwabt-thmk.
+    $linkrwabtthmk = MenuLinkContent::create([
+      'title' => t('وزارة الداخلية'),
+      'weight' => 7,
+      'link' => ['uri' => 'internal:/',],
+      'menu_name' => 'rwabt-thmk',
+      'parent' => 'system.menu.rwabt-thmk',
+    ]);
+    $linkrwabtthmk->save();
+
+    $linkrwabtthmk1 = MenuLinkContent::create([
+      'title' => t('وزارة الصحة'),
+      'weight' => 7,
+      'link' => ['uri' => 'internal:/',],
+      'menu_name' => 'rwabt-thmk',
+      'parent' => 'system.menu.rwabt-thmk',
+    ]);
+    $linkrwabtthmk1->save();
+
+    $linkrwabtthmk2 = MenuLinkContent::create([
+      'title' => t('وزارة التعليم'),
+      'weight' => 7,
+      'link' => ['uri' => 'internal:/',],
+      'menu_name' => 'rwabt-thmk',
+      'parent' => 'system.menu.rwabt-thmk',
+    ]);
+    $linkrwabtthmk2->save();
+
+    $linkrwabtthmk3 = MenuLinkContent::create([
+      'title' => t('وزارة العدل'),
+      'weight' => 7,
+      'link' => ['uri' => 'internal:/',],
+      'menu_name' => 'rwabt-thmk',
+      'parent' => 'system.menu.rwabt-thmk',
+    ]);
+    $linkrwabtthmk3->save();
+
+    // Populate the twasl-m-na.
+    $linktwaslmna = MenuLinkContent::create([
+      'title' => t('تويتر'),
+      'weight' => 7,
+      'link' => [
+        'uri' => 'internal:/',
+        'options' => [
+          'fa_icon' => 'fa-twitter-square',
+          'fa_icon_prefix' => 'fa',
+          'fa_icon_tag' => 'i',
+          'fa_icon_appearance' => 'before',
+          'attributes' => [
+            'class' => [
+              ''
+            ]
+          ],
+        ],
+      ],
+      'menu_name' => 'twasl-m-na',
+      'parent' => 'system.menu.twasl-m-na',
+    ]);
+    $linktwaslmna->save();
+
+    $linktwaslmna1 = MenuLinkContent::create([
+      'title' => t('انستقرام'),
+      'weight' => 7,
+      'link' => [
+        'uri' => 'internal:/',
+        'options' => [
+          'fa_icon' => 'fab fa-instagram-square',
+          'fa_icon_prefix' => 'fa',
+          'fa_icon_tag' => 'i',
+          'fa_icon_appearance' => 'before',
+          'attributes' => [
+            'class' => [
+              ''
+            ]
+          ],
+        ],
+      ],
+      'menu_name' => 'twasl-m-na',
+      'parent' => 'system.menu.twasl-m-na',
+    ]);
+    $linktwaslmna1->save();
+
+    $linktwaslmna2 = MenuLinkContent::create([
+      'title' => t('يوتيوب'),
+      'weight' => 7,
+      'link' => [
+        'uri' => 'internal:/',
+        'options' => [
+          'fa_icon' => 'fa-youtube-square',
+          'fa_icon_prefix' => 'fa',
+          'fa_icon_tag' => 'i',
+          'fa_icon_appearance' => 'before',
+          'attributes' => [
+            'class' => [
+              ''
+            ]
+          ],
+        ],
+      ],
+      'menu_name' => 'twasl-m-na',
+      'parent' => 'system.menu.twasl-m-na',
+    ]);
+    $linktwaslmna2->save();
+
+    $linktwaslmna3 = MenuLinkContent::create([
+      'title' => t('البريد الاكتروني'),
+      'weight' => 7,
+      'link' => [
+        'uri' => 'internal:/',
+        'options' => [
+          'fa_icon' => 'fa-envelope',
+          'fa_icon_prefix' => 'fa',
+          'fa_icon_tag' => 'i',
+          'fa_icon_appearance' => 'before',
+          'attributes' => [
+            'class' => [
+              ''
+            ]
+          ],
+        ],
+      ],
+      'menu_name' => 'twasl-m-na',
+      'parent' => 'system.menu.twasl-m-na',
+    ]);
+    $linktwaslmna3->save();
+  }

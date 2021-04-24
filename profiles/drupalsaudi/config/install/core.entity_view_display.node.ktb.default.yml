@@ -1,0 +1,49 @@
+langcode: ar
+status: true
+dependencies:
+  config:
+    - field.field.node.ktb.body
+    - field.field.node.ktb.field_file_book
+    - field.field.node.ktb.field_image_book
+    - node.type.ktb
+  module:
+    - file
+    - image
+    - text
+    - user
+id: node.ktb.default
+targetEntityType: node
+bundle: ktb
+mode: default
+content:
+  body:
+    label: hidden
+    type: text_default
+    weight: 101
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+  field_file_book:
+    weight: 103
+    label: hidden
+    settings:
+      use_description_as_link_text: true
+    third_party_settings: {  }
+    type: file_default
+    region: content
+  field_image_book:
+    weight: 102
+    label: hidden
+    settings:
+      image_style: ''
+      image_link: ''
+    third_party_settings: {  }
+    type: image
+    region: content
+  links:
+    weight: 100
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  langcode: true

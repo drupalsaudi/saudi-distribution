@@ -1,0 +1,68 @@
+flexslider.form_settings:
+  path: /admin/config/media/flexslider/advanced
+  defaults:
+    _title: 'FlexSlider Advanced settings'
+    _form: \Drupal\flexslider\Form\FlexsliderFormSettings
+  requirements:
+    _permission: 'administer flexslider'
+
+# Flexslider optionset routing definition
+entity.flexslider.collection:
+  path: '/admin/config/media/flexslider'
+  defaults:
+    _entity_list: 'flexslider'
+    _title: 'FlexSlider'
+  requirements:
+    _permission: 'administer flexslider'
+  options:
+    _admin_route: TRUE
+
+entity.flexslider.add_form:
+  path: '/admin/config/media/flexslider/add'
+  defaults:
+    _entity_form: 'flexslider.add'
+    _title: 'Add optionset'
+  requirements:
+    _permission: 'administer flexslider'
+  options:
+    _admin_route: TRUE
+
+entity.flexslider.edit_form:
+  path: '/admin/config/media/flexslider/{flexslider}'
+  defaults:
+    _entity_form: 'flexslider.edit'
+    _title: 'Edit optionset'
+  requirements:
+    _permission: 'administer flexslider'
+  options:
+    _admin_route: TRUE
+
+entity.flexslider.delete_form:
+  path: '/admin/config/media/flexslider/{flexslider}/delete'
+  defaults:
+    _entity_form: 'flexslider.delete'
+    _title: 'Delete optionset'
+  requirements:
+    _permission: 'administer flexslider'
+  options:
+    _admin_route: TRUE
+
+entity.flexslider.enable:
+  path: '/admin/config/media/flexslider/{flexslider}/enable'
+  defaults:
+    _controller: '\Drupal\flexslider\Controller\FlexsliderOptionsetController::enable'
+    entity_type: 'flexslider'
+  requirements:
+    _permission: 'administer flexslider'
+  options:
+    _admin_route: TRUE
+
+entity.flexslider.disable:
+  path: '/admin/config/media/flexslider/{flexslider}/disable'
+  defaults:
+    _controller: '\Drupal\flexslider\Controller\FlexsliderOptionsetController::disable'
+    entity_type: 'flexslider'
+  requirements:
+    _permission: 'administer flexslider'
+  options:
+    _admin_route: TRUE

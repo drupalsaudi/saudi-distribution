@@ -1,0 +1,37 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the animate any module.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function animate_any_schema() {
+  $schema['animate_any_settings'] = [
+    'description' => 'The base table for nodes.',
+    'fields' => [
+      'aid' => [
+        'description' => 'The primary identifier for a animate table.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'parent' => [
+        'description' => 'Parent class entry',
+        'type' => 'varchar',
+        'length' => 100,
+        'not null' => TRUE,
+        'default' => '',
+      ],
+      'identifier' => [
+        'description' => 'JSON data of identifier and animation',
+        'type' => 'text',
+        'not null' => TRUE,
+      ],
+    ],
+    'primary key' => ['aid'],
+  ];
+  return $schema;
+}

@@ -1,0 +1,18 @@
+{#
+/**
+ * @file
+ * Default theme implementation for the Flexslider list wrapper template.
+ *
+ * Available variables:
+ * - attributes: An array of attributes to apply to the element.
+ * - settings.type: The wrapper type. (ul or ol)
+ * - content.list: The array of slides
+ * - settings: An array containing the given settings.
+ *
+ * @see template_preprocess_flexslider_list()
+ */
+#}
+
+<{{ settings.type }}{{ attributes }}>
+    {{ content.list }}
+</{{ settings.type }}>

@@ -1,0 +1,19 @@
+langcode: ar
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - drupalsaudi_saad_one
+id: drupalsaudi_saad_one_content
+theme: drupalsaudi_saad_one
+region: content
+weight: 0
+provider: null
+plugin: system_main_block
+settings:
+  id: system_main_block
+  label: 'محتوى الصفحة الرئيسية'
+  provider: system
+  label_display: '0'
+visibility: {  }

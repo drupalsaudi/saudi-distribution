@@ -1,0 +1,27 @@
+{
+  "name": "drupal/multiple_registration",
+  "description": "Ability to create role-specific registration pages.",
+  "type": "drupal-module",
+  "keywords": ["Drupal", "multiple_registration", "Multiple Registration"],
+  "homepage": "https://www.drupal.org/project/multiple_registration",
+  "authors": [
+    {
+      "name": "Oleksandr Ivanchenko (oleksandr-ivanchenko)",
+      "homepage": "https://www.drupal.org/u/oleksandr-ivanchenko",
+      "role": "Maintainer"
+    },
+    {
+      "name": "Yaroslav Samoilenko (ysamoylenko)",
+      "homepage": "https://www.drupal.org/u/ysamoylenko",
+      "role": "Co-maintainer"
+    },
+    {
+      "name": "Alex Liannoy (alex-liannoy)",
+      "homepage": "https://www.drupal.org/u/alex-liannoy",
+      "role": "Co-maintainer"
+    }
+  ],
+  "support": {
+    "issues": "https://www.drupal.org/project/multiple_registration"
+  }
+}

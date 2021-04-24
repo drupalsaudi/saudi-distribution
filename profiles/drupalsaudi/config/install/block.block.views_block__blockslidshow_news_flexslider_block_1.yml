@@ -1,0 +1,29 @@
+langcode: ar
+status: true
+dependencies:
+  config:
+    - views.view.blockslidshow_news_flexslider
+  module:
+    - system
+    - views
+  theme:
+    - drupalsaudi_saad_one
+id: views_block__blockslidshow_news_flexslider_block_1
+theme: drupalsaudi_saad_one
+region: featured_top
+weight: 0
+provider: null
+plugin: 'views_block:blockslidshow_news_flexslider-block_1'
+settings:
+  id: 'views_block:blockslidshow_news_flexslider-block_1'
+  label: ''
+  provider: views
+  label_display: '0'
+  views_label: ''
+  items_per_page: none
+visibility:
+  request_path:
+    id: request_path
+    pages: '<front>'
+    negate: false
+    context_mapping: {  }

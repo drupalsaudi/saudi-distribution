@@ -1,0 +1,71 @@
+name: توزيعة دروبال السعودية
+type: profile
+description: 'توزيعة دروبال السعودية فيها كل ما يتحتاجه المطور <a href="https://github.com/drupalsaudi/saudi-distribution" target="_blank" >الدعم</a>'
+# version: VERSION
+core: 8.x
+core_version_requirement: ^8 || ^9
+install:
+  - node
+  - history
+  - block
+  - breakpoint
+  - ckeditor
+  - color
+  - config
+  - comment
+  - contextual
+  - contact
+  - menu_link_content
+  - datetime
+  - block_content
+  - quickedit
+  - editor
+  - help
+  - image
+  - menu_ui
+  - options
+  - path
+  - page_cache
+  - dynamic_page_cache
+  - big_pipe
+  - taxonomy
+  - dblog
+  - search
+  - shortcut
+  - toolbar
+  - field_ui
+  - file
+  - rdf
+  - views
+  - views_ui
+  - tour
+  - automated_cron
+  - admin_toolbar:admin_toolbar_tools
+  - admin_toolbar:admin_toolbar_links_access_filter
+  - simple_block
+  - captcha
+  - image_captcha
+  - multiple_registration
+  - menu_link_attributes
+  - flexslider
+  - flexslider_views
+  - fontawesome
+  - fontawesome_menu_icons
+  - views_bootstrap
+  - layout_discovery
+  - layout_builder
+  - animate_any
+  - yaml_content
+themes:
+  - bootstrap_barrio
+  - drupalsaudi_saad_one
+  - bartik
+  - seven
+
+'interface translation project': drupalsaudi
+'interface translation server pattern': profiles/drupalsaudi/translations/%language/%project.%language.po
+
+distribution:
+  name: توزيعة دروبال السعودية
+  langcode: ar
+

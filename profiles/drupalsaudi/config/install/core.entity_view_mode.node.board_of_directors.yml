@@ -1,0 +1,9 @@
+langcode: ar
+status: true
+dependencies:
+  module:
+    - node
+id: node.board_of_directors
+label: board-of-directors
+targetEntityType: node
+cache: true
