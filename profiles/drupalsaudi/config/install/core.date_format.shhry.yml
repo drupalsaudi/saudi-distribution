@@ -1,0 +1,7 @@
+langcode: ar
+status: true
+dependencies: {  }
+id: shhry
+label: شهري
+locked: false
+pattern: F

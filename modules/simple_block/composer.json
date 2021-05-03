@@ -1,0 +1,18 @@
+{
+    "name": "drupal/simple_block",
+    "description": "Title/content custom blocks stored as config entities",
+    "type": "drupal-module",
+    "license": "GPL-2.0-or-later",
+    "homepage": "https://www.drupal.org/project/simple_block",
+    "authors": [
+        {
+            "name": "Claudiu Cristea",
+            "homepage": "https://www.drupal.org/u/claudiucristea"
+        }
+    ],
+    "support": {
+        "issues": "https://www.drupal.org/project/issues/simple_block",
+        "source": "https://git.drupalcode.org/project/simple_block"
+    },
+    "minimum-stability": "dev"
+}

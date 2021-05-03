@@ -1,0 +1,13 @@
+langcode: en
+status: true
+dependencies: {  }
+name: flexslider_thumbnail
+label: 'Flexslider Thumbnail'
+effects:
+  b4778d08-beca-43b7-8403-3d87e42991f6:
+    uuid: b4778d08-beca-43b7-8403-3d87e42991f6
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 160
+      height: 100

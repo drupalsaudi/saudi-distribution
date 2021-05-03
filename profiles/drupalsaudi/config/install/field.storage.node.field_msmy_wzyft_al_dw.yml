@@ -1,0 +1,35 @@
+langcode: ar
+status: true
+dependencies:
+  module:
+    - node
+    - options
+id: node.field_msmy_wzyft_al_dw
+field_name: field_msmy_wzyft_al_dw
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: '0'
+      label: 'رئيس مجلس الادارة'
+    -
+      value: '1'
+      label: 'نائب الرئيس'
+    -
+      value: '2'
+      label: 'امين الجمعية'
+    -
+      value: '3'
+      label: 'المشرف المالي'
+    -
+      value: '4'
+      label: عضو مجلس الاداره
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

@@ -1,0 +1,29 @@
+langcode: ar
+status: true
+dependencies:
+  config:
+    - views.view.f_alyat_qadmh
+  module:
+    - system
+    - views
+  theme:
+    - drupalsaudi_saad_one
+id: views_block__f_alyat_qadmh_block_1
+theme: drupalsaudi_saad_one
+region: header_left
+weight: 0
+provider: null
+plugin: 'views_block:f_alyat_qadmh-block_1'
+settings:
+  id: 'views_block:f_alyat_qadmh-block_1'
+  label: ''
+  provider: views
+  label_display: '0'
+  views_label: ''
+  items_per_page: none
+visibility:
+  request_path:
+    id: request_path
+    pages: '<front>'
+    negate: false
+    context_mapping: {  }

@@ -1,0 +1,118 @@
+<?php
+
+/**
+ *
+ * Animation options.
+ */
+function animate_any_options() {
+  return [
+    'none' => t('-- No animation --'),
+    'bounce' => t('Bounce'),
+    'flash' => t('Flash'),
+    'pulse' => t('Pulse'),
+    'rubberBand' => t('Rubber Band'),
+    'shake' => t('Shake'),
+    'swing' => t('Swing'),
+    'tada' => t('Tada'),
+    'wobble' => t('Wobble'),
+    'bounceIn' => t('Bounce In'),
+    'bounceInDown' => t('Bounce In Down'),
+    'bounceInLeft' => t('Bounce In Left'),
+    'bounceInRight' => t('Bounce In Right'),
+    'bounceInUp' => t('Bounce In Up'),
+    'bounceOut' => t('Bounce Out'),
+    'bounceOutDown' => t('Bounce Out Down'),
+    'bounceOutLeft' => t('Bounce Out Left'),
+    'bounceOutRight' => t('Bounce Out Right'),
+    'bounceOutUp' => t('Bounce Out Up'),
+    'fadeIn' => t('Fade In'),
+    'fadeInDown' => t('Fade In Down'),
+    'fadeInDownBig' => t('Fade In Down Big'),
+    'fadeInLeft' => t('Fade In Left'),
+    'fadeInLeftBig' => t('Fade In Left Big'),
+    'fadeInRight' => t('Fade In Right'),
+    'fadeInRightBig' => t('Fade In Right Big'),
+    'fadeInUp' => t('Fade In Up'),
+    'fadeInUpBig' => t('Fade In Up Big'),
+    'fadeOut' => t('Fade Out'),
+    'fadeOutDown' => t('Fade Out Down'),
+    'fadeOutDownBig' => t('Fade Out Down Big'),
+    'fadeOutLeft' => t('Fade Out Left'),
+    'fadeOutLeftBig' => t('Fade Out Left Big'),
+    'fadeOutRight' => t('Fade Out Right'),
+    'fadeOutRightBig' => t('Fade Out Right Big'),
+    'fadeOutUp' => t('Fade Out Up'),
+    'fadeOutUpBig' => t('Fade Out Up Big'),
+    'flipInX' => t('Flip In X'),
+    'flipInY' => t('Flip In Y'),
+    'flipOutX' => t('Flip Out X'),
+    'flipOutY' => t('Flip Out Y'),
+    'lightSpeedIn' => t('Light Speed In'),
+    'lightSpeedOut' => t('Light Speed Out'),
+    'rotateIn' => t('Rotate In'),
+    'rotateInDownLeft' => t('Rotate In Down Left'),
+    'rotateInDownRight' => t('Rotate In Down Right'),
+    'rotateInUpLeft' => t('Rotate In Up Left'),
+    'rotateInUpRight' => t('Rotate In Up Right'),
+    'rotateOut' => t('Rotate Out'),
+    'rotateOutDownLeft' => t('Rotate Out Down Left'),
+    'rotateOutDownRight' => t('Rotate Out Down Right'),
+    'rotateOutUpLeft' => t('Rotate Out Up Left'),
+    'rotateOutUpRight' => t('Rotate Out Up Right'),
+    'hinge' => t('Hinge'),
+    'rollIn' => t('Roll In'),
+    'rollOut' => t('Roll Out'),
+    'zoomIn' => t('Zoon In'),
+    'zoomInDown' => t('Zoom In Down'),
+    'zoomInLeft' => t('Zoom In Left'),
+    'zoomInRight' => t('Zoom In Right'),
+    'zoomInUp' => t('Zoom In Up'),
+    'zoomOut' => t('Zoom Out'),
+    'zoomOutDown' => t('Zoom Out Down'),
+    'zoomOutLeft' => t('Zoom Out Left'),
+    'zoomOutRight' => t('Zoom Out Right'),
+    'zoomOutUp' => t('Zoom Out Up'),
+    'slideInDown' => t('Slide In Down'),
+    'slideInLeft' => t('Slide In Left'),
+    'slideInRight' => t('Slide In Right'),
+    'slideInUp' => t('Slide In Up'),
+    'slideOutDown' => t('Slide Out Down'),
+    'slideOutLeft' => t('Slide Out Left'),
+    'slideOutRight' => t('Slide Out Right'),
+    'slideOutUp' => t('Slide Out Up'),
+  ];
+}
+
+/*
+ * Implements hook_page_attachments().
+ */
+
+function animate_any_page_attachments(&$page) {
+  $connection = \Drupal::database();
+  $fetch = $connection->select("animate_any_settings", "a");
+  $fetch->fields('a');
+  $fetch_results = $fetch->execute()->fetchAll();
+  $json_data = json_encode($fetch_results);
+  // Pass json variable to animate_any.js.
+  $page['#attached']['library'][] = 'animate_any/animate';
+  $page['#attached']['drupalSettings']['animate']['animation_data'] = $json_data;
+}
+
+/**
+ * jQuery event options.
+ */
+function animate_on_event() {
+  return [
+    'none' => t('-- No event --'),
+    'onload' => t('On page load'),
+    'scroll' => t('On page scroll'),
+    'click' => t('Click'),
+    'mouseover' => t('Hover'),
+    'mouseout' => t('Mouse Out'),
+    'mousedown' => t('Mouse Down'),
+    'mouseup' => t('Mouse Up'),
+    'mouseenter' => t('Mouse Enter'),
+    'mouseleave' => t('Mouse Leave'),
+    'mousemove' => t('Mouse Move'),
+  ];
+}

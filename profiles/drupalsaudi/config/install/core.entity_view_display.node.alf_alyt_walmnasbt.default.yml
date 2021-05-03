@@ -1,0 +1,59 @@
+langcode: ar
+status: true
+dependencies:
+  config:
+    - field.field.node.alf_alyt_walmnasbt.body
+    - field.field.node.alf_alyt_walmnasbt.field_asm_almhadr
+    - field.field.node.alf_alyt_walmnasbt.field_image
+    - field.field.node.alf_alyt_walmnasbt.field_tarykh_w_wqt_almnasbt
+    - node.type.alf_alyt_walmnasbt
+  module:
+    - image
+    - text
+    - user
+id: node.alf_alyt_walmnasbt.default
+targetEntityType: node
+bundle: alf_alyt_walmnasbt
+mode: default
+content:
+  body:
+    label: hidden
+    type: text_default
+    weight: 4
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+  field_asm_almhadr:
+    weight: 3
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  field_image:
+    weight: 1
+    label: above
+    settings:
+      image_style: ''
+      image_link: ''
+    third_party_settings: {  }
+    type: image
+    region: content
+  field_tarykh_w_wqt_almnasbt:
+    weight: 2
+    label: above
+    settings:
+      date_format: medium
+      custom_date_format: ''
+      timezone: ''
+    third_party_settings: {  }
+    type: timestamp
+    region: content
+  links:
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  langcode: true

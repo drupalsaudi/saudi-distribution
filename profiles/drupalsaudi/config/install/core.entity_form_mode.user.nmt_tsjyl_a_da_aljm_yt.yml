@@ -1,0 +1,9 @@
+langcode: ar
+status: true
+dependencies:
+  module:
+    - user
+id: user.nmt_tsjyl_a_da_aljm_yt
+label: 'نمط تسجيل اعضاء الجمعية'
+targetEntityType: user
+cache: true

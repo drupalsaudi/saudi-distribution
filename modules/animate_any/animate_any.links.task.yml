@@ -1,0 +1,24 @@
+animate_any.animate_any_form:
+  route_name : animate_any.animate_any_form
+  title: Add
+  base_route: animate_any.animate_any_form
+  weight: 10
+
+animate_any.animate_list:
+  route_name: animate_any.animate_list
+  title: List
+  base_route: animate_any.animate_any_form
+  weight: 20
+
+animate_any.animate_import:
+  route_name: animate_any.animate_import
+  title: Import
+  base_route: animate_any.animate_any_form
+  weight: 30
+
+animate_any.animate_export:
+  route_name: animate_any.animate_export
+  title: Export
+  base_route: animate_any.animate_any_form
+  weight: 40
+

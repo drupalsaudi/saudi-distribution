@@ -1,0 +1,10 @@
+name: 'Layout Builder Extra Field test'
+type: module
+description: 'Support module for testing layout building.'
+package: Testing
+# version: VERSION
+
+# Information added by Drupal.org packaging script on 2021-04-21
+version: '9.1.7'
+project: 'drupal'
+datestamp: 1619022211

@@ -1,0 +1,18 @@
+fontawesome-iconpicker:
+  css:
+    component:
+      /libraries/fontawesome-iconpicker/dist/css/fontawesome-iconpicker.min.css: { minified: true }
+  js:
+    /libraries/fontawesome-iconpicker/dist/js/fontawesome-iconpicker.min.js: { minified: true }
+
+fontawesome-menu-icons:
+  css:
+    component:
+      css/fontawesome_menu_icons.css: {}
+  js:
+    js/fontawesome_menu_icons.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.once
+    - core/drupal
+    - core/drupalSettings

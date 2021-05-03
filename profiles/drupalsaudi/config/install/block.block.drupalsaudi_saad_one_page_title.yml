@@ -1,0 +1,17 @@
+langcode: ar
+status: true
+dependencies:
+  theme:
+    - drupalsaudi_saad_one
+id: drupalsaudi_saad_one_page_title
+theme: drupalsaudi_saad_one
+region: content
+weight: -50
+provider: null
+plugin: page_title_block
+settings:
+  id: page_title_block
+  label: 'عنوان الصفحة'
+  provider: core
+  label_display: '0'
+visibility: {  }

@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {  }
+id: flexslider-example
+label: 'FlexSlider Example'
+description: 'Example FlexSlider implementations'
+locked: true

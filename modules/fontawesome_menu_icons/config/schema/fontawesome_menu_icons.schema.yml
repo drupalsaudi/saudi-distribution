@@ -1,0 +1,6 @@
+fontawesome_menu_icons.settings:
+  type: config_object
+  label: 'Settings'
+  mapping:
+    menu_link_icons:
+      type: mapping

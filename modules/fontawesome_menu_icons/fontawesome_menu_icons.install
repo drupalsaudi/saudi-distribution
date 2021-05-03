@@ -1,0 +1,28 @@
+<?php
+
+/**
+ * @file
+ * Install file for fontawesome_menu_icons module.
+ */
+
+/**
+ * Implements hook_uninstall().
+ */
+function fontawesome_menu_icons_uninstall() {
+  // Remove link icons from menu_links table.
+  // TODO: Drupal Rector Notice: Please delete the following comment after you've made any necessary changes.
+  // You will need to use `\Drupal\core\Database\Database::getConnection()` if you do not yet have access to the container here.
+  $result = \Drupal::database()->query("SELECT id, link__options FROM {menu_link_content_data} WHERE link__options LIKE '%\"fa_icon\"%'");
+
+  foreach ($result as $record) {
+    $options = unserialize($record->link__options);
+    unset($options['fa_icon']);
+
+    // TODO: Drupal Rector Notice: Please delete the following comment after you've made any necessary changes.
+    // You will need to use `\Drupal\core\Database\Database::getConnection()` if you do not yet have access to the container here.
+    \Drupal::database()->query("UPDATE {menu_link_content_data} SET link__options = :options WHERE id = :id", [
+      ':options' => serialize($options),
+      ':id'      => $record->id
+    ]);
+  }
+}

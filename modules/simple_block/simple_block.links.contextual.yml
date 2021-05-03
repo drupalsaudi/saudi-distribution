@@ -1,0 +1,10 @@
+simple_block.block_edit:
+  title: 'Edit'
+  group: 'simple_block'
+  route_name: 'entity.simple_block.edit_form'
+
+simple_block.block_delete:
+  title: 'Delete'
+  group: 'simple_block'
+  route_name: 'entity.simple_block.delete_form'
+  weight: 1

@@ -1,0 +1,6 @@
+services:
+  simple_block_layout_builder.controller_alter:
+    class: Drupal\simple_block_layout_builder\Event\Subscriber\SimpleBlockAddControllerSubscriber
+    arguments: ['@current_route_match', '@current_user']
+    tags:
+      - { name: event_subscriber }

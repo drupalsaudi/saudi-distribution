@@ -1,0 +1,9 @@
+langcode: ar
+status: true
+dependencies:
+  module:
+    - node
+id: node._rd_almhadr
+label: 'عرض المحاضر'
+targetEntityType: node
+cache: true

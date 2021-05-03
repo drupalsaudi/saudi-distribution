@@ -1,0 +1,32 @@
+langcode: ar
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node._rd_almhadr
+    - field.field.node.almhadr_wmqdm_alf_alyt_walmnasbh.body
+    - field.field.node.almhadr_wmqdm_alf_alyt_walmnasbh.field_image
+    - image.style.thumbnail
+    - node.type.almhadr_wmqdm_alf_alyt_walmnasbh
+  module:
+    - image
+    - user
+_core:
+  default_config_hash: OM6jq4_wH-SLO_3k0FCq-FmgXIXYooo0TYVLGGqgryQ
+id: node.almhadr_wmqdm_alf_alyt_walmnasbh._rd_almhadr
+targetEntityType: node
+bundle: almhadr_wmqdm_alf_alyt_walmnasbh
+mode: _rd_almhadr
+content:
+  field_image:
+    weight: 0
+    label: hidden
+    settings:
+      image_style: thumbnail
+      image_link: content
+    third_party_settings: {  }
+    type: image
+    region: content
+hidden:
+  body: true
+  langcode: true
+  links: true

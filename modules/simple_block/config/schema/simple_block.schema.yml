@@ -1,0 +1,15 @@
+# Schema for the configuration files of the Simple Block module.
+
+simple_block.*:
+  type: config_entity
+  label: 'Simple block'
+  mapping:
+    id:
+      type: string
+      label: 'ID'
+    title:
+      type: label
+      label: 'Title'
+    content:
+      type: text_format
+      label: 'Content'

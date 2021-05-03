@@ -1,0 +1,20 @@
+langcode: ar
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_msmy_wzyft_al_dw
+    - node.type._dw_mjls_aladarh
+  module:
+    - options
+id: node._dw_mjls_aladarh.field_msmy_wzyft_al_dw
+field_name: field_msmy_wzyft_al_dw
+entity_type: node
+bundle: _dw_mjls_aladarh
+label: 'مسمى وظيفة العضو'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

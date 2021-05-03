@@ -1,0 +1,30 @@
+build:
+  assessment:
+    validate_codebase:
+      phplint:
+        halt-on-fail: true
+      phpcs:
+        sniff-all-files: false
+        halt-on-fail: true
+    testing:
+#      run_tests.phpunit:
+#        types: 'PHPUnit-Unit'
+#        testgroups: '--all'
+#        suppress-deprecations: false
+#        halt-on-fail: false
+#      run_tests.kernel:
+#        types: 'PHPUnit-Kernel'
+#        testgroups: '--all'
+#        suppress-deprecations: false
+#        halt-on-fail: false
+      run_tests.functional:
+        types: 'PHPUnit-Functional'
+        testgroups: '--all'
+        suppress-deprecations: false
+        halt-on-fail: false
+      run_tests.javascript:
+        concurrency: 15
+        types: 'PHPUnit-FunctionalJavascript'
+        testgroups: '--all'
+        suppress-deprecations: false
+        halt-on-fail: false
