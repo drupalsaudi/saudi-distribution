@@ -549,3 +549,22 @@ padding: 2px 13px 6px;
 .view-almrkz-ala-lamy .field--name-body {
   clear: unset;
 }
+.field--name-field-asm-almhadr a {
+  color: #2f9e48;
+  font-family: sst, Arial, sans-serif;
+}
+.field--name-field-asm-almhadr .field__items {
+  display: table;
+}
+.field--name-field-asm-almhadr .field__item {
+  display: table;
+  margin-bottom: 5px;
+  font-weight: 600;
+}
+.field--name-field-asm-almhadr .field__item > .svg-inline--fa {
+  color: #1d8234;
+float: right;
+margin-left: 5px;
+font-size: 18px !important;
+margin-top: 5px;
+}
