@@ -16,7 +16,7 @@ provider: null
 plugin: 'simple_block:block_sample_test'
 settings:
   id: 'simple_block:block_sample_test'
-  label: 'بلوك مساعدة توزيعة دروبال السعودية sample'
+  label: 'صفحة المساعدة لتوزيعة سعد'
   provider: simple_block
   label_display: visible
 visibility:

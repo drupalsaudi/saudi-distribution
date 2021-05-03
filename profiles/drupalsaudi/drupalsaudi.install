@@ -46,7 +46,7 @@ function drupalsaudi_install() {
 
   $drupalsaudishortcut = Shortcut::create([
     'shortcut_set' => 'default',
-    'title' => t('المساعدة دروبال السعودية'),
+    'title' => t('صفحة المساعدة لتوزيعة سعد'),
     'weight' => -18,
     'link' => ['uri' => 'internal:/admin/help/drupal-saudi'],
   ]);
@@ -54,7 +54,7 @@ function drupalsaudi_install() {
 
     // Populate the main menu.
     $linkpagedrupalsaudihelp = MenuLinkContent::create([
-      'title' => t('المساعدة دروبال السعودية'),
+      'title' => t('صفحة المساعدة لتوزيعة سعد'),
       'weight' => 10,
       'link' => [
         'uri' => 'internal:/admin/help/drupal-saudi',
